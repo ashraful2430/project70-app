@@ -1,36 +1,48 @@
 "use client";
-import { useState, useCallback } from "react";
 
-const KEY = "project70-level";
-const RANKS = ["","E","E+","D","D+","C","B"];
-const TITLES = ["","Initiate Hunter","Bronze Hunter","Iron Hunter","Silver Hunter","Gold Hunter","Platinum Hunter"];
+// XP awarded per completed exercise
+export const XP_PER_EXERCISE = 15;
 
-export function useLevel() {
-  const [level, setLevel] = useState<number>(() => {
-    if (typeof window === "undefined") return 1;
-    return Math.min(6, Math.max(1, Number(localStorage.getItem(KEY) || 1)));
-  });
+// Cumulative XP needed to reach each level (index = level-1)
+const XP_THRESHOLDS = [0, 525, 1500, 3000, 5550, 9000];
 
-  const upgrade = useCallback(() => {
-    setLevel((prev) => {
-      const next = Math.min(6, prev + 1);
-      localStorage.setItem(KEY, String(next));
-      return next;
-    });
-  }, []);
+const RANKS  = ["E", "E+", "D", "D+", "C", "S"];
+const TITLES = [
+  "Initiate Hunter",
+  "Bronze Hunter",
+  "Iron Hunter",
+  "Silver Hunter",
+  "Gold Hunter",
+  "Platinum Hunter",
+];
+
+export function xpToLevel(xp: number): number {
+  for (let i = XP_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= XP_THRESHOLDS[i]) return i + 1;
+  }
+  return 1;
+}
+
+export function useLevel(totalCompleted: number) {
+  const xp      = totalCompleted * XP_PER_EXERCISE;
+  const level   = xpToLevel(xp);
+  const maxLevel = level >= 6;
+
+  const currentFloor = XP_THRESHOLDS[level - 1] ?? 0;
+  const nextCeiling  = XP_THRESHOLDS[level]     ?? XP_THRESHOLDS[XP_THRESHOLDS.length - 1];
+  const xpProgress   = maxLevel
+    ? 100
+    : Math.round(((xp - currentFloor) / (nextCeiling - currentFloor)) * 100);
+
+  const xpIntoLevel = xp - currentFloor;
+  const xpForNext   = nextCeiling - currentFloor;
 
   const phaseIndex = level <= 2 ? 0 : level <= 4 ? 1 : 2;
-  const xpForLevel = [0, 0, 1000, 2500, 4500, 7000, 10000];
-  const xpNext = [1000, 1000, 2500, 4500, 7000, 10000, 10000];
-  const xpProgress = level >= 6 ? 100 : Math.round(((xpForLevel[level]) / xpNext[level]) * 100);
 
   return {
-    level,
-    upgrade,
+    xp, level, maxLevel, xpProgress, xpIntoLevel, xpForNext,
     phaseIndex,
-    rank: RANKS[level] || "E",
-    title: TITLES[level] || "Initiate Hunter",
-    xpProgress,
-    maxLevel: level >= 6,
+    rank:  RANKS[level - 1]  ?? "E",
+    title: TITLES[level - 1] ?? "Initiate Hunter",
   };
 }
