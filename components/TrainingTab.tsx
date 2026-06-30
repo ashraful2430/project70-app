@@ -1,0 +1,211 @@
+"use client";
+import { motion, type Variants } from "framer-motion";
+import type { Day } from "@/types";
+import { WARMUPS_BY_DAY, MAIN_PROGRAM, MAIN_PROGRAM_ABS, PELVIC_PROGRAM } from "@/lib/data";
+import ExerciseCard from "./ExerciseCard";
+
+interface Props {
+  day: Day;
+  phaseIndex: number;
+  isComplete: (id: string) => boolean;
+  onToggle: (id: string) => void;
+}
+
+const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07 } },
+};
+const item: Variants = {
+  hidden: { opacity: 0, y: 14 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
+
+export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: Props) {
+  const warmup = WARMUPS_BY_DAY[day.id];
+  const gymDayKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "fri" | "sat";
+
+  const phase = MAIN_PROGRAM[phaseIndex];
+  const mainExercises = day.type === "gym" ? (phase[gymDayKey] ?? []) : [];
+  const absExercises = day.id === 3 ? MAIN_PROGRAM_ABS[phaseIndex] : [];
+
+  const pelvicPhase = phaseIndex <= 0 ? PELVIC_PROGRAM[0] : phaseIndex === 1 ? PELVIC_PROGRAM[1] : PELVIC_PROGRAM[2];
+  const pelvicExercises = day.id === 4 ? pelvicPhase.thu : day.id === 0 ? pelvicPhase.sun : [];
+  const homeExercises = day.exercises ?? [];
+
+  return (
+    <div>
+      {/* Warmup */}
+      {warmup && (
+        <>
+          <p className="section-label">Warm-up · {warmup.label}</p>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            {warmup.items.map((item_data, i) => {
+              const id = `wu-${day.id}-${i}`;
+              const done = isComplete(id);
+              return (
+                <motion.div key={id} variants={item}>
+                  <div
+                    className="card-inner"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      marginBottom: 8,
+                      borderLeft: `3px solid ${done ? "var(--green)" : "var(--border-hover)"}`,
+                      opacity: done ? 0.7 : 1,
+                      transition: "all 0.25s ease",
+                    }}
+                  >
+                    <motion.button
+                      className={`check-btn ${done ? "done" : ""}`}
+                      onClick={() => onToggle(id)}
+                      whileTap={{ scale: 0.85 }}
+                      animate={done ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                      transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                    >
+                      {done && <CheckIcon />}
+                    </motion.button>
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontWeight: 600, fontSize: 14,
+                        color: done ? "var(--text-muted)" : "var(--text)",
+                        textDecoration: done ? "line-through" : "none",
+                        marginBottom: 2,
+                      }}>
+                        {item_data.name}
+                      </div>
+                      <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 8 }}>{item_data.detail}</div>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <span className="pill pill-purple">+{item_data.xp} XP</span>
+                        <span className="pill pill-green">~{item_data.cal} cal</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </>
+      )}
+
+      {/* Main gym exercises */}
+      {day.type === "gym" && mainExercises.length > 0 && (
+        <>
+          <p className="section-label">
+            Main exercises · {phase.label}
+            <span className="pill pill-purple">{phase.levelRange}</span>
+          </p>
+          <div className="safety-note" style={{ marginBottom: 12 }}>
+            These exercises change when you level up. Tap &ldquo;How to do it&rdquo; for the full form guide.
+          </div>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            {mainExercises.map((ex) => {
+              const id = `${day.id}-main-${ex.name.replace(/\W+/g, "_")}`;
+              return (
+                <motion.div key={id} variants={item}>
+                  <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </>
+      )}
+
+      {/* Wednesday abs */}
+      {absExercises.length > 0 && (
+        <>
+          <p className="section-label">Core & abs</p>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            {absExercises.map((ex) => {
+              const id = `${day.id}-abs-${ex.name.replace(/\W+/g, "_")}`;
+              return (
+                <motion.div key={id} variants={item}>
+                  <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </>
+      )}
+
+      {/* Cardio finisher */}
+      {day.finisher && (
+        <>
+          <p className="section-label">Cardio finisher</p>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
+            <div className="finisher-card">
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 6 }}>{day.finisher.name}</div>
+                  <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.55 }}>{day.finisher.detail}</div>
+                </div>
+                <motion.button
+                  className={`check-btn ${isComplete(`fin-${day.id}`) ? "done" : ""}`}
+                  onClick={() => onToggle(`fin-${day.id}`)}
+                  style={{ marginTop: 2 }}
+                  whileTap={{ scale: 0.85 }}
+                  animate={isComplete(`fin-${day.id}`) ? { scale: [1, 1.2, 1] } : { scale: 1 }}
+                  transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                >
+                  {isComplete(`fin-${day.id}`) && <CheckIcon />}
+                </motion.button>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                <span className="pill pill-purple">+{day.finisher.xp} XP</span>
+                <span className="pill pill-green">~{day.finisher.cal} cal</span>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+
+      {/* Home recovery exercises */}
+      {day.type === "home" && homeExercises.length > 0 && (
+        <>
+          <p className="section-label">Recovery route</p>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            {homeExercises.map((ex) => {
+              const id = `${day.id}-home-${ex.name.replace(/\W+/g, "_")}`;
+              return (
+                <motion.div key={id} variants={item}>
+                  <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </>
+      )}
+
+      {/* Pelvic floor */}
+      {pelvicExercises.length > 0 && (
+        <>
+          <p className="section-label">
+            Pelvic floor · {pelvicPhase.label}
+            <span className="pill pill-purple">{pelvicPhase.levelRange}</span>
+          </p>
+          <div className="safety-note" style={{ marginBottom: 12 }}>
+            These exercises change as you level up. Private training — no one else needs to know.
+          </div>
+          <motion.div variants={stagger} initial="hidden" animate="show">
+            {pelvicExercises.map((ex) => {
+              const id = `${day.id}-pelvic-${ex.name.replace(/\W+/g, "_")}`;
+              return (
+                <motion.div key={id} variants={item}>
+                  <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </>
+      )}
+    </div>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M2 7l3.5 3.5L12 3.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
