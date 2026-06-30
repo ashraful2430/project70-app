@@ -3,6 +3,7 @@ import { motion, type Variants } from "framer-motion";
 import type { Day } from "@/types";
 import { WARMUPS_BY_DAY, MAIN_PROGRAM, MAIN_PROGRAM_ABS, PELVIC_PROGRAM } from "@/lib/data";
 import ExerciseCard from "./ExerciseCard";
+import { getWatchUrl } from "@/lib/youtube";
 
 interface Props {
   day: Day;
@@ -75,9 +76,32 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
                         {item_data.name}
                       </div>
                       <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 8 }}>{item_data.detail}</div>
-                      <div style={{ display: "flex", gap: 8 }}>
+                      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
                         <span className="pill pill-purple">+{item_data.xp} XP</span>
                         <span className="pill pill-green">~{item_data.cal} cal</span>
+                        <motion.a
+                          href={getWatchUrl(item_data.name)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: 5,
+                            padding: "2px 10px",
+                            borderRadius: 8,
+                            background: "rgba(255,0,0,0.1)",
+                            border: "1px solid rgba(255,0,0,0.25)",
+                            color: "#f87171",
+                            fontSize: 11,
+                            fontWeight: 600,
+                            textDecoration: "none",
+                          }}
+                          whileHover={{ scale: 1.04, background: "rgba(255,0,0,0.18)" }}
+                          whileTap={{ scale: 0.96 }}
+                        >
+                          <YouTubeIcon />
+                          Watch form
+                        </motion.a>
                       </div>
                     </div>
                   </div>
@@ -206,6 +230,14 @@ function CheckIcon() {
   return (
     <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
       <path d="M2 7l3.5 3.5L12 3.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function YouTubeIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
     </svg>
   );
 }
