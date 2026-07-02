@@ -1,369 +1,640 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface Muscle {
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Category = "push" | "pull" | "legs" | "core";
+type View = "front" | "back";
+
+interface MuscleInfo {
   id: string;
   label: string;
   shortLabel: string;
-  color: string;
-  description: string;
+  desc: string;
   exercises: string[];
-  cx: number;
-  cy: number;
-  rx: number;
-  ry: number;
+  category: Category;
+  accent: string;
+  // which views this muscle appears in
+  views: View[];
 }
 
-const FRONT: Muscle[] = [
-  { id:"front-delt-l", label:"Front Deltoid (Left)", shortLabel:"Delt", color:"#0891b2", description:"The front portion of your shoulder muscle. Responsible for raising your arm forward.", exercises:["Shoulder Press","Arnold Press","Front Raise","Cable Lateral Raise","Push Press"], cx:68, cy:100, rx:16, ry:13 },
-  { id:"front-delt-r", label:"Front Deltoid (Right)", shortLabel:"Delt", color:"#0891b2", description:"The front portion of your shoulder muscle. Responsible for raising your arm forward.", exercises:["Shoulder Press","Arnold Press","Front Raise","Cable Lateral Raise","Push Press"], cx:132, cy:100, rx:16, ry:13 },
-  { id:"pec-l", label:"Left Pectoralis (Chest)", shortLabel:"Chest", color:"#7c3aed", description:"The pec major covers most of your chest. It pushes things away from your body.", exercises:["Bench Press","Incline Dumbbell Press","Pec Fly","Cable Chest Fly","Decline Dumbbell Press","Dips"], cx:88, cy:122, rx:22, ry:20 },
-  { id:"pec-r", label:"Right Pectoralis (Chest)", shortLabel:"Chest", color:"#7c3aed", description:"The pec major covers most of your chest. It pushes things away from your body.", exercises:["Bench Press","Incline Dumbbell Press","Pec Fly","Cable Chest Fly","Decline Dumbbell Press","Dips"], cx:112, cy:122, rx:22, ry:20 },
-  { id:"bicep-l", label:"Left Biceps Brachii", shortLabel:"Biceps", color:"#10b981", description:"The bicep is the muscle on the front of your upper arm. It flexes your elbow and turns your palm up.", exercises:["Barbell Curl","Hammer Curl","Incline Curl","Spider Curl","Preacher Curl","Lat Pulldown"], cx:60, cy:160, rx:12, ry:26 },
-  { id:"bicep-r", label:"Right Biceps Brachii", shortLabel:"Biceps", color:"#10b981", description:"The bicep is the muscle on the front of your upper arm. It flexes your elbow and turns your palm up.", exercises:["Barbell Curl","Hammer Curl","Incline Curl","Spider Curl","Preacher Curl","Lat Pulldown"], cx:140, cy:160, rx:12, ry:26 },
-  { id:"forearm-l", label:"Left Forearm Flexors", shortLabel:"Forearm", color:"#059669", description:"The forearm flexors run along the inside of your forearm. They flex your wrist and fingers.", exercises:["Wrist Curl","Hammer Curl","Dead Hang","Farmer's Carry","Grip Squeeze"], cx:55, cy:210, rx:10, ry:22 },
-  { id:"forearm-r", label:"Right Forearm Flexors", shortLabel:"Forearm", color:"#059669", description:"The forearm flexors run along the inside of your forearm. They flex your wrist and fingers.", exercises:["Wrist Curl","Hammer Curl","Dead Hang","Farmer's Carry","Grip Squeeze"], cx:145, cy:210, rx:10, ry:22 },
-  { id:"abs", label:"Rectus Abdominis (Abs / Six-pack)", shortLabel:"Abs", color:"#f59e0b", description:"The rectus abdominis is the 'six pack' muscle running vertically down your stomach. It flexes your spine forward.", exercises:["Crunches","Hanging Knee Raises","Reverse Crunches","Leg Raises","Ab Crunches"], cx:100, cy:160, rx:14, ry:32 },
-  { id:"oblique-l", label:"Left Obliques (Side Core)", shortLabel:"Obliques", color:"#d97706", description:"The obliques run diagonally along the sides of your abdomen. They rotate and bend your torso sideways.", exercises:["Russian Twists","Side Plank","Bicycle Crunch","High-Knee Crunches"], cx:83, cy:162, rx:9, ry:28 },
-  { id:"oblique-r", label:"Right Obliques (Side Core)", shortLabel:"Obliques", color:"#d97706", description:"The obliques run diagonally along the sides of your abdomen. They rotate and bend your torso sideways.", exercises:["Russian Twists","Side Plank","Bicycle Crunch","High-Knee Crunches"], cx:117, cy:162, rx:9, ry:28 },
-  { id:"quad-l", label:"Left Quadriceps (Front Thigh)", shortLabel:"Quads", color:"#ef4444", description:"The quads are 4 muscles on the front of your thigh. They straighten your knee — the biggest leg muscle group.", exercises:["Squat","Leg Press","Leg Extension","Lunge","Jump Squat","Sumo Squat"], cx:88, cy:285, rx:21, ry:48 },
-  { id:"quad-r", label:"Right Quadriceps (Front Thigh)", shortLabel:"Quads", color:"#ef4444", description:"The quads are 4 muscles on the front of your thigh. They straighten your knee — the biggest leg muscle group.", exercises:["Squat","Leg Press","Leg Extension","Lunge","Jump Squat","Sumo Squat"], cx:112, cy:285, rx:21, ry:48 },
-  { id:"shin-l", label:"Left Tibialis Anterior (Shin)", shortLabel:"Shin", color:"#fb923c", description:"The tibialis runs along your shin (front of lower leg). It lifts your foot up toward your shin.", exercises:["Treadmill Walk (incline)","Stair Climbing"], cx:86, cy:375, rx:11, ry:28 },
-  { id:"shin-r", label:"Right Tibialis Anterior (Shin)", shortLabel:"Shin", color:"#fb923c", description:"The tibialis runs along your shin (front of lower leg). It lifts your foot up toward your shin.", exercises:["Treadmill Walk (incline)","Stair Climbing"], cx:114, cy:375, rx:11, ry:28 },
+// ─── Muscle Data ──────────────────────────────────────────────────────────────
+
+const MUSCLES: MuscleInfo[] = [
+  {
+    id: "trap", label: "Trapezius", shortLabel: "Trapezius",
+    desc: "Diamond-shaped muscle covering the upper back. Upper fibers shrug the shoulder; middle fibers retract the shoulder blades; lower fibers depress them. Key for posture and neck/shoulder stability.",
+    exercises: ["Barbell Shrug", "Dumbbell Shrug", "Face Pull", "Rack Pull", "Farmer's Carry"],
+    category: "pull", accent: "#60a5fa", views: ["front", "back"],
+  },
+  {
+    id: "delt", label: "Deltoids (Shoulders)", shortLabel: "Shoulders",
+    desc: "Three-headed muscle wrapping the shoulder joint. Front head presses forward; lateral head raises sideways (creates width); rear head extends and externally rotates. Train all three for round shoulders.",
+    exercises: ["Overhead Press", "Lateral Raise", "Arnold Press", "Rear Delt Fly", "Face Pull"],
+    category: "push", accent: "#a78bfa", views: ["front", "back"],
+  },
+  {
+    id: "pec", label: "Pectoralis Major (Chest)", shortLabel: "Chest",
+    desc: "Large fan-shaped chest muscle. Clavicular head handles upper chest pressing; sternal head does most horizontal pushing. Responds to flat, incline, and cable variations differently.",
+    exercises: ["Bench Press", "Incline Dumbbell Press", "Cable Crossover", "Dips", "Push-Up"],
+    category: "push", accent: "#fb923c", views: ["front"],
+  },
+  {
+    id: "serratus", label: "Serratus Anterior", shortLabel: "Serratus",
+    desc: "The 'boxer's muscle' — finger-like projections on the ribcage. Protracts and rotates the scapula upward. Visible as 'gills' on lean athletes. Weak serratus causes winging scapula.",
+    exercises: ["Push-Up Plus", "Ab Rollout", "Landmine Press", "Overhead Press"],
+    category: "push", accent: "#2dd4bf", views: ["front"],
+  },
+  {
+    id: "biceps", label: "Biceps Brachii", shortLabel: "Biceps",
+    desc: "Two-headed elbow flexor and forearm supinator. Long head (outer) creates the peak; short head (inner) adds width. Works best through full range — all the way down matters as much as all the way up.",
+    exercises: ["Barbell Curl", "Hammer Curl", "Incline Dumbbell Curl", "Preacher Curl", "Cable Curl"],
+    category: "pull", accent: "#34d399", views: ["front"],
+  },
+  {
+    id: "triceps", label: "Triceps Brachii", shortLabel: "Triceps",
+    desc: "Three-headed arm extensor — 2/3 of upper arm size. Long head needs overhead extension to fully stretch; lateral head creates the horseshoe shape; medial head is always active during pressing.",
+    exercises: ["Rope Pushdown", "Overhead Extension", "Skull Crusher", "Close-Grip Bench", "Weighted Dips"],
+    category: "push", accent: "#f472b6", views: ["back"],
+  },
+  {
+    id: "forearm", label: "Forearms", shortLabel: "Forearms",
+    desc: "Flexors (front) control grip and wrist curl; extensors (back) stabilize the wrist under load. Grip strength directly limits pulling performance.",
+    exercises: ["Wrist Curl", "Reverse Curl", "Farmer's Walk", "Dead Hang", "Plate Pinch"],
+    category: "pull", accent: "#fbbf24", views: ["front", "back"],
+  },
+  {
+    id: "abs", label: "Rectus Abdominis (Abs)", shortLabel: "Abs",
+    desc: "The six-pack — one muscle sheet divided by tendinous intersections. Flexes the lumbar spine. Visible only at low body fat (under 12–14% for men). Core strength protects the spine in all heavy lifts.",
+    exercises: ["Hanging Leg Raise", "Cable Crunch", "Ab Wheel Rollout", "Dragon Flag", "Decline Sit-Up"],
+    category: "core", accent: "#f87171", views: ["front"],
+  },
+  {
+    id: "oblique", label: "External Obliques", shortLabel: "Obliques",
+    desc: "Diagonal abdominal muscles on the sides of the waist. Rotate and laterally bend the torso. Give the V-cut appearance and are essential for rotational power in sports.",
+    exercises: ["Russian Twist", "Side Plank", "Pallof Press", "Woodchop", "Landmine Rotation"],
+    category: "core", accent: "#c084fc", views: ["front"],
+  },
+  {
+    id: "lats", label: "Latissimus Dorsi (Lats)", shortLabel: "Lats",
+    desc: "Largest upper-body muscle — the 'wings'. Runs from armpit to lower back. Adducts and extends the arm. Primary driver of the V-taper silhouette. Pull-ups and rows are king.",
+    exercises: ["Pull-Up", "Lat Pulldown", "Bent-Over Row", "T-Bar Row", "Single-Arm Row"],
+    category: "pull", accent: "#38bdf8", views: ["back"],
+  },
+  {
+    id: "rhomboid", label: "Rhomboids & Mid-Trap", shortLabel: "Rhomboids",
+    desc: "Between the shoulder blades — retract and elevate the scapula. Chronically weak in desk workers, causing rounded shoulders. Rows and face pulls are the fix.",
+    exercises: ["Face Pull", "Chest-Supported Row", "Seated Cable Row", "Band Pull-Apart"],
+    category: "pull", accent: "#86efac", views: ["back"],
+  },
+  {
+    id: "erector", label: "Erector Spinae (Lower Back)", shortLabel: "Lower Back",
+    desc: "Column of muscles running the length of the spine. Extends and stabilizes the back under load. The 'Christmas tree' shape when developed. Critical for deadlift and squat safety.",
+    exercises: ["Deadlift", "Back Extension", "Romanian Deadlift", "Good Morning", "Hyperextension"],
+    category: "pull", accent: "#a3e635", views: ["back"],
+  },
+  {
+    id: "glutes", label: "Gluteus Maximus (Glutes)", shortLabel: "Glutes",
+    desc: "Largest muscle in the body. Extends and externally rotates the hip. Powers sprinting, jumping, and heavy lifting. Weak glutes force the lower back to compensate.",
+    exercises: ["Hip Thrust", "Squat", "Romanian Deadlift", "Glute Bridge", "Bulgarian Split Squat"],
+    category: "legs", accent: "#f9a8d4", views: ["back"],
+  },
+  {
+    id: "quads", label: "Quadriceps (Front Thigh)", shortLabel: "Quads",
+    desc: "Four muscles on the front of the thigh. Rectus femoris (center), vastus lateralis (outer), medialis (inner teardrop by knee), intermedius (hidden). They extend the knee. Largest muscle group in the body.",
+    exercises: ["Squat", "Leg Press", "Hack Squat", "Leg Extension", "Lunge", "Bulgarian Split Squat"],
+    category: "legs", accent: "#fcd34d", views: ["front"],
+  },
+  {
+    id: "hamstrings", label: "Hamstrings (Back Thigh)", shortLabel: "Hamstrings",
+    desc: "Three muscles on the back of the thigh. Biceps femoris (outer), semitendinosus and semimembranosus (inner). Flex the knee and extend the hip. Often undertrained vs quads — main cause of hamstring tears.",
+    exercises: ["Romanian Deadlift", "Leg Curl", "Nordic Curl", "Good Morning", "Glute-Ham Raise"],
+    category: "legs", accent: "#6ee7b7", views: ["back"],
+  },
+  {
+    id: "calves", label: "Gastrocnemius & Soleus (Calves)", shortLabel: "Calves",
+    desc: "Two calf muscles — gastrocnemius (visible peak, works with straight knee) and soleus (deeper, works with bent knee). Both plantarflex the ankle. Need high volume — used every step.",
+    exercises: ["Standing Calf Raise", "Seated Calf Raise", "Donkey Calf Raise", "Jump Rope"],
+    category: "legs", accent: "#93c5fd", views: ["front", "back"],
+  },
+  {
+    id: "tibialis", label: "Tibialis Anterior (Shin)", shortLabel: "Tibialis",
+    desc: "Runs along the outer shin. Dorsiflexes the foot (pulls toes up). Balances calf strength — important for ankle and knee health.",
+    exercises: ["Tibialis Raise", "Toe Walk", "Band Dorsiflexion", "Reverse Calf Raise"],
+    category: "legs", accent: "#c4b5fd", views: ["front"],
+  },
 ];
 
-const BACK: Muscle[] = [
-  { id:"trap", label:"Trapezius (Upper Back / Neck Base)", shortLabel:"Traps", color:"#2563eb", description:"The trapezius is the large diamond-shaped muscle of your upper back and neck. It shrugs your shoulders and pulls your shoulder blades together.", exercises:["Face Pulls","Rows","Deadlift","Farmer's Carry","Shrugs"], cx:100, cy:108, rx:30, ry:20 },
-  { id:"rear-delt-l", label:"Left Rear Deltoid (Posterior Delt)", shortLabel:"Rear Delt", color:"#0891b2", description:"The rear deltoid is the back of your shoulder. It pulls your arm backward and improves posture.", exercises:["Reverse Pec Deck","Face Pulls","Reverse Cable Fly"], cx:68, cy:100, rx:16, ry:13 },
-  { id:"rear-delt-r", label:"Right Rear Deltoid (Posterior Delt)", shortLabel:"Rear Delt", color:"#0891b2", description:"The rear deltoid is the back of your shoulder. It pulls your arm backward and improves posture.", exercises:["Reverse Pec Deck","Face Pulls","Reverse Cable Fly"], cx:132, cy:100, rx:16, ry:13 },
-  { id:"lat-l", label:"Left Latissimus Dorsi (Lats)", shortLabel:"Lats", color:"#4f46e5", description:"The lats are the largest back muscles — they create the V-taper shape. They pull your arms down and back.", exercises:["Lat Pulldown","Pull-ups","Straight-Arm Pulldown","Single-Arm Row","Seated Cable Row"], cx:74, cy:152, rx:18, ry:40 },
-  { id:"lat-r", label:"Right Latissimus Dorsi (Lats)", shortLabel:"Lats", color:"#4f46e5", description:"The lats are the largest back muscles — they create the V-taper shape. They pull your arms down and back.", exercises:["Lat Pulldown","Pull-ups","Straight-Arm Pulldown","Single-Arm Row","Seated Cable Row"], cx:126, cy:152, rx:18, ry:40 },
-  { id:"rhomboid", label:"Rhomboids & Mid Back", shortLabel:"Mid Back", color:"#7c3aed", description:"The rhomboids sit between your shoulder blades. They retract (squeeze) your shoulder blades and improve posture.", exercises:["Seated Cable Row","Face Pulls","T-Bar Row","Close-Grip Pulldown"], cx:100, cy:143, rx:20, ry:25 },
-  { id:"tricep-l", label:"Left Triceps Brachii", shortLabel:"Triceps", color:"#10b981", description:"The triceps make up 2/3 of your upper arm size. They straighten your elbow — opposite of the bicep.", exercises:["Rope Pushdown","Overhead Extension","Bench Dips","Skull Crusher","Diamond Push-up","Weighted Dip"], cx:60, cy:160, rx:12, ry:26 },
-  { id:"tricep-r", label:"Right Triceps Brachii", shortLabel:"Triceps", color:"#10b981", description:"The triceps make up 2/3 of your upper arm size. They straighten your elbow — opposite of the bicep.", exercises:["Rope Pushdown","Overhead Extension","Bench Dips","Skull Crusher","Diamond Push-up","Weighted Dip"], cx:140, cy:160, rx:12, ry:26 },
-  { id:"forearm-ext-l", label:"Left Forearm Extensors", shortLabel:"Forearm", color:"#059669", description:"The forearm extensors run along the outside/top of your forearm. They extend your wrist and fingers.", exercises:["Reverse Wrist Curl","Farmer's Carry","Dead Hang"], cx:55, cy:210, rx:10, ry:22 },
-  { id:"forearm-ext-r", label:"Right Forearm Extensors", shortLabel:"Forearm", color:"#059669", description:"The forearm extensors run along the outside/top of your forearm. They extend your wrist and fingers.", exercises:["Reverse Wrist Curl","Farmer's Carry","Dead Hang"], cx:145, cy:210, rx:10, ry:22 },
-  { id:"lower-back", label:"Erector Spinae (Lower Back)", shortLabel:"Lower Back", color:"#a855f7", description:"The erector spinae run along your spine from neck to tailbone. They keep your back straight and extend your torso.", exercises:["Romanian Deadlift","Stiff-Leg Deadlift","Hip Thrust"], cx:100, cy:218, rx:20, ry:18 },
-  { id:"glute-l", label:"Left Gluteus Maximus (Glutes)", shortLabel:"Glutes", color:"#f59e0b", description:"The glutes are the largest single muscle in your body. They extend your hip (push your leg back) and are crucial for posture and power.", exercises:["Hip Thrust","Squat","Romanian Deadlift","Bulgarian Split Squat","Donkey Kickbacks"], cx:87, cy:255, rx:24, ry:26 },
-  { id:"glute-r", label:"Right Gluteus Maximus (Glutes)", shortLabel:"Glutes", color:"#f59e0b", description:"The glutes are the largest single muscle in your body. They extend your hip (push your leg back) and are crucial for posture and power.", exercises:["Hip Thrust","Squat","Romanian Deadlift","Bulgarian Split Squat","Donkey Kickbacks"], cx:113, cy:255, rx:24, ry:26 },
-  { id:"hamstring-l", label:"Left Hamstrings (Back Thigh)", shortLabel:"Hamstrings", color:"#dc2626", description:"Three muscles on the back of your thigh that bend your knee and extend your hip. Opposite of quads.", exercises:["Romanian Deadlift","Stiff-Leg Deadlift","Leg Curl","Nordic Curl","Hip Thrust"], cx:88, cy:308, rx:21, ry:46 },
-  { id:"hamstring-r", label:"Right Hamstrings (Back Thigh)", shortLabel:"Hamstrings", color:"#dc2626", description:"Three muscles on the back of your thigh that bend your knee and extend your hip. Opposite of quads.", exercises:["Romanian Deadlift","Stiff-Leg Deadlift","Leg Curl","Nordic Curl","Hip Thrust"], cx:112, cy:308, rx:21, ry:46 },
-  { id:"calf-l", label:"Left Gastrocnemius (Calf)", shortLabel:"Calf", color:"#fb923c", description:"The calf muscles (gastrocnemius + soleus) point your foot downward (plantarflexion). They're used every time you take a step.", exercises:["Standing Calf Raise","Seated Calf Raise","Calf Raise Drop Set","Jump Squat"], cx:86, cy:378, rx:12, ry:28 },
-  { id:"calf-r", label:"Right Gastrocnemius (Calf)", shortLabel:"Calf", color:"#fb923c", description:"The calf muscles (gastrocnemius + soleus) point your foot downward (plantarflexion). They're used every time you take a step.", exercises:["Standing Calf Raise","Seated Calf Raise","Calf Raise Drop Set","Jump Squat"], cx:114, cy:378, rx:12, ry:28 },
+const CAT_LABEL: Record<Category, string> = { push: "Push", pull: "Pull", legs: "Legs", core: "Core" };
+const CAT_COLOR: Record<Category, string> = { push: "#fb923c", pull: "#60a5fa", legs: "#a3e635", core: "#f87171" };
+
+// ─── Muscle Region Polygons ───────────────────────────────────────────────────
+// SVG viewBox: "0 0 400 560"
+// Coordinates mapped to a standard anatomy front/back figure at this scale.
+// Each muscle has a list of polygon point strings (bilateral = render both sides).
+// "bilateral" means the LEFT side polygon is also mirrored for the RIGHT side
+// using transform="scale(-1,1) translate(-400,0)"
+
+interface MusclePoly {
+  id: string;
+  view: View;
+  // Array of SVG polygon "points" strings (space-separated x,y pairs)
+  polys: string[];
+  // If true, also render mirror-image polygon on the other side
+  bilateral?: boolean;
+}
+
+const MUSCLE_POLYS: MusclePoly[] = [
+  // ── FRONT VIEW ──────────────────────────────────────────────────────────────
+
+  // Upper Trapezius (front slope, bilateral)
+  {
+    id: "trap", view: "front", bilateral: true,
+    polys: ["148,130 120,140 106,152 110,162 126,158 148,148 156,138"],
+  },
+  // Deltoid front (bilateral)
+  {
+    id: "delt", view: "front", bilateral: true,
+    polys: ["106,135 86,145 76,160 80,182 92,188 106,180 114,162 112,148"],
+  },
+  // Pectoralis Major left (bilateral)
+  {
+    id: "pec", view: "front", bilateral: true,
+    polys: ["148,138 116,150 110,162 112,185 124,198 148,202 162,195 168,178 162,158"],
+  },
+  // Serratus (fingers, bilateral)
+  {
+    id: "serratus", view: "front", bilateral: true,
+    polys: [
+      "118,195 112,205 118,210 128,202",
+      "116,210 110,220 116,226 126,218",
+      "114,226 108,236 114,242 124,234",
+    ],
+  },
+  // Biceps (bilateral)
+  {
+    id: "biceps", view: "front", bilateral: true,
+    polys: ["88,188 72,196 66,216 68,240 76,254 88,256 100,250 106,232 104,210 96,194"],
+  },
+  // Forearm flexors (bilateral)
+  {
+    id: "forearm", view: "front", bilateral: true,
+    polys: ["80,256 62,264 56,285 58,315 68,328 82,326 94,316 96,290 92,268"],
+  },
+  // Rectus Abdominis (center, 6 segments)
+  {
+    id: "abs", view: "front", bilateral: false,
+    polys: [
+      // top row
+      "168,200 168,220 184,220 184,200",
+      "216,200 216,220 232,220 232,200",
+      // mid row
+      "168,224 168,244 184,244 184,224",
+      "216,224 216,244 232,244 232,224",
+      // bottom row
+      "170,248 170,266 184,266 184,248",
+      "216,248 216,266 230,266 230,248",
+    ],
+  },
+  // External Obliques (bilateral)
+  {
+    id: "oblique", view: "front", bilateral: true,
+    polys: ["152,198 136,210 128,230 130,260 140,274 154,278 162,265 164,240 162,215"],
+  },
+  // Quadriceps (bilateral — each has 3 shapes)
+  {
+    id: "quads", view: "front", bilateral: true,
+    polys: [
+      // Vastus lateralis
+      "136,290 118,300 110,325 112,365 120,385 132,390 140,378 140,340 138,310",
+      // Rectus femoris center
+      "156,285 148,295 146,320 148,362 156,386 168,390 174,376 174,340 170,310 164,292",
+      // Vastus medialis teardrop
+      "148,372 140,384 140,398 150,408 166,410 176,402 178,390 168,378",
+    ],
+  },
+  // Tibialis Anterior (bilateral)
+  {
+    id: "tibialis", view: "front", bilateral: true,
+    polys: ["126,400 116,415 114,450 118,480 130,488 140,484 144,466 142,430 134,410"],
+  },
+  // Calves front edge (bilateral)
+  {
+    id: "calves", view: "front", bilateral: true,
+    polys: ["142,402 136,415 136,455 140,478 152,486 160,480 162,456 160,422 152,406"],
+  },
+
+  // ── BACK VIEW ───────────────────────────────────────────────────────────────
+
+  // Full Trapezius (bilateral, back)
+  {
+    id: "trap", view: "back", bilateral: true,
+    polys: [
+      // upper slope (bilateral)
+      "156,125 134,135 114,148 110,162 124,168 148,158 160,145",
+      // middle diamond
+      "156,145 148,162 152,192 168,200 180,190 188,172 176,148",
+    ],
+  },
+  // Posterior Deltoid (bilateral)
+  {
+    id: "delt", view: "back", bilateral: true,
+    polys: ["110,138 88,150 78,170 80,196 94,204 108,198 116,182 116,160"],
+  },
+  // Rhomboids (between scapulae)
+  {
+    id: "rhomboid", view: "back", bilateral: false,
+    polys: [
+      "156,162 138,172 134,195 142,210 162,215 180,208 184,190 172,168",
+    ],
+  },
+  // Infraspinatus / Teres (bilateral)
+  {
+    id: "rhomboid", view: "back", bilateral: true,
+    polys: ["114,162 108,180 108,200 116,218 130,224 142,218 148,200 146,175 136,160"],
+  },
+  // Triceps (bilateral)
+  {
+    id: "triceps", view: "back", bilateral: true,
+    polys: ["92,188 74,198 64,220 64,252 70,272 82,278 96,274 104,254 106,228 100,205"],
+  },
+  // Forearm extensors (bilateral)
+  {
+    id: "forearm", view: "back", bilateral: true,
+    polys: ["80,278 62,288 56,310 56,342 66,354 80,352 92,342 96,316 90,292"],
+  },
+  // Latissimus Dorsi (bilateral)
+  {
+    id: "lats", view: "back", bilateral: true,
+    polys: ["116,200 108,220 106,250 108,280 116,305 128,315 140,312 148,295 148,260 144,228 136,205"],
+  },
+  // Erector Spinae (bilateral, columns beside spine)
+  {
+    id: "erector", view: "back", bilateral: true,
+    polys: ["172,200 165,225 164,260 165,300 170,320 180,322 188,318 190,295 190,258 188,220 182,200"],
+  },
+  // Gluteus Maximus (bilateral)
+  {
+    id: "glutes", view: "back", bilateral: true,
+    polys: ["148,310 126,322 116,340 116,368 124,388 140,400 158,402 172,392 178,372 176,344 166,320"],
+  },
+  // Hamstrings (bilateral — 2 heads)
+  {
+    id: "hamstrings", view: "back", bilateral: true,
+    polys: [
+      // Biceps femoris outer
+      "128,398 112,410 108,440 110,480 118,500 132,504 140,496 144,468 142,432 134,412",
+      // Semitendinosus inner
+      "150,398 142,410 140,444 142,480 150,500 164,504 172,494 174,466 172,432 162,412",
+    ],
+  },
+  // Gastrocnemius calves (bilateral)
+  {
+    id: "calves", view: "back", bilateral: true,
+    polys: ["130,504 118,520 116,552 120,578 132,588 144,586 152,574 154,546 150,518 140,506"],
+  },
 ];
 
-// Body silhouette background shapes (muted, non-interactive)
-function BodySilhouette({ view }: { view: "front" | "back" }) {
-  const fill = "rgba(30,30,70,0.7)";
-  return (
-    <g>
-      {/* Head */}
-      <ellipse cx={100} cy={35} rx={24} ry={27} fill={fill} />
-      {/* Neck */}
-      <rect x={90} y={60} width={20} height={20} rx={6} fill={fill} />
-      {/* Shoulders */}
-      <rect x={62} y={80} width={76} height={26} rx={12} fill={fill} />
-      {/* Left upper arm */}
-      <ellipse cx={58} cy={155} rx={16} ry={32} fill={fill} />
-      {/* Right upper arm */}
-      <ellipse cx={142} cy={155} rx={16} ry={32} fill={fill} />
-      {/* Left forearm */}
-      <ellipse cx={52} cy={210} rx={13} ry={28} fill={fill} />
-      {/* Right forearm */}
-      <ellipse cx={148} cy={210} rx={13} ry={28} fill={fill} />
-      {/* Left hand */}
-      <ellipse cx={50} cy={248} rx={11} ry={16} fill={fill} />
-      {/* Right hand */}
-      <ellipse cx={150} cy={248} rx={11} ry={16} fill={fill} />
-      {/* Torso */}
-      <rect x={72} y={106} width={56} height={108} rx={8} fill={fill} />
-      {/* Hips */}
-      <rect x={74} y={225} width={52} height={30} rx={10} fill={fill} />
-      {/* Left thigh */}
-      <ellipse cx={88} cy={292} rx={22} ry={50} fill={fill} />
-      {/* Right thigh */}
-      <ellipse cx={112} cy={292} rx={22} ry={50} fill={fill} />
-      {/* Left knee */}
-      <ellipse cx={87} cy={345} rx={15} ry={12} fill={fill} />
-      {/* Right knee */}
-      <ellipse cx={113} cy={345} rx={15} ry={12} fill={fill} />
-      {/* Left shin/calf */}
-      <ellipse cx={86} cy={378} rx={13} ry={32} fill={fill} />
-      {/* Right shin/calf */}
-      <ellipse cx={114} cy={378} rx={13} ry={32} fill={fill} />
-      {/* Left foot */}
-      <ellipse cx={84} cy={418} rx={15} ry={10} fill={fill} />
-      {/* Right foot */}
-      <ellipse cx={116} cy={418} rx={15} ry={10} fill={fill} />
-      {/* Face details (front only) */}
-      {view === "front" && (
-        <>
-          <ellipse cx={93} cy={32} rx={4} ry={5} fill="rgba(80,80,120,0.6)" />
-          <ellipse cx={107} cy={32} rx={4} ry={5} fill="rgba(80,80,120,0.6)" />
-          <path d="M94 46 Q100 50 106 46" stroke="rgba(80,80,120,0.6)" strokeWidth={1.5} fill="none" strokeLinecap="round" />
-        </>
-      )}
-    </g>
-  );
-}
+// ─── Component ────────────────────────────────────────────────────────────────
 
-function MuscleShape({ m, isHovered, isSelected, onHover, onClick }: {
-  m: Muscle;
-  isHovered: boolean;
-  isSelected: boolean;
-  onHover: (id: string | null) => void;
-  onClick: (m: Muscle) => void;
-}) {
-  const active = isHovered || isSelected;
-  return (
-    <g
-      style={{ cursor: "pointer" }}
-      onMouseEnter={() => onHover(m.id)}
-      onMouseLeave={() => onHover(null)}
-      onClick={() => onClick(m)}
-    >
-      <defs>
-        <radialGradient id={`grad-${m.id}`} cx="40%" cy="35%" r="65%">
-          <stop offset="0%" stopColor={m.color} stopOpacity={active ? 1 : 0.5} />
-          <stop offset="100%" stopColor={m.color} stopOpacity={active ? 0.7 : 0.2} />
-        </radialGradient>
-        {active && (
-          <filter id={`glow-${m.id}`}>
-            <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-            <feMerge>
-              <feMergeNode in="coloredBlur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        )}
-      </defs>
-      <ellipse
-        cx={m.cx} cy={m.cy} rx={m.rx} ry={m.ry}
-        fill={`url(#grad-${m.id})`}
-        stroke={active ? m.color : "rgba(255,255,255,0.12)"}
-        strokeWidth={active ? 1.5 : 0.8}
-        filter={active ? `url(#glow-${m.id})` : undefined}
-        style={{ transition: "all 0.2s ease" }}
-      />
-      {active && (
-        <text
-          x={m.cx} y={m.cy + 4}
-          textAnchor="middle"
-          fontSize={m.rx > 14 ? 7 : 6}
-          fill="white"
-          fontWeight="bold"
-          style={{ pointerEvents: "none" }}
-        >
-          {m.shortLabel}
-        </text>
-      )}
-    </g>
-  );
-}
+const VIEWBOX_W = 400;
+const VIEWBOX_H = 560;
+// Mirror transform: flip horizontally around center x=200
+const MIRROR = `scale(-1,1) translate(-${VIEWBOX_W},0)`;
 
 export default function BodyGuide() {
-  const [view, setView]           = useState<"front" | "back">("front");
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
-  const [selected, setSelected]   = useState<Muscle | null>(null);
-  const [zoom, setZoom]           = useState(1);
-  const [flipping, setFlipping]   = useState(false);
+  const [view, setView]         = useState<View>("front");
+  const [selected, setSelected] = useState<string | null>(null);
+  const [hovering, setHovering] = useState<string | null>(null);
+  const [filter, setFilter]     = useState<Category | "all">("all");
+  const [imgMissing, setImgMissing] = useState(false);
 
-  const muscles = view === "front" ? FRONT : BACK;
+  const selectedInfo = selected ? MUSCLES.find(m => m.id === selected) ?? null : null;
 
-  function toggleView() {
-    setFlipping(true);
-    setTimeout(() => {
-      setView(v => v === "front" ? "back" : "front");
-      setSelected(null);
-      setFlipping(false);
-    }, 200);
-  }
+  const handleSelect = (id: string) => {
+    if (filter !== "all") {
+      const info = MUSCLES.find(m => m.id === id);
+      if (!info || info.category !== filter) return;
+    }
+    setSelected(p => p === id ? null : id);
+  };
+
+  const getPolyOpacity = (id: string) => {
+    if (selected === id || hovering === id) return 0.55;
+    if (selected && selected !== id) return 0;
+    if (filter !== "all") {
+      const info = MUSCLES.find(m => m.id === id);
+      if (!info || info.category !== filter) return 0;
+    }
+    return 0.18;
+  };
+
+  const getPolyFill = (id: string) => {
+    if (selected === id) {
+      return MUSCLES.find(m => m.id === id)?.accent ?? "#FF4020";
+    }
+    if (hovering === id) {
+      return MUSCLES.find(m => m.id === id)?.accent ?? "#FF4020";
+    }
+    return "#FF5520";
+  };
+
+  const viewPolys = MUSCLE_POLYS.filter(p => p.view === view);
 
   return (
-    <div className="card" style={{ padding: 0, overflow: "hidden" }}>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100%", background: "var(--surface)" }}>
+
       {/* Header */}
       <div style={{
-        padding: "16px 20px", borderBottom: "1px solid var(--border)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        flexWrap: "wrap", gap: 10,
+        padding: "12px 20px 10px",
+        borderBottom: "1px solid var(--border)",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, flexWrap: "wrap",
       }}>
         <div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text)" }}>Body Guide</div>
-          <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
-            Tap any muscle to learn what it's called and which exercises target it
-          </div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: "var(--text)" }}>Body Guide</div>
+          <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 1 }}>Tap any muscle to learn exercises</div>
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          {/* Zoom */}
-          <button onClick={() => setZoom(z => Math.max(0.8, z - 0.2))} style={iconBtn}>−</button>
-          <span style={{ fontSize: 11, color: "var(--text-muted)", minWidth: 30, textAlign: "center" }}>
-            {Math.round(zoom * 100)}%
-          </span>
-          <button onClick={() => setZoom(z => Math.min(2.5, z + 0.2))} style={iconBtn}>+</button>
-          {/* Front/Back */}
-          <motion.button
-            onClick={toggleView}
-            whileTap={{ scale: 0.96 }}
-            style={{
-              padding: "8px 14px", borderRadius: 10, cursor: "pointer",
-              background: "linear-gradient(135deg, var(--purple), #4c1d95)",
-              border: "1px solid rgba(167,139,250,0.3)",
-              color: "#fff", fontSize: 12, fontWeight: 700,
-            }}
-          >
-            {view === "front" ? "⇄ View Back" : "⇄ View Front"}
-          </motion.button>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {selected && (
+            <button onClick={() => setSelected(null)} style={{
+              padding: "5px 12px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+              background: "var(--bg)", border: "1px solid var(--border)",
+              color: "var(--muted)", cursor: "pointer",
+            }}>× Clear</button>
+          )}
+          <div style={{
+            display: "flex", background: "var(--bg)", borderRadius: 8,
+            border: "1px solid var(--border)", overflow: "hidden",
+          }}>
+            {(["front", "back"] as View[]).map(v => (
+              <button key={v} onClick={() => { setView(v); setSelected(null); }} style={{
+                padding: "6px 18px", fontSize: 12, fontWeight: 600, border: "none",
+                background: view === v ? "var(--purple)" : "transparent",
+                color: view === v ? "#fff" : "var(--muted)",
+                cursor: "pointer", transition: "all 0.2s",
+              }}>
+                {v === "front" ? "Front" : "Back"}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Body + Info layout */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-
-          {/* SVG body diagram */}
-          <div style={{
-            flex: "0 0 auto", overflow: "hidden",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            padding: "20px 10px",
-            background: "radial-gradient(ellipse at center, rgba(124,58,237,0.08) 0%, transparent 70%)",
-            minWidth: 200,
-          }}>
-            <div style={{
-              transform: `scale(${zoom}) ${flipping ? "rotateY(90deg)" : "rotateY(0deg)"}`,
-              transition: "transform 0.2s ease",
-              transformOrigin: "center top",
+      {/* Filter */}
+      <div style={{
+        display: "flex", gap: 6, padding: "8px 20px",
+        borderBottom: "1px solid var(--border)",
+        overflowX: "auto", scrollbarWidth: "none",
+      }}>
+        {(["all", "push", "pull", "legs", "core"] as const).map(cat => {
+          const active = filter === cat;
+          const color  = cat === "all" ? "var(--purple)" : CAT_COLOR[cat];
+          return (
+            <button key={cat} onClick={() => setFilter(f => f === cat ? "all" : cat as typeof filter)} style={{
+              padding: "4px 14px", borderRadius: 20, fontSize: 11, fontWeight: 600,
+              border: `1px solid ${active ? color : "var(--border)"}`,
+              background: active ? `${color}22` : "transparent",
+              color: active ? color : "var(--muted)",
+              cursor: "pointer", whiteSpace: "nowrap", flex: "0 0 auto",
             }}>
-              <svg
-                viewBox="0 0 200 440"
-                width={180}
-                height={396}
-                style={{ display: "block", overflow: "visible" }}
-              >
-                <BodySilhouette view={view} />
-                {muscles.map(m => (
-                  <MuscleShape
-                    key={m.id}
-                    m={m}
-                    isHovered={hoveredId === m.id}
-                    isSelected={selected?.id === m.id}
-                    onHover={setHoveredId}
-                    onClick={setSelected}
-                  />
-                ))}
-              </svg>
-            </div>
-          </div>
+              {cat === "all" ? "All" : CAT_LABEL[cat]}
+            </button>
+          );
+        })}
+      </div>
 
-          {/* Info panel */}
-          <div style={{ flex: 1, minWidth: 200, padding: "16px 20px", borderLeft: "1px solid var(--border)" }}>
-            <AnimatePresence mode="wait">
-              {selected ? (
-                <motion.div
-                  key={selected.id}
-                  initial={{ opacity: 0, x: 14 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {/* Muscle name */}
-                  <div style={{
-                    display: "flex", alignItems: "center", gap: 10, marginBottom: 12,
-                  }}>
-                    <div style={{
-                      width: 12, height: 12, borderRadius: "50%",
-                      background: selected.color, flexShrink: 0,
-                      boxShadow: `0 0 8px ${selected.color}`,
-                    }} />
-                    <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", lineHeight: 1.3 }}>
-                      {selected.label}
-                    </div>
-                  </div>
+      {/* Main content */}
+      <div style={{ display: "flex", flex: 1, minHeight: 0, flexWrap: "wrap" }}>
 
-                  {/* Description */}
-                  <div className="card-inner" style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 6 }}>
-                      What it does
-                    </div>
-                    <p style={{ fontSize: 12, color: "var(--text)", lineHeight: 1.65 }}>
-                      {selected.description}
-                    </p>
-                  </div>
+        {/* Body diagram */}
+        <div style={{
+          flex: "0 0 auto",
+          display: "flex", flexDirection: "column", alignItems: "center",
+          padding: "12px 8px",
+          minWidth: 200,
+        }}>
+          <div style={{ position: "relative", width: "100%", maxWidth: 260 }}>
+            {/* Anatomy image */}
+            {!imgMissing ? (
+              <img
+                src={view === "front" ? "/anatomy-front.jpg" : "/anatomy-back.jpg"}
+                alt={`${view} anatomy`}
+                style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
+                onError={() => setImgMissing(true)}
+              />
+            ) : (
+              /* Fallback when images not yet added */
+              <div style={{
+                width: "100%", aspectRatio: "400/560",
+                background: "linear-gradient(180deg, #1a0a0a 0%, #0d0505 100%)",
+                borderRadius: 8,
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                gap: 10, padding: 20,
+              }}>
+                <div style={{ fontSize: 36 }}>🫀</div>
+                <div style={{ fontSize: 12, color: "#888", textAlign: "center", lineHeight: 1.5 }}>
+                  Save your anatomy image as:<br />
+                  <code style={{ fontSize: 10, color: "#aaa" }}>public/anatomy-front.jpg</code><br />
+                  <code style={{ fontSize: 10, color: "#aaa" }}>public/anatomy-back.jpg</code>
+                </div>
+              </div>
+            )}
 
-                  {/* Exercises */}
-                  <div className="card-inner">
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.8px", marginBottom: 8 }}>
-                      Exercises that target this
-                    </div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                      {selected.exercises.map(ex => (
-                        <span key={ex} style={{
-                          fontSize: 11, padding: "4px 9px", borderRadius: 8,
-                          background: `${selected.color}18`,
-                          border: `1px solid ${selected.color}40`,
-                          color: selected.color, fontWeight: 600,
-                        }}>
-                          {ex}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+            {/* SVG overlay with clickable muscle regions */}
+            <svg
+              viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
+              style={{
+                position: "absolute", inset: 0,
+                width: "100%", height: "100%",
+                cursor: "crosshair",
+              }}
+              onClick={() => { if (!hovering) setSelected(null); }}
+            >
+              {viewPolys.map((polyDef, di) =>
+                polyDef.polys.map((pts, pi) => {
+                  const key = `${polyDef.id}-${di}-${pi}`;
+                  const fill = getPolyFill(polyDef.id);
+                  const opacity = getPolyOpacity(polyDef.id);
 
-                  <button
-                    onClick={() => setSelected(null)}
-                    style={{
-                      marginTop: 12, fontSize: 11, color: "var(--text-muted)",
-                      background: "none", border: "none", cursor: "pointer", padding: 0,
-                    }}
-                  >
-                    ← Back
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="placeholder"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  style={{ paddingTop: 16 }}
-                >
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 8 }}>
-                    {view === "front" ? "Front View" : "Back View"}
-                  </div>
-                  <div style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.7, marginBottom: 16 }}>
-                    Tap any glowing muscle region to learn its name, what it does, and which exercises in your program target it.
-                  </div>
-
-                  {/* Legend */}
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    {[...new Map(muscles.map(m => [m.color, m])).values()]
-                      .filter((m, i) => i < 7)
-                      .map(m => (
-                        <div key={m.color} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <div style={{
-                            width: 8, height: 8, borderRadius: "50%",
-                            background: m.color, flexShrink: 0,
-                          }} />
-                          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                            {m.shortLabel}
-                          </span>
-                        </div>
-                    ))}
-                  </div>
-                </motion.div>
+                  return (
+                    <g key={key}>
+                      {/* Left / center polygon */}
+                      <polygon
+                        points={pts}
+                        fill={fill}
+                        opacity={opacity}
+                        stroke={selected === polyDef.id ? fill : "transparent"}
+                        strokeWidth={1.5}
+                        style={{ cursor: "pointer", transition: "opacity 0.15s" }}
+                        onClick={e => { e.stopPropagation(); handleSelect(polyDef.id); }}
+                        onMouseEnter={() => setHovering(polyDef.id)}
+                        onMouseLeave={() => setHovering(null)}
+                      />
+                      {/* Mirrored right polygon (bilateral) */}
+                      {polyDef.bilateral && (
+                        <polygon
+                          points={pts}
+                          fill={fill}
+                          opacity={opacity}
+                          stroke={selected === polyDef.id ? fill : "transparent"}
+                          strokeWidth={1.5}
+                          transform={MIRROR}
+                          style={{ cursor: "pointer", transition: "opacity 0.15s" }}
+                          onClick={e => { e.stopPropagation(); handleSelect(polyDef.id); }}
+                          onMouseEnter={() => setHovering(polyDef.id)}
+                          onMouseLeave={() => setHovering(null)}
+                        />
+                      )}
+                    </g>
+                  );
+                })
               )}
-            </AnimatePresence>
+
+              {/* Hover label */}
+              {hovering && !selected && (() => {
+                const info = MUSCLES.find(m => m.id === hovering);
+                return info ? (
+                  <text
+                    x={VIEWBOX_W / 2} y={VIEWBOX_H - 14}
+                    textAnchor="middle" fontSize={13} fontWeight="bold"
+                    fill={info.accent} stroke="#000" strokeWidth={3} paintOrder="stroke"
+                    style={{ pointerEvents: "none", userSelect: "none" }}
+                  >
+                    {info.shortLabel}
+                  </text>
+                ) : null;
+              })()}
+            </svg>
           </div>
+
+          {/* Legend dots */}
+          <div style={{
+            display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
+            padding: "10px 4px 0",
+            maxWidth: 260,
+          }}>
+            {MUSCLES
+              .filter(m => m.views.includes(view) && (filter === "all" || m.category === filter))
+              .map(m => (
+                <button
+                  key={m.id}
+                  onClick={() => handleSelect(m.id)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 4,
+                    padding: "3px 8px", borderRadius: 20, fontSize: 10, fontWeight: 600,
+                    border: `1px solid ${selected === m.id ? m.accent : m.accent + "44"}`,
+                    background: selected === m.id ? `${m.accent}22` : "transparent",
+                    color: selected === m.id ? m.accent : "var(--muted)",
+                    cursor: "pointer",
+                  }}
+                >
+                  <span style={{
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: m.accent, flexShrink: 0,
+                  }} />
+                  {m.shortLabel}
+                </button>
+              ))}
+          </div>
+        </div>
+
+        {/* Info panel */}
+        <div style={{ flex: 1, minWidth: 190, padding: "14px 16px", overflowY: "auto" }}>
+          <AnimatePresence mode="wait">
+            {selectedInfo ? (
+              <motion.div key={selectedInfo.id}
+                initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.18 }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 10 }}>
+                  <div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>{selectedInfo.label}</div>
+                    <span style={{
+                      display: "inline-block", marginTop: 4,
+                      padding: "2px 10px", borderRadius: 20,
+                      background: `${CAT_COLOR[selectedInfo.category]}22`,
+                      border: `1px solid ${CAT_COLOR[selectedInfo.category]}55`,
+                      fontSize: 10, fontWeight: 600, color: CAT_COLOR[selectedInfo.category],
+                    }}>{CAT_LABEL[selectedInfo.category]}</span>
+                  </div>
+                  <button onClick={() => setSelected(null)} style={{
+                    background: "none", border: "none", color: "var(--muted)",
+                    cursor: "pointer", fontSize: 20, lineHeight: 1, padding: 2,
+                  }}>×</button>
+                </div>
+
+                <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.65, marginBottom: 16 }}>
+                  {selectedInfo.desc}
+                </p>
+
+                <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", color: "var(--text)", marginBottom: 8, textTransform: "uppercase" }}>
+                  Best Exercises
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                  {selectedInfo.exercises.map((ex, i) => (
+                    <motion.div key={ex}
+                      initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      style={{
+                        display: "flex", alignItems: "center", gap: 10,
+                        padding: "8px 12px", borderRadius: 8,
+                        background: "var(--bg)", border: "1px solid var(--border)",
+                      }}
+                    >
+                      <span style={{
+                        width: 18, height: 18, borderRadius: "50%", flexShrink: 0,
+                        background: `${selectedInfo.accent}22`,
+                        border: `1px solid ${selectedInfo.accent}66`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: 9, fontWeight: 700, color: selectedInfo.accent,
+                      }}>{i + 1}</span>
+                      <span style={{ fontSize: 12, color: "var(--text)" }}>{ex}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 6 }}>
+                  {filter !== "all"
+                    ? `${CAT_LABEL[filter as Category]} Muscles`
+                    : view === "front" ? "Front Body Muscles" : "Back Body Muscles"}
+                </div>
+                <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5, marginBottom: 16 }}>
+                  Hover or tap any highlighted region. Use the {view === "front" ? "Back →" : "Front →"} button to flip.
+                </div>
+                {(["push", "pull", "legs", "core"] as Category[])
+                  .filter(cat => filter === "all" || filter === cat)
+                  .map(cat => {
+                    const catMuscles = MUSCLES.filter(m => m.category === cat && m.views.includes(view));
+                    if (catMuscles.length === 0) return null;
+                    return (
+                      <div key={cat} style={{ marginBottom: 14 }}>
+                        <div style={{
+                          fontSize: 10, fontWeight: 700, letterSpacing: "0.08em",
+                          color: CAT_COLOR[cat], textTransform: "uppercase", marginBottom: 6,
+                        }}>{CAT_LABEL[cat]}</div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+                          {catMuscles.map(m => (
+                            <button key={m.id} onClick={() => handleSelect(m.id)} style={{
+                              padding: "4px 12px", borderRadius: 20,
+                              border: `1px solid ${m.accent}44`,
+                              background: `${m.accent}11`,
+                              color: m.accent, fontSize: 11, fontWeight: 600, cursor: "pointer",
+                            }}>{m.shortLabel}</button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
   );
 }
-
-const iconBtn: React.CSSProperties = {
-  width: 28, height: 28, borderRadius: 8,
-  background: "var(--surface2)", border: "1px solid var(--border)",
-  color: "var(--text)", cursor: "pointer",
-  display: "flex", alignItems: "center", justifyContent: "center",
-  fontSize: 16, fontWeight: 700, lineHeight: 1,
-};

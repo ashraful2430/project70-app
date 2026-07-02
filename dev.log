@@ -1,0 +1,263 @@
+
+> project70-app@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.9 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.31.63:3000
+- Environments: .env.local
+✓ Ready in 2.4s
+
+ GET / 200 in 624ms (next.js: 346ms, application-code: 278ms)
+ GET / 200 in 77ms (next.js: 14ms, application-code: 63ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="inter_5901b7c6-module__ec5Qua__variable"
+-                         webcrx=""
+                        >
+                          <body
+-                           data-new-gr-c-s-check-loaded="14.1307.0"
+-                           data-gr-ext-installed=""
+                          >
+                  ...
+ 
+    at <unknown> (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="inter_5901b7c6-module__ec5Qua__variable"
+-                         webcrx=""
+                        >
+                  ...
+ 
+    at <unknown> (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+ GET / 200 in 614ms (next.js: 231ms, application-code: 383ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="inter_5901b7c6-module__ec5Qua__variable"
+-                         webcrx=""
+                        >
+                  ...
+ 
+    at <unknown> (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+✓ Compiled in 844ms
+ GET / 200 in 480ms (next.js: 280ms, application-code: 200ms)
+✓ Compiled in 1880ms
+ GET / 200 in 633ms (next.js: 363ms, application-code: 270ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="inter_5901b7c6-module__ec5Qua__variable"
+-                         webcrx=""
+                        >
+                  ...
+ 
+    at <unknown> (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+✓ Compiled in 2.7s
+ GET / 200 in 480ms (next.js: 217ms, application-code: 263ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html
+                          lang="en"
+                          className="inter_5901b7c6-module__ec5Qua__variable"
+-                         webcrx=""
+                        >
+                  ...
+ 
+    at <unknown> (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at emitPendingHydrationWarnings (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3438:13)
+    at completeWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6885:102)
+    at runWithFiberInDEV (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:131)
+    at completeUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9622:23)
+    at performUnitOfWork (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9557:28)
+    at workLoopConcurrentByScheduler (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
