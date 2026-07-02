@@ -1,1685 +1,1687 @@
 import type { MainPhase, Exercise } from "@/types";
 
 export const MAIN_PROGRAM: MainPhase[] = [
+  // ─────────────────────────────────────────────────────────────────────────
+  // PHASE 1 — Foundation (Weeks 1–4) · Level 1–2
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    "label": "Foundation",
-    "levelRange": "Level 1-2",
-    "mon": [
+    label: "Foundation",
+    levelRange: "Level 1-2",
+
+    // MONDAY — Chest & Triceps
+    mon: [
       {
-        "name": "Dumbbell Chest Press (flat bench)",
-        "target": "Chest",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Lower dumbbells to chest level slowly, press straight up. Keep feet flat on the floor.",
-        "steps": [
-          "Sit on bench with a dumbbell in each hand.",
-          "Lie back and press dumbbells above your chest, arms extended.",
-          "Lower slowly until elbows are at 90 degrees.",
-          "Press back up. Slow down beats fast up."
+        name: "Dumbbell Chest Press",
+        target: "Chest",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Lower dumbbells slowly to chest level, press straight up. Keep feet flat on the floor.",
+        steps: [
+          "Sit on a flat bench with a dumbbell in each hand.",
+          "Lie back and hold dumbbells at chest level, elbows at 90 degrees.",
+          "Press both dumbbells straight up until arms are almost fully extended.",
+          "Lower slowly back to the start — 2 seconds down, 1 second up."
         ],
-        "difficulty": 1.2,
-        "calories": 32
+        difficulty: 1.2,
+        calories: 32
       },
       {
-        "name": "Incline Dumbbell Press",
-        "target": "Upper chest",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Set bench to 30 to 45 degrees. Targets upper chest and front shoulder.",
-        "steps": [
-          "Adjust bench to 30 to 45 degree angle.",
-          "Press dumbbells from upper chest upward.",
-          "Lower slowly under control.",
-          "Do not flare elbows too wide."
+        name: "Incline Dumbbell Press",
+        target: "Upper chest",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Set bench to 30–45 degrees. Targets upper chest and front shoulder.",
+        steps: [
+          "Set the bench to a 30–45 degree incline.",
+          "Hold dumbbells at upper-chest level, elbows slightly wider than shoulders.",
+          "Press upward and slightly inward — the dumbbells should come close at the top.",
+          "Lower slowly under full control. Do not arch your lower back off the bench."
         ],
-        "difficulty": 1.2,
-        "calories": 30
+        difficulty: 1.2,
+        calories: 30
       },
       {
-        "name": "Chest Fly (machine or dumbbell)",
-        "target": "Chest",
-        "sets": 2,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Focus on squeezing your chest at the center. Slow movement matters more than weight here.",
-        "steps": [
-          "If using dumbbells, lie flat and open arms wide with soft elbow bend.",
-          "Bring hands together over chest like hugging a barrel.",
-          "Squeeze chest at the top for 1 second.",
-          "Open slowly."
+        name: "Pec Fly (Machine or Dumbbell)",
+        target: "Chest",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Focus on squeezing your chest at the centre. Slow movement matters more than weight.",
+        steps: [
+          "If using machine: sit with back flat against pad, grip handles at chest height.",
+          "If using dumbbells: lie flat, arms wide with a soft elbow bend.",
+          "Bring hands together in front of your chest like hugging a barrel.",
+          "Squeeze your chest hard at the top for 1 second, then open slowly."
         ],
-        "difficulty": 1,
-        "calories": 24
+        difficulty: 1,
+        calories: 24
       },
       {
-        "name": "Seated Shoulder Press (machine or dumbbell)",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Keep back straight against the pad. Press directly upward. Do not lean back.",
-        "steps": [
-          "Sit tall with back supported.",
-          "Press dumbbells from shoulder height straight up.",
-          "Do not lock elbows fully at the top.",
-          "Lower to shoulder height and repeat."
+        name: "Overhead Dumbbell Extension",
+        target: "Triceps",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Only your forearms move. Keep upper arms still and pointing straight up.",
+        steps: [
+          "Hold one dumbbell with both hands directly overhead, arms straight.",
+          "Lower the dumbbell slowly behind your head by bending only at the elbows.",
+          "Keep your upper arms vertical and still throughout — only forearms move.",
+          "Press back up to straight arms. Do not flare elbows out."
         ],
-        "difficulty": 1.2,
-        "calories": 28
+        difficulty: 1.1,
+        calories: 22
       },
       {
-        "name": "Tricep Rope Pushdown (cable)",
-        "target": "Triceps",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Keep elbows locked to your sides throughout. Only your forearms move.",
-        "steps": [
-          "Stand at cable machine with rope attachment at chest height.",
-          "Grip rope, elbows pinned to ribs.",
-          "Push rope down until arms are straight.",
-          "Let rope come back up slowly."
+        name: "Rope Cable Pushdown",
+        target: "Triceps",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Keep elbows locked to your sides throughout. Only your forearms move.",
+        steps: [
+          "Stand at cable machine with rope attachment set at chest height.",
+          "Grip rope with thumbs up, elbows pinned to your ribs.",
+          "Push rope downward until arms are fully straight, spreading the rope at the bottom.",
+          "Let rope come back up slowly — resist the weight on the way up."
         ],
-        "difficulty": 1,
-        "calories": 22
+        difficulty: 1,
+        calories: 22
       },
       {
-        "name": "Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "After pushing movements your forearm flexors are fresh — train them directly now. Palm facing up, curl using only your wrist.",
-        "steps": [
-          "Sit on the bench and rest one forearm along your thigh, wrist hanging just past your knee.",
-          "Hold a light dumbbell, palm facing up.",
-          "Let your wrist drop fully, then curl upward as high as you can.",
-          "Lower slowly all the way back down before the next rep.",
-          "Complete all reps on one arm, then switch."
+        name: "Hanging Knee Raises",
+        target: "Core & abs",
+        sets: 3,
+        reps: "10",
+        rest: "45s",
+        cue: "Use your core to pull knees up — not momentum. Control the lowering.",
+        steps: [
+          "Hang from a pull-up bar with hands slightly wider than shoulder width.",
+          "Brace your core and pull both knees up toward your chest.",
+          "Squeeze abs at the top, then lower legs slowly — resist gravity on the way down.",
+          "If too hard, do Reverse Crunches on a mat instead: lie flat, lift hips off floor."
         ],
-        "difficulty": 1,
-        "calories": 10
-      },
-      {
-        "name": "Reverse Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Same position, palm facing DOWN. Targets the top of your forearm — the extensor muscles most people never train.",
-        "steps": [
-          "Forearm on your thigh, wrist past your knee, palm facing down.",
-          "Hold a light dumbbell.",
-          "Lift the back of your hand upward as high as you can.",
-          "Lower slowly and fully before the next rep.",
-          "Complete all reps on one arm, then switch."
-        ],
-        "difficulty": 1,
-        "calories": 8
+        difficulty: 1.1,
+        calories: 20
       }
     ],
-    "tue": [
+
+    // TUESDAY — Back & Biceps
+    tue: [
       {
-        "name": "Lat Pulldown (machine)",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Pull bar to your collarbone, lean slightly back. Do not yank with your neck.",
-        "steps": [
-          "Sit at lat pulldown with thighs under the pad.",
-          "Grip bar wider than shoulder width.",
-          "Pull bar down to collarbone while squeezing shoulder blades together.",
-          "Let bar rise slowly under control."
+        name: "Single-Arm Dumbbell Row",
+        target: "Back",
+        sets: 3,
+        reps: "12 each side",
+        rest: "60s",
+        cue: "Rest one knee on a bench. Pull weight up toward your hip — not your shoulder.",
+        steps: [
+          "Place one knee and same-side hand on a bench for support.",
+          "Hold a dumbbell in the opposite hand, arm hanging straight down.",
+          "Pull the dumbbell up toward your hip, squeezing your shoulder blade.",
+          "Lower fully before the next rep. Complete all reps then switch sides."
         ],
-        "difficulty": 1.2,
-        "calories": 30
+        difficulty: 1.2,
+        calories: 28
       },
       {
-        "name": "Seated Cable Row",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Sit tall, pull handle to your belly button. Hold the squeeze for 1 second at the end.",
-        "steps": [
-          "Sit upright at cable row machine.",
-          "Pull handle toward belly button, not chest.",
-          "Squeeze shoulder blades together at the end.",
-          "Let arms extend forward slowly."
+        name: "Lat Pulldown",
+        target: "Back",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Pull bar to your collarbone, lean slightly back. Do not yank with your neck.",
+        steps: [
+          "Sit at the lat pulldown machine, thighs locked under the pad.",
+          "Grip the bar wider than shoulder width, arms fully extended.",
+          "Pull the bar down to your collarbone while squeezing your shoulder blades together.",
+          "Let the bar rise slowly under control. If no machine, do Assisted Pull-ups."
         ],
-        "difficulty": 1.2,
-        "calories": 28
+        difficulty: 1.2,
+        calories: 30
       },
       {
-        "name": "One-Arm Dumbbell Row",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10 each",
-        "rest": "60s",
-        "cue": "Rest one knee on a bench. Pull weight up to your hip, not your shoulder.",
-        "steps": [
-          "Place one knee and same-side hand on a bench.",
-          "Hold dumbbell in opposite hand, arm hanging.",
-          "Pull dumbbell up toward hip.",
-          "Lower slowly. Complete all reps on one side then switch."
+        name: "Seated Cable Row",
+        target: "Back",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Sit tall, pull handle to your belly button. Hold the squeeze for 1 second.",
+        steps: [
+          "Sit upright at the cable row machine, feet on the platform.",
+          "Pull the handle toward your belly button — not your chest.",
+          "Squeeze your shoulder blades together hard at the end of the pull.",
+          "Let arms extend forward slowly, getting a good stretch before the next rep."
         ],
-        "difficulty": 1.2,
-        "calories": 30
+        difficulty: 1.2,
+        calories: 28
       },
       {
-        "name": "Face Pull (cable)",
-        "target": "Rear delts",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Pull rope toward your forehead with thumbs slightly back. Great for posture.",
-        "steps": [
-          "Set cable to forehead height with rope attachment.",
-          "Pull rope toward your face, elbows high.",
-          "Squeeze rear delts at the end of the movement.",
-          "Control the return."
+        name: "EZ Barbell Curl",
+        target: "Biceps",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Elbows stay pinned to your ribs. No swinging. Control both the up and down.",
+        steps: [
+          "Hold an EZ barbell with an underhand grip, hands on the angled inner grip.",
+          "Stand tall, elbows pinned to your sides.",
+          "Curl the bar up toward your chest in a smooth arc.",
+          "Lower slowly all the way back down before the next rep."
         ],
-        "difficulty": 1,
-        "calories": 22
+        difficulty: 1.1,
+        calories: 22
       },
       {
-        "name": "Dumbbell Bicep Curl",
-        "target": "Biceps",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Alternate arms. Keep body still, no swinging. Lower the weight slowly.",
-        "steps": [
-          "Stand with a dumbbell in each hand.",
-          "Curl one arm up, keeping elbow pinned to ribs.",
-          "Squeeze bicep at the top.",
-          "Lower slowly. Switch arms."
+        name: "Incline Hammer Curl",
+        target: "Biceps & forearms",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Lying on an incline stretches the bicep more at the bottom for a bigger range of motion.",
+        steps: [
+          "Set a bench to 45-60 degrees incline and lie back against it.",
+          "Hold a dumbbell in each hand, palms facing each other (thumbs up).",
+          "Curl both arms up without swinging your shoulders forward.",
+          "Lower slowly, feeling the full stretch at the bottom."
         ],
-        "difficulty": 1,
-        "calories": 20
+        difficulty: 1.1,
+        calories: 20
       },
       {
-        "name": "Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Sit with your forearm resting on your thigh, palm facing up. Curl the dumbbell using only your wrist. This targets the forearm flexors — the muscles behind the veins along the inside of your arm.",
-        "steps": [
+        name: "Dumbbell Wrist Curls",
+        target: "Forearms",
+        sets: 3,
+        reps: "12",
+        rest: "30s",
+        cue: "Forearm resting on your thigh. Only your wrist moves. Palm facing up.",
+        steps: [
           "Sit on a bench and rest one forearm along your thigh, wrist hanging just past your knee.",
-          "Hold a light dumbbell, palm facing up.",
-          "Let your wrist drop fully, then curl your hand upward as high as you can.",
-          "Lower slowly all the way back down before the next rep — the lowering builds just as much as the curl.",
-          "Complete all reps on one arm, then switch."
+          "Hold a light dumbbell palm facing up.",
+          "Let your wrist drop fully down, then curl upward as high as possible.",
+          "Lower slowly all the way before the next rep. Switch arms after all reps."
         ],
-        "difficulty": 1,
-        "calories": 10
-      },
-      {
-        "name": "Reverse Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Same position as Wrist Curl but palm facing DOWN. Targets the top of your forearm — the part visible when your arm rests on a table. Most people never train these muscles at all.",
-        "steps": [
-          "Sit with your forearm on your thigh, wrist just past your knee — this time palm facing down.",
-          "Hold a light dumbbell.",
-          "Lift the back of your hand upward as high as you can, squeezing at the top.",
-          "Lower slowly and fully before the next rep.",
-          "Complete all reps on one arm, then switch."
-        ],
-        "difficulty": 1,
-        "calories": 8
+        difficulty: 1,
+        calories: 10
       }
     ],
-    "wed": [
+
+    // WEDNESDAY — Shoulders & Cardio
+    wed: [
       {
-        "name": "Goblet Squat (hold 1 dumbbell at chest)",
-        "target": "Quads",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "90s",
-        "cue": "Hold weight close to chest. Sit back deep like lowering into a chair. Knees track over toes.",
-        "steps": [
-          "Hold one dumbbell vertically at your chest.",
-          "Feet shoulder-width, toes slightly out.",
-          "Lower down slowly until thighs are parallel or below.",
-          "Push through full foot to stand."
+        name: "Dumbbell Shoulder Press",
+        target: "Shoulders",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Press dumbbells straight up from shoulder height. Do not lean back.",
+        steps: [
+          "Sit on a bench with back support, or stand with feet shoulder-width apart.",
+          "Hold dumbbells at shoulder height, palms facing forward.",
+          "Press straight up until arms are almost fully extended.",
+          "Lower slowly back to shoulder height. Keep core braced throughout."
         ],
-        "difficulty": 1.3,
-        "calories": 36
+        difficulty: 1.2,
+        calories: 28
       },
       {
-        "name": "Leg Press Machine",
-        "target": "Quads",
-        "sets": 4,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Feet shoulder-width. Do not lock knees at the top. Control the weight down.",
-        "steps": [
-          "Set a weight you can do 12 reps with.",
-          "Feet shoulder-width on the platform.",
-          "Lower platform toward chest slowly.",
-          "Push away through full foot. Do not snap knees straight at top."
+        name: "Lateral Dumbbell Raise",
+        target: "Side delts",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Raise arms out sideways to shoulder height. Use light weight — form over ego here.",
+        steps: [
+          "Hold light dumbbells by your sides, slight bend in elbows.",
+          "Raise both arms out like wings until they reach shoulder height.",
+          "Pause briefly at the top — you should feel a burn in the side of your shoulders.",
+          "Lower slowly. Heavy weight here means wrong form."
         ],
-        "difficulty": 1.3,
-        "calories": 40
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Romanian Deadlift (dumbbells)",
-        "target": "Hamstrings",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Push hips backward with slight bend in knees. Feel the hamstring stretch at the bottom.",
-        "steps": [
-          "Hold dumbbells in front of thighs.",
-          "Hinge at hips, pushing them back.",
-          "Lower dumbbells along your legs.",
-          "Feel hamstring stretch, then drive hips forward to stand."
+        name: "Cable Front Raise",
+        target: "Front delts",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Cable keeps tension constant throughout the lift, unlike dumbbells which go slack.",
+        steps: [
+          "Stand facing away from a low cable machine, handle in one hand (or both with a rope).",
+          "Raise your arm straight forward until it reaches shoulder height.",
+          "Pause at the top, then lower slowly under control.",
+          "No dumbbells? Do a standing dumbbell front raise instead."
         ],
-        "difficulty": 1.3,
-        "calories": 36
+        difficulty: 1,
+        calories: 18
       },
       {
-        "name": "Seated Leg Curl (machine)",
-        "target": "Hamstrings",
-        "sets": 2,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Squeeze hamstring at the bottom of the movement. Control the return up.",
-        "steps": [
-          "Sit at machine with pad on lower legs.",
-          "Curl legs downward under the seat.",
-          "Squeeze at the bottom.",
-          "Return slowly."
+        name: "Reverse Pec Deck Fly",
+        target: "Rear delts",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Face the machine. This hits rear delts which are critical for posture and shoulder health.",
+        steps: [
+          "Sit facing the machine, gripping the handles with straight arms in front.",
+          "Pull your arms back and out in a wide arc, squeezing your shoulder blades.",
+          "Pause when hands are level with your shoulders.",
+          "Return slowly. No pec deck? Use cable rear-delt fly or bent-over dumbbell fly."
         ],
-        "difficulty": 1,
-        "calories": 26
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Standing Calf Raise",
-        "target": "Calves",
-        "sets": 3,
-        "reps": "15",
-        "rest": "45s",
-        "cue": "Rise fully on tiptoes. Lower slowly for a full stretch at the bottom.",
-        "steps": [
-          "Stand on the edge of a step or flat floor.",
-          "Rise on tiptoes as high as possible.",
-          "Pause at the top.",
-          "Lower heel down past neutral for full stretch."
+        name: "LISS Cardio — Treadmill Walk",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "15 min",
+        rest: "-",
+        cue: "Low-Intensity Steady State. Brisk walk — you should be breathing harder but still able to talk.",
+        steps: [
+          "Set treadmill to speed 6-7 km/h and incline 3-4%.",
+          "Walk briskly for 15 minutes without holding the rails.",
+          "Maintain an upright posture — do not hunch forward.",
+          "Home option: 10-15 minutes of continuous stair climbing up and down."
         ],
-        "difficulty": 1,
-        "calories": 20
-      },
-      {
-        "name": "Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Legs and forearms are completely separate muscle groups — after a full leg session your forearms are fully fresh and ready. Train them now rather than leaving them idle.",
-        "steps": [
-          "Sit on the bench and rest one forearm along your thigh, wrist hanging just past your knee.",
-          "Hold a light dumbbell, palm facing up.",
-          "Let your wrist drop fully, then curl upward as high as you can.",
-          "Lower slowly all the way back down before the next rep.",
-          "Complete all reps on one arm, then switch."
-        ],
-        "difficulty": 1,
-        "calories": 10
-      },
-      {
-        "name": "Reverse Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Palm facing DOWN. Targets the extensor muscles across the top of your forearm — completely different muscle group from legs, so there is no reason to skip it on a leg day.",
-        "steps": [
-          "Forearm on your thigh, wrist past your knee, palm facing down.",
-          "Hold a light dumbbell.",
-          "Lift the back of your hand upward as high as you can.",
-          "Lower slowly and fully before the next rep.",
-          "Complete all reps on one arm, then switch."
-        ],
-        "difficulty": 1,
-        "calories": 8
+        difficulty: 1,
+        calories: 120
       }
     ],
-    "fri": [
+
+    // FRIDAY — Legs & Abs (moved from Thursday to fit your schedule)
+    fri: [
       {
-        "name": "Incline Dumbbell Press",
-        "target": "Upper chest",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Bench at 30 degrees. Targets upper chest and front shoulder.",
-        "steps": [
-          "Set bench to 30 degree incline.",
-          "Press dumbbells from upper chest upward.",
-          "Lower slowly under control.",
-          "Do not arch lower back off the bench."
+        name: "Stiff-Legged Deadlift",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Knees stay almost straight. Push hips back and feel the hamstring stretch at the bottom.",
+        steps: [
+          "Hold dumbbells or a barbell in front of your thighs.",
+          "Keep knees very slightly bent — almost straight — throughout.",
+          "Hinge at your hips, pushing them back as you lower the weight.",
+          "Stop when you feel a deep hamstring stretch, then drive hips forward to stand."
         ],
-        "difficulty": 1.2,
-        "calories": 30
+        difficulty: 1.3,
+        calories: 34
       },
       {
-        "name": "Single-Arm Dumbbell Row",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10 each",
-        "rest": "60s",
-        "cue": "Rest one knee on bench. Pull weight up to your hip. Avoid twisting torso.",
-        "steps": [
-          "One knee and hand on bench for support.",
-          "Hold dumbbell in the other hand.",
-          "Pull toward your hip.",
-          "Lower fully before the next rep."
+        name: "Smith Machine Squats",
+        target: "Quads & glutes",
+        sets: 3,
+        reps: "12",
+        rest: "75s",
+        cue: "Bar on upper traps, squat below parallel. Drive through full foot to stand.",
+        steps: [
+          "Set bar on Smith machine at shoulder height, step under it and rest on upper traps.",
+          "Feet shoulder-width apart, toes slightly out.",
+          "Squat down until thighs are at or below parallel — do not cut it short.",
+          "Drive through your heels to stand. No Smith machine? Use Goblet Squat."
         ],
-        "difficulty": 1.2,
-        "calories": 28
+        difficulty: 1.3,
+        calories: 38
       },
       {
-        "name": "Dumbbell Lateral Raise",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Raise arms out sideways to shoulder height. Use light weight. Focus on form.",
-        "steps": [
-          "Hold light dumbbells by your sides.",
-          "Raise arms out like wings to shoulder height.",
-          "Soft elbow bend throughout.",
-          "Lower slowly. Heavy weight here is wrong form."
+        name: "Leg Curl (Machine)",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Squeeze your hamstring at the bottom of the movement. Control the return up.",
+        steps: [
+          "Lie face-down on the leg curl machine, pad against the back of your ankles.",
+          "Curl your heels upward toward your glutes.",
+          "Squeeze hard at the top for 1 second.",
+          "Lower slowly back to the start — resist on the way down."
         ],
-        "difficulty": 1,
-        "calories": 22
+        difficulty: 1.1,
+        calories: 26
       },
       {
-        "name": "Push-ups (floor or on knees)",
-        "target": "Chest",
-        "sets": 2,
-        "reps": "to failure",
-        "rest": "45s",
-        "cue": "Go until you cannot do another clean rep. Stop before form breaks.",
-        "steps": [
-          "Start in high plank or knees position.",
-          "Lower chest to just above the floor.",
-          "Push back up with body straight.",
-          "Stop the set when hips start to sag."
+        name: "Abductor Machine",
+        target: "Outer thighs & glutes",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Push knees outward against the pads. Do not use your back — only your hips move.",
+        steps: [
+          "Sit in the abductor machine with pads on the outside of your knees.",
+          "Push your knees outward as wide as the machine allows.",
+          "Squeeze glutes and outer thighs at the end position.",
+          "Bring knees back slowly — do not let the weight snap back."
         ],
-        "difficulty": 1,
-        "calories": 24
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Tricep Bench Dip",
-        "target": "Triceps",
-        "sets": 2,
-        "reps": "10",
-        "rest": "45s",
-        "cue": "Hands on bench behind you. Lower until elbows reach 90 degrees.",
-        "steps": [
-          "Sit on bench edge, hands gripping the edge beside hips.",
-          "Slide hips off bench.",
-          "Lower by bending elbows to 90 degrees.",
-          "Push back up."
+        name: "Standing Calf Raise",
+        target: "Calves",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Rise fully on tiptoes. Lower heel down past neutral for a full stretch.",
+        steps: [
+          "Stand on the edge of a step or use the calf raise machine.",
+          "Rise up onto your tiptoes as high as possible.",
+          "Pause at the top for 1 second.",
+          "Lower your heel slowly below the step level for a full calf stretch."
         ],
-        "difficulty": 1,
-        "calories": 22
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Farmer's Carry or Dead Hang",
-        "target": "Forearms & grip",
-        "sets": 3,
-        "reps": "30s",
-        "rest": "30s",
-        "cue": "Two options — pick whichever your gym allows. Both build grip strength and forearm thickness that makes veins pop. You will feel the forearm pump immediately.",
-        "steps": [
-          "Option A — Farmer's Carry: Pick up two heavy dumbbells, hold at your sides, and walk 20 to 30 steps at a steady pace. Squeeze the handles hard the entire 30 seconds. Shoulders stay back, core stays braced.",
-          "Option B — Dead Hang: Jump up to a pull-up bar and simply hang with straight arms for 30 seconds. Do not swing. Just hold on.",
-          "Rest 30 seconds between sets.",
-          "If your grip gives out early the first week, reduce to 20 seconds and build up — grip strength improves faster than almost any other muscle."
+        name: "Abs Circuit — Leg Raises",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — go straight into Russian Twists",
+        cue: "Superset: do 10 Leg Raises immediately into 10 Russian Twists. Rest 30 sec then repeat.",
+        steps: [
+          "Lie flat on a mat, hands under your hips for support.",
+          "Keep legs straight (or slightly bent) and raise them to 90 degrees.",
+          "Lower legs slowly back down without letting heels touch the floor.",
+          "Immediately move into Russian Twists — no rest between the two exercises."
         ],
-        "difficulty": 1,
-        "calories": 12
+        difficulty: 1.1,
+        calories: 16
+      },
+      {
+        name: "Abs Circuit — Russian Twists",
+        target: "Obliques & core",
+        sets: 3,
+        reps: "10",
+        rest: "30s — then repeat the superset",
+        cue: "After Leg Raises, go straight into this. Lean back 45 degrees, rotate side to side.",
+        steps: [
+          "Sit on the mat, knees bent, lean back to about 45 degrees.",
+          "Lift feet slightly off the floor for extra challenge (or keep them down).",
+          "Rotate your torso to tap the floor beside each hip alternately — that is 1 rep each side.",
+          "Rest 30 seconds, then repeat the full Leg Raises + Russian Twists circuit 2 more times."
+        ],
+        difficulty: 1.1,
+        calories: 14
       }
     ],
-    "sat": [
+
+    // SATURDAY — Full Body Workout + LISS
+    sat: [
       {
-        "name": "Goblet Squat",
-        "target": "Quads",
-        "sets": 3,
-        "reps": "12",
-        "rest": "60s",
-        "cue": "Same movement as Wednesday. Try to go slightly deeper this week.",
-        "steps": [
-          "Hold dumbbell at chest.",
-          "Squat deep and controlled.",
-          "Keep chest up throughout.",
-          "Push through full foot to stand."
+        name: "Sumo Squat",
+        target: "Legs — inner thighs & quads",
+        sets: 3,
+        reps: "10-12",
+        rest: "60s",
+        cue: "Wide stance, toes pointed out 45 degrees. Targets inner thighs and glutes differently from a regular squat.",
+        steps: [
+          "Stand with feet wider than shoulder-width, toes angled out 45 degrees.",
+          "Hold a dumbbell vertically in front of you for balance and load.",
+          "Squat straight down, keeping your chest tall and knees tracking over toes.",
+          "Drive through your full foot to stand. Keep the dumbbell close to your body."
         ],
-        "difficulty": 1.3,
-        "calories": 36
+        difficulty: 1.2,
+        calories: 34
       },
       {
-        "name": "Dumbbell Romanian Deadlift",
-        "target": "Hamstrings",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Focus on the hamstring stretch at the bottom. Hips push back.",
-        "steps": [
-          "Soft knees throughout the movement.",
-          "Push hips backward as you lower.",
-          "Feel hamstring stretch.",
-          "Drive hips forward to return."
+        name: "Decline Dumbbell Press",
+        target: "Lower chest",
+        sets: 3,
+        reps: "10-12",
+        rest: "60s",
+        cue: "Feet anchored high, head lower than hips. Targets lower chest specifically.",
+        steps: [
+          "Set the bench to a decline angle. Hook feet under the ankle pads.",
+          "Hold dumbbells at lower-chest level, elbows just below shoulder height.",
+          "Press the dumbbells upward and slightly inward.",
+          "Lower slowly to the start position under full control."
         ],
-        "difficulty": 1.3,
-        "calories": 34
+        difficulty: 1.2,
+        calories: 30
       },
       {
-        "name": "Leg Extensions (machine)",
-        "target": "Quads",
-        "sets": 2,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Squeeze quad at the top of each rep. Control the return down.",
-        "steps": [
-          "Sit at machine with pad on shin.",
-          "Extend legs until straight.",
-          "Squeeze quad hard at the top.",
-          "Lower slowly."
+        name: "Straight-Arm Pulldown",
+        target: "Back — lats",
+        sets: 3,
+        reps: "10-12",
+        rest: "60s",
+        cue: "Arms stay straight throughout. This isolates the lats without bicep involvement.",
+        steps: [
+          "Stand at a high cable with a straight bar or rope attachment, arms extended overhead.",
+          "Keep arms completely straight — no bending at the elbows.",
+          "Pull the bar down in a big arc until it reaches your thighs.",
+          "Squeeze your lats hard at the bottom, then let the bar rise slowly."
         ],
-        "difficulty": 1,
-        "calories": 26
+        difficulty: 1.1,
+        calories: 24
       },
       {
-        "name": "Standing Calf Raises",
-        "target": "Calves",
-        "sets": 3,
-        "reps": "15",
-        "rest": "45s",
-        "cue": "Slow and controlled. Feel the full range each rep.",
-        "steps": [
-          "Rise fully on tiptoes.",
-          "Pause at top.",
-          "Lower heel slowly.",
-          "Full stretch at the bottom."
+        name: "Face Pulls",
+        target: "Rear delts & upper back",
+        sets: 3,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Pull rope toward your forehead with thumbs pointing back. Great for posture and shoulder health.",
+        steps: [
+          "Set cable to forehead height with rope attachment.",
+          "Hold rope with thumbs up, arms extended forward.",
+          "Pull rope toward your face, elbows flaring high and wide.",
+          "Squeeze rear delts hard at the end, then return slowly."
         ],
-        "difficulty": 1,
-        "calories": 20
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Plank Hold",
-        "target": "Core",
-        "sets": 3,
-        "reps": "40s",
-        "rest": "45s",
-        "cue": "5 seconds longer than Wednesday to track your progress over time.",
-        "steps": [
-          "High plank or forearm plank.",
-          "Straight line from head to heels.",
-          "Abs and glutes squeezed.",
-          "Breathe slowly and steadily."
+        name: "Preacher Curl",
+        target: "Biceps",
+        sets: 3,
+        reps: "10-12",
+        rest: "45s",
+        cue: "The preacher bench stops you cheating. Arms locked — only biceps do the work.",
+        steps: [
+          "Sit at the preacher bench, upper arms resting on the pad.",
+          "Hold a barbell or EZ bar with underhand grip.",
+          "Curl the weight up as far as you can, squeezing your biceps hard.",
+          "Lower slowly all the way down to a full arm extension before the next rep."
         ],
-        "difficulty": 1,
-        "calories": 16
+        difficulty: 1.1,
+        calories: 20
       },
       {
-        "name": "Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "A quick forearm finisher before the cardio. Keeps blood flowing to the arms all the way to the end of the session.",
-        "steps": [
-          "Sit on the bench and rest one forearm along your thigh, wrist hanging just past your knee.",
-          "Hold a light dumbbell, palm facing up.",
-          "Let your wrist drop fully, then curl upward as high as you can.",
-          "Lower slowly all the way back down before the next rep.",
-          "Complete all reps on one arm, then switch."
+        name: "Cable Triceps Pushdown",
+        target: "Triceps",
+        sets: 3,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Elbows pinned to your sides. Push down until arms are fully straight.",
+        steps: [
+          "Stand at a cable machine with a straight bar or V-bar attachment at chest height.",
+          "Grip the bar, elbows pinned to your ribs.",
+          "Push down until both arms are fully extended.",
+          "Let the bar rise slowly back up — control the eccentric."
         ],
-        "difficulty": 1,
-        "calories": 10
+        difficulty: 1,
+        calories: 20
       },
       {
-        "name": "Reverse Wrist Curl (Seated)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15",
-        "rest": "30s",
-        "cue": "Palm facing DOWN. Last strength exercise before the HIIT finisher — keep the reps clean and controlled.",
-        "steps": [
-          "Forearm on your thigh, wrist past your knee, palm facing down.",
-          "Hold a light dumbbell.",
-          "Lift the back of your hand upward as high as you can.",
-          "Lower slowly and fully before the next rep.",
-          "Complete all reps on one arm, then switch."
+        name: "LISS Cardio Finisher — Brisk Walk",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "15 min",
+        rest: "-",
+        cue: "Close your full-body session with 15 minutes of brisk walking to maximise weekly calorie burn.",
+        steps: [
+          "Treadmill: set speed 6-7 km/h, incline 3-4%.",
+          "Walk briskly for 15 minutes without holding the rails.",
+          "Keep an upright posture throughout.",
+          "Outdoor option: 15 min brisk walk — fast enough that talking takes effort."
         ],
-        "difficulty": 1,
-        "calories": 8
+        difficulty: 1,
+        calories: 110
       }
     ]
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PHASE 2 — Build Strength (Weeks 5–8) · Level 3–4
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    "label": "Build Strength",
-    "levelRange": "Level 3-4",
-    "mon": [
+    label: "Build Strength",
+    levelRange: "Level 3-4",
+
+    // MONDAY — Chest, Shoulders & Triceps
+    mon: [
       {
-        "name": "Flat Dumbbell Bench Press (heavier)",
-        "target": "Chest",
-        "sets": 4,
-        "reps": "8-10",
-        "rest": "75s",
-        "cue": "Same flat press as Foundation, but heavier weight and lower reps. The last 2 reps of each set should need real effort.",
-        "steps": [
-          "Sit on the bench with a heavier pair of dumbbells than you used at lower levels.",
-          "Lie back and press the dumbbells above your chest.",
-          "Lower under control until your elbows reach 90 degrees.",
-          "Press back up — the last 2 reps of each set should feel genuinely hard."
+        name: "Incline Bench Press",
+        target: "Upper chest",
+        sets: 3,
+        reps: "10",
+        rest: "75s",
+        cue: "Incline angle hits upper chest harder. The last 2 reps of each set should feel genuinely difficult.",
+        steps: [
+          "Set bench to 30-45 degrees. Grip the barbell slightly wider than shoulder-width.",
+          "Lower the bar slowly to your upper chest — 3 seconds down.",
+          "Press back up explosively without fully locking elbows at the top.",
+          "Dumbbell version: hold dumbbells at upper-chest level and press upward."
         ],
-        "difficulty": 1.3,
-        "calories": 36
+        difficulty: 1.3,
+        calories: 36
       },
       {
-        "name": "Decline Push-up",
-        "target": "Lower chest & triceps",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "60s",
-        "cue": "Feet elevated on a step or low bench. This shifts more of the work onto your lower chest and triceps than a flat push-up.",
-        "steps": [
-          "Place your feet on a step, bench, or chair behind you.",
-          "Hands on the floor, slightly wider than shoulder width.",
-          "Lower your chest toward the floor with control.",
-          "Push back up to a straight-arm position."
+        name: "Cable Chest Fly",
+        target: "Chest",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Cable keeps tension on your chest the entire range — unlike dumbbells which go slack at the top.",
+        steps: [
+          "Stand between two cable stacks set at chest height, handle in each hand.",
+          "Arms slightly bent, bring hands together in front of your chest in a hugging motion.",
+          "Squeeze your chest hard when hands meet.",
+          "Open back out slowly, feeling the stretch across your chest."
         ],
-        "difficulty": 1.2,
-        "calories": 26
+        difficulty: 1.1,
+        calories: 24
       },
       {
-        "name": "Cable Chest Fly (standing)",
-        "target": "Chest",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "A standing cable keeps tension on your chest through the entire range, unlike a dumbbell fly which goes slack at the top.",
-        "steps": [
-          "Stand between two cable stacks set to chest height.",
-          "Hold a handle in each hand, arms slightly bent.",
-          "Bring your hands together in front of your chest in a hugging motion.",
-          "Open back out slowly, feeling a stretch across your chest."
+        name: "Dumbbell Arnold Press",
+        target: "Shoulders",
+        sets: 3,
+        reps: "10",
+        rest: "60s",
+        cue: "Rotating shoulder press — hits all three heads of the shoulder more than a standard press.",
+        steps: [
+          "Hold dumbbells at shoulder height with palms facing YOU, elbows in front.",
+          "As you press upward, rotate your palms to face FORWARD at the top.",
+          "Reverse the rotation on the way back down — palms end facing you again.",
+          "Keep the rotation smooth and controlled throughout."
         ],
-        "difficulty": 1.1,
-        "calories": 24
+        difficulty: 1.2,
+        calories: 28
       },
       {
-        "name": "Arnold Press",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "A rotating shoulder press — palms face you at the bottom, face forward at the top. Hits more of the shoulder than a standard press.",
-        "steps": [
-          "Hold dumbbells at shoulder height, palms facing you.",
-          "Press up while rotating your palms to face forward at the top.",
-          "Reverse the rotation as you lower back down.",
-          "Keep the movement smooth, not jerky."
-        ],
-        "difficulty": 1.2,
-        "calories": 28
-      },
-      {
-        "name": "Overhead Dumbbell Tricep Extension",
-        "target": "Triceps",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Stretches the triceps more than a pushdown because your arms are overhead instead of at your sides.",
-        "steps": [
-          "Hold one dumbbell with both hands above your head, arms straight.",
-          "Lower it slowly behind your head by bending only at the elbows.",
-          "Keep your upper arms still — only your forearms move.",
-          "Press back up to straight arms."
-        ],
-        "difficulty": 1.1,
-        "calories": 22
-      },
-      {
-        "name": "Wrist Curl (Seated, Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Slightly heavier than Foundation phase. Your forearm flexors should be noticeably stronger by now — use that progress.",
-        "steps": [
-          "Sit with your forearm resting along your thigh, palm facing up, wrist just past your knee.",
-          "Use a slightly heavier dumbbell than you used at Foundation level.",
-          "Curl upward fully, pause at the top, then lower slowly and completely.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 11
-      },
-      {
-        "name": "Reverse Wrist Curl (Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Palm facing DOWN, slightly heavier dumbbell than Foundation. The extensor muscles develop more slowly than the flexors — stay patient.",
-        "steps": [
-          "Forearm on your thigh, palm facing down.",
-          "Use a slightly heavier dumbbell than the Foundation phase.",
-          "Lift the back of your hand all the way up, pause, then lower fully.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 9
-      }
-    ],
-    "tue": [
-      {
-        "name": "Band-Assisted Pull-up",
-        "target": "Back",
-        "sets": 3,
-        "reps": "6-8",
-        "rest": "75s",
-        "cue": "A real step toward a full pull-up. The band takes some of your bodyweight so you can practice the motion with good form.",
-        "steps": [
-          "Loop a resistance band over the pull-up bar and place one foot or knee in the loop.",
-          "Grip the bar slightly wider than shoulder width.",
-          "Pull your chest up toward the bar, leading with your elbows.",
-          "Lower under control — don't just drop down."
-        ],
-        "difficulty": 1.3,
-        "calories": 32
-      },
-      {
-        "name": "Bent-Over Dumbbell Row (both arms)",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Both arms at once instead of one at a time — more core and lower-back stability needed to hold the position.",
-        "steps": [
-          "Hold a dumbbell in each hand, hinge forward at the hips with a flat back.",
-          "Let the dumbbells hang at arm's length.",
-          "Pull both elbows back, squeezing your shoulder blades together.",
-          "Lower with control without rounding your back."
-        ],
-        "difficulty": 1.3,
-        "calories": 30
-      },
-      {
-        "name": "Chest-Supported Row",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Resting your chest on an incline bench removes any chance of cheating with your lower back — it's all back muscle.",
-        "steps": [
-          "Lie face-down on an incline bench holding a dumbbell in each hand.",
-          "Let your arms hang straight down.",
-          "Pull both elbows back, squeezing your shoulder blades.",
-          "Lower slowly back to the start."
-        ],
-        "difficulty": 1.2,
-        "calories": 28
-      },
-      {
-        "name": "Reverse Cable Fly",
-        "target": "Rear delts",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Same rear-delt target as Face Pull, different angle — keeps the muscle guessing instead of doing the identical motion every week.",
-        "steps": [
-          "Stand between two cables set above shoulder height.",
-          "Cross your arms and grab the opposite handles.",
-          "Pull your arms out and back in a wide arc, squeezing your shoulder blades.",
-          "Return slowly to the start."
-        ],
-        "difficulty": 1.1,
-        "calories": 22
-      },
-      {
-        "name": "Hammer Curl",
-        "target": "Biceps & forearms",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Palms face each other instead of up — shifts some of the work to your forearms as well as your biceps.",
-        "steps": [
-          "Stand holding a dumbbell in each hand, palms facing your body.",
-          "Curl one arm up keeping your palm facing in the whole way.",
-          "Squeeze at the top, then lower slowly.",
-          "Switch arms and repeat."
-        ],
-        "difficulty": 1.1,
-        "calories": 20
-      },
-      {
-        "name": "Wrist Curl (Seated, Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Same movement as Foundation phase but with a slightly heavier dumbbell. By this level your forearm flexors should be noticeably stronger than when you started the wrist work.",
-        "steps": [
-          "Sit with your forearm resting along your thigh, palm facing up, wrist past your knee.",
-          "Use a slightly heavier dumbbell than you used in the Foundation phase.",
-          "Curl upward fully, pause at the top, then lower slowly and completely.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 11
-      },
-      {
-        "name": "Reverse Wrist Curl (Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Heavier than Foundation phase. The extensor muscles on the top of your forearm develop more slowly than the flexors — stay patient, they show clearly in the veins along the top of your forearm once they build up.",
-        "steps": [
-          "Sit with your forearm on your thigh, palm facing down.",
-          "Use a slightly heavier dumbbell than the Foundation phase.",
-          "Lift the back of your hand all the way up, pause, then lower fully before the next rep.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 9
-      }
-    ],
-    "wed": [
-      {
-        "name": "Bulgarian Split Squat",
-        "target": "Quads & glutes",
-        "sets": 3,
-        "reps": "10 each leg",
-        "rest": "75s",
-        "cue": "One leg does almost all the work here — much harder than a regular squat at the same weight, and great for fixing side-to-side imbalances.",
-        "steps": [
-          "Stand a long step in front of a bench, rest the top of one foot on it behind you.",
-          "Lower straight down on your front leg until the back knee nearly touches the floor.",
-          "Push through your front foot to stand back up.",
-          "Complete all reps, then switch legs."
-        ],
-        "difficulty": 1.4,
-        "calories": 38
-      },
-      {
-        "name": "Walking Lunge (weighted)",
-        "target": "Quads & glutes",
-        "sets": 3,
-        "reps": "10 each leg",
-        "rest": "75s",
-        "cue": "Now holding dumbbells — the same lunge pattern a beginner does with bodyweight, but loaded.",
-        "steps": [
-          "Hold a dumbbell in each hand at your sides.",
-          "Step forward into a lunge, back knee dropping toward the floor.",
-          "Push through your front foot to step into the next lunge.",
-          "Keep alternating legs as you walk forward."
-        ],
-        "difficulty": 1.3,
-        "calories": 34
-      },
-      {
-        "name": "Stiff-Leg Deadlift",
-        "target": "Hamstrings",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Knees stay almost straight here, unlike a Romanian deadlift's soft bend — puts more stretch directly on the hamstrings.",
-        "steps": [
-          "Hold dumbbells in front of your thighs, knees only very slightly bent.",
-          "Hinge at your hips, lowering the dumbbells along your legs.",
-          "Stop when you feel a deep hamstring stretch.",
-          "Drive your hips forward to stand back up."
-        ],
-        "difficulty": 1.3,
-        "calories": 34
-      },
-      {
-        "name": "Lying Leg Curl (machine)",
-        "target": "Hamstrings",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Lying instead of seated changes the angle on your hamstrings — a useful variation, not a harder or easier version.",
-        "steps": [
-          "Lie face down on the machine with the pad against the back of your ankles.",
-          "Curl your heels up toward your glutes.",
-          "Squeeze at the top for 1 second.",
-          "Lower slowly back to the start."
-        ],
-        "difficulty": 1.1,
-        "calories": 26
-      },
-      {
-        "name": "Seated Calf Raise",
-        "target": "Calves",
-        "sets": 3,
-        "reps": "15",
-        "rest": "45s",
-        "cue": "A seated calf raise targets a slightly different part of the calf than standing — keep both versions in rotation.",
-        "steps": [
-          "Sit at the machine with the pads on your thighs and the balls of your feet on the platform.",
-          "Rise up onto your toes as high as you can.",
-          "Pause at the top.",
-          "Lower your heels down for a full stretch."
-        ],
-        "difficulty": 1,
-        "calories": 18
-      },
-      {
-        "name": "Wrist Curl (Seated, Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Your legs are done — forearms are completely fresh. Heavier dumbbell than Foundation phase, same clean movement.",
-        "steps": [
-          "Sit with your forearm resting along your thigh, palm facing up, wrist just past your knee.",
-          "Use a slightly heavier dumbbell than Foundation phase.",
-          "Curl upward fully, pause, then lower slowly and completely.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 11
-      },
-      {
-        "name": "Reverse Wrist Curl (Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Palm facing DOWN. Same progression as the Tuesday version — slightly heavier than Foundation, focus on the top of the forearm.",
-        "steps": [
-          "Forearm on your thigh, palm facing down.",
-          "Use a slightly heavier dumbbell than Foundation phase.",
-          "Lift the back of your hand all the way up, pause, then lower fully.",
-          "Switch arms after all reps."
-        ],
-        "difficulty": 1.1,
-        "calories": 9
-      }
-    ],
-    "fri": [
-      {
-        "name": "Flat Dumbbell Press",
-        "target": "Chest",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "A flat bench angle instead of incline — works the middle of your chest instead of the upper portion.",
-        "steps": [
-          "Lie flat on a bench holding a dumbbell in each hand.",
-          "Press them straight up above your chest.",
-          "Lower under control until your elbows hit about 90 degrees.",
-          "Press back up."
-        ],
-        "difficulty": 1.2,
-        "calories": 30
-      },
-      {
-        "name": "Chest-Supported Dumbbell Row",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "60s",
-        "cue": "Same idea as Tuesday's version — lying face-down removes any lower-back cheating from the row.",
-        "steps": [
-          "Lie face-down on an incline bench with a dumbbell in each hand.",
-          "Let your arms hang straight down.",
-          "Pull both elbows back, squeezing your shoulder blades together.",
-          "Lower slowly."
-        ],
-        "difficulty": 1.2,
-        "calories": 28
-      },
-      {
-        "name": "Cable Lateral Raise",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "A cable keeps tension on your shoulder the whole way up and down, unlike a dumbbell which goes slack at the bottom.",
-        "steps": [
-          "Stand sideways to a low cable pulley, handle in the hand farthest from the machine.",
+        name: "Cable Lateral Raise",
+        target: "Side delts",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Cable keeps tension on your shoulder the whole way up AND down — unlike dumbbells.",
+        steps: [
+          "Stand sideways to a low cable, handle in the hand farthest from the machine.",
+          "Keep a slight bend in your elbow throughout.",
           "Raise your arm out to the side until it reaches shoulder height.",
-          "Pause briefly at the top.",
-          "Lower slowly and repeat."
+          "Lower slowly and repeat. Switch sides after all reps."
         ],
-        "difficulty": 1.1,
-        "calories": 22
+        difficulty: 1.1,
+        calories: 20
       },
       {
-        "name": "Decline Push-up",
-        "target": "Lower chest & shoulders",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Feet elevated this time instead of flat on the floor — a small change that shifts the emphasis and keeps push-ups from getting stale.",
-        "steps": [
-          "Place your feet on a step or low chair behind you.",
-          "Hands on the floor a bit wider than shoulder width.",
-          "Lower your chest toward the floor.",
-          "Push back up to straight arms."
-        ],
-        "difficulty": 1.2,
-        "calories": 26
-      },
-      {
-        "name": "Overhead Tricep Extension",
-        "target": "Triceps",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Same triceps stretch-focused move from Monday's Build phase — repeated here since Friday already mixes push and pull.",
-        "steps": [
+        name: "Overhead Triceps Extension",
+        target: "Triceps",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Arms overhead stretches the long head of the triceps — the largest portion.",
+        steps: [
           "Hold one dumbbell with both hands overhead, arms straight.",
-          "Lower it behind your head by bending only your elbows.",
-          "Keep your upper arms still.",
-          "Press back up to straight arms."
+          "Lower slowly behind your head by bending only at the elbows.",
+          "Keep upper arms still and pointing straight up.",
+          "Press back to straight arms. Repeat."
         ],
-        "difficulty": 1.1,
-        "calories": 22
+        difficulty: 1.1,
+        calories: 22
       },
       {
-        "name": "Farmer's Carry (Heavier)",
-        "target": "Forearms, grip & traps",
-        "sets": 3,
-        "reps": "40s",
-        "rest": "30s",
-        "cue": "Heavier than the Foundation version and 10 extra seconds per carry. Your grip should have improved noticeably by this phase — use weight that genuinely challenges you to hold on past the 30-second mark.",
-        "steps": [
-          "Pick up two dumbbells that feel genuinely heavy — grip should start to struggle around 30 to 35 seconds in.",
-          "Walk with shoulders back, core braced, back straight.",
-          "Keep your grip tight the entire 40 seconds — do not var the dumbbells slip into your fingers.",
-          "Put them down under control at the end. Rest the full 30 seconds before the next set."
+        name: "Bench Dips",
+        target: "Triceps",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Hands on bench behind you, hips off. Lower until elbows reach 90 degrees.",
+        steps: [
+          "Sit on the edge of a bench, hands gripping the edge beside your hips.",
+          "Slide your hips off the bench so your weight is on your hands.",
+          "Lower your body by bending your elbows to about 90 degrees.",
+          "Push back up to straight arms. Keep your back close to the bench."
         ],
-        "difficulty": 1.1,
-        "calories": 14
+        difficulty: 1.1,
+        calories: 22
+      },
+      {
+        name: "Hanging Knee Raises",
+        target: "Core & abs",
+        sets: 4,
+        reps: "10",
+        rest: "45s",
+        cue: "4 sets now instead of 3. Control the lowering — abs are working on the way down too.",
+        steps: [
+          "Hang from a pull-up bar, hands slightly wider than shoulder-width.",
+          "Pull both knees up toward your chest using your core — not momentum.",
+          "Squeeze at the top, then lower legs slowly.",
+          "Reset fully hanging before the next rep."
+        ],
+        difficulty: 1.2,
+        calories: 22
       }
     ],
-    "sat": [
+
+    // TUESDAY — Back & Biceps + Cardio
+    tue: [
       {
-        "name": "Bulgarian Split Squat",
-        "target": "Quads & glutes",
-        "sets": 3,
-        "reps": "10 each leg",
-        "rest": "60s",
-        "cue": "Same single-leg challenge as Wednesday's Build phase — Saturday keeps the pace a little quicker since a HIIT finisher follows.",
-        "steps": [
-          "Rest the top of one foot on a bench behind you, standing a long step in front of it.",
-          "Lower straight down until your back knee nearly touches the floor.",
-          "Push through your front foot to stand.",
-          "Switch legs after completing all reps."
+        name: "T-Bar Row",
+        target: "Mid back & thickness",
+        sets: 3,
+        reps: "8",
+        rest: "75s",
+        cue: "Heavier, lower reps. Pull the weight toward your chest. Feel your mid-back do the work.",
+        steps: [
+          "Straddle the T-bar machine or use a barbell in a corner with a row handle.",
+          "Hinge forward 45 degrees, back flat, arms straight.",
+          "Pull the weight up toward your lower chest, leading with your elbows.",
+          "Squeeze your shoulder blades together at the top, lower slowly."
         ],
-        "difficulty": 1.4,
-        "calories": 38
+        difficulty: 1.4,
+        calories: 36
       },
       {
-        "name": "Single-Leg Romanian Deadlift",
-        "target": "Hamstrings & balance",
-        "sets": 3,
-        "reps": "8 each leg",
-        "rest": "60s",
-        "cue": "Balancing on one leg adds a real stability challenge on top of the hamstring stretch.",
-        "steps": [
-          "Stand on one leg holding a dumbbell in the opposite hand.",
-          "Hinge forward at the hips, letting your free leg extend back for balance.",
-          "Lower the dumbbell toward the floor, feeling the hamstring stretch.",
-          "Drive your hips forward to stand back up, then switch legs."
+        name: "Cable Close-Grip Pulldown",
+        target: "Lats & biceps",
+        sets: 3,
+        reps: "8",
+        rest: "60s",
+        cue: "Narrow grip changes the angle and hits the inner lats. Pull to your collarbone.",
+        steps: [
+          "Attach a close-grip handle to the lat pulldown. Sit with thighs under the pad.",
+          "Grip the handle with palms facing each other, hands close together.",
+          "Pull down to your collarbone, elbows driving toward your hips.",
+          "Let the weight rise slowly, getting a full lat stretch at the top."
         ],
-        "difficulty": 1.4,
-        "calories": 34
+        difficulty: 1.3,
+        calories: 30
       },
       {
-        "name": "Walking Lunge",
-        "target": "Quads & glutes",
-        "sets": 3,
-        "reps": "10 each leg",
-        "rest": "60s",
-        "cue": "Same pattern as Wednesday's Build-phase lunge — moving instead of standing in place makes your legs and balance work harder.",
-        "steps": [
-          "Step forward into a lunge, back knee dropping toward the floor.",
-          "Push through your front foot to step forward into the next lunge.",
-          "Keep your torso upright throughout.",
-          "Continue alternating legs."
+        name: "Seated Cable Row",
+        target: "Back",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Heavier than Phase 1. Hold the contraction for 2 full seconds this time.",
+        steps: [
+          "Sit upright at the cable row, feet on the platform.",
+          "Pull the handle to your belly button, squeezing shoulder blades hard.",
+          "Hold the squeeze for 2 full seconds.",
+          "Let arms extend forward slowly, getting a stretch before the next rep."
         ],
-        "difficulty": 1.3,
-        "calories": 32
+        difficulty: 1.3,
+        calories: 28
       },
       {
-        "name": "Seated Calf Raise",
-        "target": "Calves",
-        "sets": 3,
-        "reps": "15",
-        "rest": "45s",
-        "cue": "Same seated variation as Wednesday — calves respond well to being hit from a couple of different angles each week.",
-        "steps": [
-          "Sit with the pads on your thighs and your toes on the platform.",
-          "Rise onto your toes as high as you can.",
-          "Pause at the top.",
-          "Lower for a full stretch."
+        name: "Dumbbell Hammer Curl",
+        target: "Biceps & forearms",
+        sets: 4,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Palms facing each other the whole time. This hits biceps AND forearms together.",
+        steps: [
+          "Stand with a dumbbell in each hand, palms facing your body (thumbs up).",
+          "Curl one arm up, keeping your palm facing in the whole way.",
+          "Squeeze at the top, then lower slowly.",
+          "Switch arms and repeat — alternate for all reps."
         ],
-        "difficulty": 1,
-        "calories": 18
+        difficulty: 1.2,
+        calories: 22
       },
       {
-        "name": "Side Plank",
-        "target": "Obliques & core",
-        "sets": 3,
-        "reps": "30s each side",
-        "rest": "45s",
-        "cue": "A side-on hold instead of a front plank — targets the obliques along the sides of your core.",
-        "steps": [
-          "Lie on your side, prop yourself up on one forearm, elbow under your shoulder.",
-          "Lift your hips so your body forms a straight line.",
-          "Hold, keeping your hips from sagging toward the floor.",
-          "Switch sides after the hold."
+        name: "Spider Curl",
+        target: "Biceps",
+        sets: 4,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Lying face-down on an incline keeps your elbows forward and removes all cheating.",
+        steps: [
+          "Lie face-down on an incline bench set to 45 degrees, holding a dumbbell in each hand.",
+          "Arms hang straight down from your shoulders.",
+          "Curl both arms upward — elbows stay pointed straight down throughout.",
+          "Lower slowly to a full arm extension before the next rep."
         ],
-        "difficulty": 1.1,
-        "calories": 14
+        difficulty: 1.2,
+        calories: 20
       },
       {
-        "name": "Wrist Curl (Seated, Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Saturday finisher before HIIT — heavier than Foundation, same movement. Forearms are fresh after a leg session so give it full effort.",
-        "steps": [
-          "Sit with your forearm along your thigh, palm facing up, wrist past your knee.",
-          "Use a slightly heavier dumbbell than Foundation phase.",
-          "Curl fully upward, pause, then lower slowly.",
-          "Switch arms after all reps."
+        name: "Wrist Curls + Dead Hang",
+        target: "Forearms & grip",
+        sets: 3,
+        reps: "15 curls then 20s hang",
+        rest: "30s",
+        cue: "Superset: 15 wrist curls immediately followed by a 20-second dead hang. Burns the forearms completely.",
+        steps: [
+          "Do 15 seated wrist curls (palm up, forearm on thigh) with a light dumbbell.",
+          "Immediately stand up and grip a pull-up bar with both hands.",
+          "Hang with straight arms for 20 seconds — do not swing.",
+          "Step off and rest 30 seconds. Repeat for all 3 sets."
         ],
-        "difficulty": 1.1,
-        "calories": 11
+        difficulty: 1.2,
+        calories: 14
       },
       {
-        "name": "Reverse Wrist Curl (Heavier)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Palm facing DOWN. Keep reps clean — this is the last strength exercise before the HIIT finisher.",
-        "steps": [
-          "Forearm on your thigh, palm facing down.",
-          "Use a slightly heavier dumbbell than Foundation phase.",
-          "Lift the back of your hand all the way up, pause, then lower fully.",
-          "Switch arms after all reps."
+        name: "LISS Cardio Finisher",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "20 min",
+        rest: "-",
+        cue: "20 minutes of low-intensity steady-state cardio to maximise fat burning after the lifting session.",
+        steps: [
+          "Treadmill: set speed 6-7 km/h, incline 3-4%. Walk briskly for 20 minutes.",
+          "Stationary bike: moderate resistance, steady comfortable pace.",
+          "Elliptical: steady pace for 20 minutes.",
+          "Keep intensity low — you should be breathing harder but still able to speak."
         ],
-        "difficulty": 1.1,
-        "calories": 9
+        difficulty: 1,
+        calories: 150
+      }
+    ],
+
+    // WEDNESDAY — Legs (Hamstrings & Glutes focus), Calves & Abs
+    wed: [
+      {
+        name: "Dumbbell Romanian Deadlift",
+        target: "Hamstrings & glutes",
+        sets: 3,
+        reps: "10",
+        rest: "75s",
+        cue: "Soft knee bend, hips push back. Feel the hamstring stretch at the bottom — that's where the growth happens.",
+        steps: [
+          "Hold a dumbbell in each hand in front of your thighs.",
+          "Soft bend in your knees — not a squat, just enough to unlock them.",
+          "Push your hips BACKWARD as you lower the dumbbells along your legs.",
+          "Feel the hamstring stretch, then drive hips forward to return to standing."
+        ],
+        difficulty: 1.3,
+        calories: 34
+      },
+      {
+        name: "Hip Thrust",
+        target: "Glutes",
+        sets: 3,
+        reps: "10",
+        rest: "60s",
+        cue: "The best glute exercise. Drive hips up until body forms a straight line from knees to shoulders.",
+        steps: [
+          "Sit on the floor with your upper back against a bench, a dumbbell or barbell across your hips.",
+          "Feet flat on the floor, shoulder-width apart.",
+          "Drive your hips upward by squeezing your glutes hard.",
+          "Hold at the top for 1 second, then lower slowly. Do not arch your lower back."
+        ],
+        difficulty: 1.3,
+        calories: 30
+      },
+      {
+        name: "Leg Curl (Machine)",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Higher reps this phase. Squeeze your hamstring hard at the bottom every single rep.",
+        steps: [
+          "Lie face-down (or seated) at the leg curl machine.",
+          "Curl your heels up toward your glutes as far as possible.",
+          "Squeeze the hamstring hard at the fully contracted position.",
+          "Lower slowly under full control — do not let the weight drop."
+        ],
+        difficulty: 1.1,
+        calories: 26
+      },
+      {
+        name: "Donkey Kickbacks",
+        target: "Glutes",
+        sets: 3,
+        reps: "15 each leg",
+        rest: "45s",
+        cue: "Use a cable machine or bodyweight. Squeeze your glute at the top of each rep.",
+        steps: [
+          "On cable machine: attach ankle strap to low cable, face the machine, grip handles for balance.",
+          "Kick your leg back and up, squeezing the glute hard at the top.",
+          "Lower slowly. Keep your core braced throughout — do not twist your hips.",
+          "Complete all reps on one leg then switch. Bodyweight version works on all fours on a mat."
+        ],
+        difficulty: 1.1,
+        calories: 22
+      },
+      {
+        name: "Standing Calf Raise",
+        target: "Calves",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Full range every rep — heels go below the step at the bottom, tiptoes fully at the top.",
+        steps: [
+          "Stand on the edge of a step with heels hanging off.",
+          "Rise onto tiptoes as high as possible, squeezing calves.",
+          "Pause at the top for 1 second.",
+          "Lower your heels below the step level for a full stretch before the next rep."
+        ],
+        difficulty: 1,
+        calories: 20
+      },
+      {
+        name: "Abs Tri-Set — Ab Crunches",
+        target: "Upper abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — go straight into Reverse Crunches",
+        cue: "Tri-set: Crunches → Reverse Crunches → Russian Twists back to back, no rest. Rest 30s then repeat.",
+        steps: [
+          "Lie on your back, knees bent, hands lightly behind your head.",
+          "Curl your upper body forward toward your knees using only your abs.",
+          "Hold the crunch for 1 second at the top.",
+          "Lower slowly back down. Immediately move to Reverse Crunches."
+        ],
+        difficulty: 1.1,
+        calories: 14
+      },
+      {
+        name: "Abs Tri-Set — Reverse Crunches",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — go straight into Russian Twists",
+        cue: "Keep your lower back pressed into the mat. Lift hips using your abs, not momentum.",
+        steps: [
+          "Lie on your back, hands under your hips, legs bent at 90 degrees.",
+          "Use your lower abs to lift your hips off the floor, curling your knees toward your chest.",
+          "Pause at the top, then lower hips slowly back down.",
+          "Immediately move into Russian Twists — no rest."
+        ],
+        difficulty: 1.1,
+        calories: 14
+      },
+      {
+        name: "Abs Tri-Set — Russian Twists",
+        target: "Obliques",
+        sets: 3,
+        reps: "10 each side",
+        rest: "30s — then repeat the full tri-set",
+        cue: "Final exercise of the tri-set. Lean back, rotate side to side. Rest 30 sec then repeat from Crunches.",
+        steps: [
+          "Sit on the floor, knees bent, lean back about 45 degrees.",
+          "Hold hands together or a light weight — lift feet slightly off the floor.",
+          "Rotate your torso to tap the floor beside each hip alternately.",
+          "Rest 30 seconds, then repeat the full tri-set 2 more times."
+        ],
+        difficulty: 1.2,
+        calories: 16
+      }
+    ],
+
+    // FRIDAY — Upper Body & Cardio
+    fri: [
+      {
+        name: "Barbell Bench Press",
+        target: "Chest",
+        sets: 3,
+        reps: "10",
+        rest: "75s",
+        cue: "The king of chest exercises. Lower bar to mid-chest, press up and slightly back.",
+        steps: [
+          "Lie flat on a bench, grip the barbell slightly wider than shoulder-width.",
+          "Unrack and lower the bar slowly to your mid-chest — 3 seconds down.",
+          "Press back up powerfully without fully locking elbows at the top.",
+          "No barbell? Use Dumbbell Bench Press at the same weight progression."
+        ],
+        difficulty: 1.3,
+        calories: 36
+      },
+      {
+        name: "Dumbbell Shoulder Press",
+        target: "Shoulders",
+        sets: 3,
+        reps: "10",
+        rest: "60s",
+        cue: "Heavier than Phase 1. The last 2 reps should take real effort.",
+        steps: [
+          "Sit on a bench with back support, dumbbells at shoulder height.",
+          "Press both dumbbells straight up simultaneously until nearly fully extended.",
+          "Lower slowly back to shoulder height.",
+          "Keep your core braced and do not lean back."
+        ],
+        difficulty: 1.3,
+        calories: 30
+      },
+      {
+        name: "Reverse-Grip Lat Pulldown",
+        target: "Lats & biceps",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Underhand grip shifts more work to your lower lats and involves biceps more than an overhand grip.",
+        steps: [
+          "Sit at the lat pulldown, grip the bar underhand (palms facing you), shoulder-width apart.",
+          "Pull the bar down to your upper chest, elbows driving toward your hips.",
+          "Lean back slightly as you pull — keep it controlled, not a swing.",
+          "Let the bar rise slowly under control to a full arm extension."
+        ],
+        difficulty: 1.2,
+        calories: 28
+      },
+      {
+        name: "EZ Barbell Curl",
+        target: "Biceps",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Same movement as Phase 1 but heavier. Strict form — no swinging.",
+        steps: [
+          "Hold an EZ bar with underhand grip on the inner angled grip.",
+          "Stand tall, elbows locked to your sides.",
+          "Curl the bar up to your chest in a smooth arc.",
+          "Lower slowly all the way to full arm extension."
+        ],
+        difficulty: 1.2,
+        calories: 22
+      },
+      {
+        name: "Cable Triceps Pushdown",
+        target: "Triceps",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Heavier than Phase 1. Elbows still pinned. Squeeze triceps hard at the bottom.",
+        steps: [
+          "Stand at cable machine with V-bar or straight bar at chest height.",
+          "Grip bar with elbows pinned to ribs.",
+          "Push down until arms are fully straight, squeezing triceps.",
+          "Return slowly — control the whole movement."
+        ],
+        difficulty: 1.2,
+        calories: 22
+      },
+      {
+        name: "LISS Cardio Finisher",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "20 min",
+        rest: "-",
+        cue: "20 minutes after upper body work accelerates fat loss. Keep intensity low and steady.",
+        steps: [
+          "Treadmill: speed 6-7 km/h, incline 3-4%. Walk briskly for 20 minutes.",
+          "Or use the elliptical at a steady comfortable pace.",
+          "Breathing should be elevated but you can still hold a conversation.",
+          "Do not stop moving — consistency of the pace is more important than intensity."
+        ],
+        difficulty: 1,
+        calories: 150
+      }
+    ],
+
+    // SATURDAY — Lower Body (Quad focus) & Abs
+    sat: [
+      {
+        name: "Smith Machine Front Squat",
+        target: "Quads",
+        sets: 3,
+        reps: "10",
+        rest: "90s",
+        cue: "Bar across front of shoulders. Upright torso hits quads harder than a back squat.",
+        steps: [
+          "Set bar on Smith machine at shoulder height, cross your arms to rest it on front delts.",
+          "Step feet shoulder-width, slightly forward of the bar.",
+          "Squat straight down keeping your torso as upright as possible.",
+          "Drive through your full foot to stand. No Smith? Use a dumbbell Goblet Squat."
+        ],
+        difficulty: 1.4,
+        calories: 40
+      },
+      {
+        name: "Leg Press",
+        target: "Quads & glutes",
+        sets: 3,
+        reps: "10",
+        rest: "75s",
+        cue: "Feet shoulder-width. Do not lock knees at the top. Control the platform down.",
+        steps: [
+          "Sit in the leg press machine, feet shoulder-width on the platform.",
+          "Release the safety handles and lower the platform toward your chest slowly.",
+          "Push away through your full foot until legs are nearly straight — do not snap knees.",
+          "Lower again slowly for the next rep."
+        ],
+        difficulty: 1.3,
+        calories: 38
+      },
+      {
+        name: "Leg Extension",
+        target: "Quads",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Squeeze your quad hard at the top of each rep. Control the return down slowly.",
+        steps: [
+          "Sit at the leg extension machine, pad resting on your shins just above the ankle.",
+          "Extend your legs until they are straight, squeezing your quads hard at the top.",
+          "Hold the squeeze for 1 second.",
+          "Lower slowly back to the start — do not let the weight drop."
+        ],
+        difficulty: 1.1,
+        calories: 26
+      },
+      {
+        name: "Seated Calf Raise",
+        target: "Calves",
+        sets: 4,
+        reps: "15",
+        rest: "45s",
+        cue: "4 sets today. Seated version hits the soleus — a deeper calf muscle standing raises miss.",
+        steps: [
+          "Sit at the seated calf raise machine, pads resting on your thighs near your knees.",
+          "Balls of feet on the platform, heels hanging free.",
+          "Rise onto your toes as high as possible, squeezing your calves.",
+          "Lower heels slowly all the way down for a full stretch."
+        ],
+        difficulty: 1,
+        calories: 22
+      },
+      {
+        name: "Abs Tri-Set — Knee Raises on Captain's Chair",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — go straight into Flutter Kicks",
+        cue: "Tri-set: Knee Raises → Flutter Kicks → High-Knee Crunches back to back. Rest 30s then repeat.",
+        steps: [
+          "Stand on the captain's chair, forearms on the pads supporting your weight.",
+          "Pull both knees up toward your chest using your lower abs.",
+          "Lower your legs slowly — resist gravity on the way down.",
+          "Immediately move into Flutter Kicks without resting."
+        ],
+        difficulty: 1.2,
+        calories: 18
+      },
+      {
+        name: "Abs Tri-Set — Flutter Kicks",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10 each side",
+        rest: "0s — go straight into High-Knee Crunches",
+        cue: "Lie flat, legs slightly off the floor. Small alternating kicks. Keep lower back pressed down.",
+        steps: [
+          "Lie flat on a mat, hands under your hips.",
+          "Raise both legs about 6 inches off the floor.",
+          "Alternate kicking legs up and down in small controlled movements.",
+          "Keep your lower back pressed into the mat throughout. Move into High-Knee Crunches next."
+        ],
+        difficulty: 1.2,
+        calories: 16
+      },
+      {
+        name: "Abs Tri-Set — High-Knee Crunches",
+        target: "Full core",
+        sets: 3,
+        reps: "10",
+        rest: "30s — then repeat the full tri-set",
+        cue: "Final exercise of the tri-set. Bring knee and opposite elbow together explosively.",
+        steps: [
+          "Lie on your back, hands behind your head, legs extended.",
+          "Simultaneously pull one knee toward your chest and crunch your opposite elbow toward it.",
+          "Alternate sides for each rep — left knee to right elbow, then right knee to left elbow.",
+          "Rest 30 seconds, then repeat the full tri-set 2 more times from Knee Raises."
+        ],
+        difficulty: 1.2,
+        calories: 18
       }
     ]
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PHASE 3 — Advanced (Weeks 9+) · Level 5–6
+  // Progressive overload of Phase 2 with advanced variations
+  // ─────────────────────────────────────────────────────────────────────────
   {
-    "label": "Advanced",
-    "levelRange": "Level 5-6",
-    "mon": [
+    label: "Advanced",
+    levelRange: "Level 5-6",
+
+    // MONDAY — Chest, Shoulders & Triceps (Advanced)
+    mon: [
       {
-        "name": "Weighted Dip or Close-Grip Push-up",
-        "target": "Chest & triceps",
-        "sets": 4,
-        "reps": "8-10",
-        "rest": "75s",
-        "cue": "The most advanced push move in this program. Use a dip station with added weight if available, or close-grip push-ups as the bodyweight version.",
-        "steps": [
-          "If using a dip station: add light weight via a belt or hold a dumbbell between your feet.",
-          "Lower your body until your elbows reach about 90 degrees.",
+        name: "Incline Bench Press (Heavy)",
+        target: "Upper chest",
+        sets: 4,
+        reps: "8",
+        rest: "90s",
+        cue: "4 sets now, 8 reps, heavier weight. The last set should be your absolute limit for 8 clean reps.",
+        steps: [
+          "Set bench to 30-45 degrees. Load the bar heavier than Phase 2.",
+          "Lower the bar slowly to your upper chest — 4 seconds down.",
+          "Press up powerfully. If form breaks, reduce weight.",
+          "Rest the full 90 seconds between sets — you need it at this intensity."
+        ],
+        difficulty: 1.5,
+        calories: 42
+      },
+      {
+        name: "Weighted Dip",
+        target: "Lower chest & triceps",
+        sets: 3,
+        reps: "8-10",
+        rest: "75s",
+        cue: "Add weight via a dip belt or dumbbell between your feet. Lean forward slightly to hit more chest.",
+        steps: [
+          "Set up at a dip station, add weight via belt or hold a dumbbell between your feet.",
+          "Lower your body until your elbows reach 90 degrees — lean forward slightly for chest emphasis.",
           "Press back up to straight arms.",
-          "Bodyweight version: hands close together under your chest for push-ups, same depth and control."
+          "No dip station: Close-grip push-ups are a solid substitute."
         ],
-        "difficulty": 1.4,
-        "calories": 40
+        difficulty: 1.4,
+        calories: 38
       },
       {
-        "name": "Single-Arm Dumbbell Press",
-        "target": "Chest & core",
-        "sets": 3,
-        "reps": "8 each side",
-        "rest": "60s",
-        "cue": "Pressing one side at a time forces your core to fight rotation — a genuinely harder version of a regular press.",
-        "steps": [
-          "Lie on a bench holding one dumbbell at shoulder height.",
-          "Press it straight up while keeping your hips and shoulders square — don't var your body twist.",
-          "Lower under control.",
-          "Complete all reps before switching sides."
+        name: "Single-Arm Cable Fly",
+        target: "Chest",
+        sets: 3,
+        reps: "12 each side",
+        rest: "45s",
+        cue: "One arm at a time exposes any imbalance between your left and right chest.",
+        steps: [
+          "Stand side-on to a cable at chest height, handle in the hand farther from the machine.",
+          "Bring your arm across your body in a hugging arc, squeezing your chest hard.",
+          "Return slowly, feeling the full stretch.",
+          "Complete all reps on one side, then switch."
         ],
-        "difficulty": 1.3,
-        "calories": 32
+        difficulty: 1.3,
+        calories: 26
       },
       {
-        "name": "Single-Arm Cable Fly",
-        "target": "Chest",
-        "sets": 3,
-        "reps": "10 each side",
-        "rest": "45s",
-        "cue": "One arm at a time, which exposes any strength imbalance between your left and right side.",
-        "steps": [
-          "Stand side-on to a cable machine set at chest height.",
-          "Hold the handle in the hand farther from the machine.",
-          "Bring your arm across your body in a hugging motion, squeezing your chest.",
-          "Return slowly, then switch sides after all reps."
-        ],
-        "difficulty": 1.2,
-        "calories": 24
-      },
-      {
-        "name": "Push Press",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "8",
-        "rest": "75s",
-        "cue": "Uses a small leg dip and drive to help push more weight overhead than a strict press — teaches your whole body to work together.",
-        "steps": [
+        name: "Push Press",
+        target: "Shoulders",
+        sets: 3,
+        reps: "8",
+        rest: "75s",
+        cue: "Use a small leg dip to help drive more weight overhead than a strict press allows.",
+        steps: [
           "Hold dumbbells at shoulder height, feet hip-width apart.",
-          "Dip your knees slightly, then drive up explosively, pressing the dumbbells overhead as your legs straighten.",
-          "Lower the dumbbells back to shoulder height with control.",
-          "Reset your stance between reps if needed."
+          "Dip your knees slightly, then drive upward explosively, pressing dumbbells overhead.",
+          "Arms fully extended at the top.",
+          "Lower the dumbbells back to shoulder height with control. Reset between reps."
         ],
-        "difficulty": 1.4,
-        "calories": 34
+        difficulty: 1.4,
+        calories: 34
       },
       {
-        "name": "Skull Crusher",
-        "target": "Triceps",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "45s",
-        "cue": "Lying down with the weight moving toward your forehead — a more advanced triceps stretch than the standing pushdown.",
-        "steps": [
-          "Lie on a bench holding dumbbells above your chest, arms straight.",
-          "Bend only at the elbows, lowering the weights toward your forehead.",
-          "Keep your upper arms still and vertical throughout.",
-          "Press back up to straight arms."
+        name: "Skull Crusher",
+        target: "Triceps",
+        sets: 3,
+        reps: "10-12",
+        rest: "45s",
+        cue: "The most advanced triceps stretch in this program. Upper arms stay vertical and still.",
+        steps: [
+          "Lie on a bench holding dumbbells or an EZ bar directly above your chest, arms straight.",
+          "Bend only at the elbows, lowering the weight toward your forehead.",
+          "Keep upper arms vertical and completely still throughout.",
+          "Press back to straight arms — triceps do all the work."
         ],
-        "difficulty": 1.2,
-        "calories": 26
+        difficulty: 1.3,
+        calories: 28
       },
       {
-        "name": "Wrist Curl Drop Set",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15 + 10",
-        "rest": "20s",
-        "cue": "15 reps at your normal weight, 10 seconds rest only, then 10 more at a lighter weight. The most intense forearm exercise in this program — forearms should be burning by the second set.",
-        "steps": [
-          "Start with your regular wrist curl weight for 15 full reps.",
+        name: "Hanging Knee Raises (Weighted)",
+        target: "Core & abs",
+        sets: 4,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Add a dumbbell held between your feet for extra resistance. Full control throughout.",
+        steps: [
+          "Hang from a pull-up bar. Hold a light dumbbell between your feet or use ankle weights.",
+          "Pull knees upward toward your chest using your lower abs.",
+          "Squeeze hard at the top.",
+          "Lower slowly under full control. Bodyweight version if too difficult."
+        ],
+        difficulty: 1.4,
+        calories: 26
+      }
+    ],
+
+    // TUESDAY — Back & Biceps (Advanced) + Cardio
+    tue: [
+      {
+        name: "Full Pull-ups",
+        target: "Back",
+        sets: 4,
+        reps: "6-8",
+        rest: "90s",
+        cue: "The real thing — no band. If you cannot complete clean reps, drop back to Band-Assisted pull-ups.",
+        steps: [
+          "Grip the bar slightly wider than shoulder width, palms facing away.",
+          "Pull your chest up toward the bar without kicking your legs.",
+          "Lower yourself under full control to a dead hang.",
+          "Reset completely before the next rep."
+        ],
+        difficulty: 1.5,
+        calories: 42
+      },
+      {
+        name: "T-Bar Row (Heavier)",
+        target: "Back",
+        sets: 4,
+        reps: "8",
+        rest: "75s",
+        cue: "4 sets now with heavier weight. The mid-back should be burning by the last 2 reps of every set.",
+        steps: [
+          "Load the T-bar heavier than Phase 2.",
+          "Hinge forward 45 degrees, back flat, core braced.",
+          "Pull weight to your lower chest, leading with elbows.",
+          "Lower slowly — resist the weight on the way down."
+        ],
+        difficulty: 1.5,
+        calories: 40
+      },
+      {
+        name: "Single-Arm Lat Pulldown",
+        target: "Lats",
+        sets: 3,
+        reps: "10 each side",
+        rest: "60s",
+        cue: "Each arm works alone — no strong side can compensate for a weak side.",
+        steps: [
+          "Attach a single handle to the lat pulldown cable.",
+          "Sit and grip with one hand, arm extended overhead.",
+          "Pull your elbow down toward your hip, squeezing your lat.",
+          "Return slowly. Switch sides after all reps."
+        ],
+        difficulty: 1.3,
+        calories: 30
+      },
+      {
+        name: "Incline Dumbbell Curl",
+        target: "Biceps",
+        sets: 4,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Lying on an incline stretches the bicep more at the bottom — a larger range means more growth.",
+        steps: [
+          "Lie back on a 45-60 degree incline bench, dumbbell in each hand.",
+          "Arms hanging straight down, palms forward.",
+          "Curl both arms up simultaneously without swinging shoulders.",
+          "Lower slowly all the way back to a full stretch."
+        ],
+        difficulty: 1.3,
+        calories: 24
+      },
+      {
+        name: "Spider Curl (Heavier)",
+        target: "Biceps",
+        sets: 4,
+        reps: "10-12",
+        rest: "45s",
+        cue: "Heavier than Phase 2. Form stays strict — elbows pointing straight down at all times.",
+        steps: [
+          "Lie face-down on an incline bench, dumbbells hanging straight down.",
+          "Curl both arms up, elbows staying pointed toward the floor.",
+          "Squeeze hard at the top.",
+          "Lower slowly to full arm extension."
+        ],
+        difficulty: 1.3,
+        calories: 22
+      },
+      {
+        name: "Wrist Curl Drop Set",
+        target: "Forearms",
+        sets: 3,
+        reps: "15 then 10",
+        rest: "20s",
+        cue: "15 reps at your normal weight, only 10 seconds rest, then 10 more at lighter weight. Maximum forearm burn.",
+        steps: [
+          "Do 15 full wrist curls at your normal Phase 2 weight.",
           "Rest only 10 seconds — just enough to grab a lighter dumbbell.",
           "Immediately do 10 more wrist curls at the lighter weight.",
-          "Take the full 20 seconds rest after the combined set before repeating."
+          "Rest 20 seconds after this combined set, then repeat."
         ],
-        "difficulty": 1.2,
-        "calories": 13
+        difficulty: 1.3,
+        calories: 16
       },
       {
-        "name": "Reverse Wrist Curl (Advanced)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Heaviest reverse curl in the program. Palm down, maximum controllable weight — the veins along the top of your forearm will be clearly visible during this set.",
-        "steps": [
-          "Forearm resting on your thigh, palm facing down.",
-          "Use the heaviest dumbbell you can curl cleanly for 15 to 20 reps.",
-          "Lift the back of your hand all the way up, pause, then lower under full control.",
-          "Switch arms after all reps."
+        name: "LISS Cardio Finisher",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "20 min",
+        rest: "-",
+        cue: "Same 20-minute LISS as Phase 2 — but try to push the treadmill incline slightly higher this phase.",
+        steps: [
+          "Treadmill: speed 6-7 km/h, incline now 5-6% (up from 3-4% in Phase 2).",
+          "Walk briskly for the full 20 minutes without holding the rails.",
+          "Core stays braced, posture upright.",
+          "Bike or elliptical alternatives at a steady elevated pace."
         ],
-        "difficulty": 1.2,
-        "calories": 10
+        difficulty: 1.1,
+        calories: 160
       }
     ],
-    "tue": [
+
+    // WEDNESDAY — Legs Advanced (Hamstrings & Glutes + Power)
+    wed: [
       {
-        "name": "Full Pull-up",
-        "target": "Back",
-        "sets": 3,
-        "reps": "5-8",
-        "rest": "90s",
-        "cue": "The real version, no band assistance. If you can't yet complete clean reps, drop back to the Band-Assisted Pull-up for a few more weeks first.",
-        "steps": [
-          "Grip the bar slightly wider than shoulder width, hands facing away from you.",
-          "Pull your chest up toward the bar without kicking your legs.",
-          "Lower yourself under control, all the way to a full arm extension.",
-          "Reset and repeat."
+        name: "Romanian Deadlift (Barbell)",
+        target: "Hamstrings & glutes",
+        sets: 4,
+        reps: "8-10",
+        rest: "90s",
+        cue: "Graduated to barbell now — heavier load, same perfect hinge form. Last 2 reps of each set should be hard.",
+        steps: [
+          "Hold a barbell in front of your thighs with an overhand grip.",
+          "Soft knee bend throughout — this is a hip hinge, not a squat.",
+          "Push hips back as you lower the bar along your legs, keeping it close.",
+          "Drive hips forward to stand, squeezing glutes hard at the top."
         ],
-        "difficulty": 1.4,
-        "calories": 38
+        difficulty: 1.5,
+        calories: 40
       },
       {
-        "name": "Single-Arm Row (Pendlay-style)",
-        "target": "Back",
-        "sets": 3,
-        "reps": "8 each side",
-        "rest": "60s",
-        "cue": "Each rep starts from a dead stop on the floor instead of staying tense the whole set — builds explosive pulling strength.",
-        "steps": [
-          "Hinge forward with a flat back, dumbbell on the floor below your shoulder.",
-          "Pull it up to your hip in one strong motion.",
-          "Lower it all the way back to the floor and var it fully rest before the next rep.",
-          "Switch sides after completing all reps."
+        name: "Hip Thrust (Weighted)",
+        target: "Glutes",
+        sets: 4,
+        reps: "10",
+        rest: "75s",
+        cue: "Heavier barbell across hips this phase. Drive all the way up — full glute squeeze.",
+        steps: [
+          "Upper back against a bench, loaded barbell across your hips.",
+          "Feet flat on the floor, slightly wider than hip-width.",
+          "Drive hips upward by contracting your glutes — body forms a straight line.",
+          "Hold the top for 2 seconds, lower slowly."
         ],
-        "difficulty": 1.3,
-        "calories": 30
+        difficulty: 1.4,
+        calories: 36
       },
       {
-        "name": "Single-Arm Lat Pulldown",
-        "target": "Back",
-        "sets": 3,
-        "reps": "10 each side",
-        "rest": "60s",
-        "cue": "Removes the ability to favor your stronger side — each side has to do its own full share of the work.",
-        "steps": [
-          "Attach a single handle to the lat pulldown cable.",
-          "Sit and grip the handle with one hand, arm extended overhead.",
-          "Pull your elbow down toward your hip, squeezing your back.",
-          "Control the return, then switch sides."
+        name: "Nordic Curl (Assisted)",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "6-8",
+        rest: "90s",
+        cue: "The hardest hamstring exercise in this program. Use your hands for as much assistance as needed.",
+        steps: [
+          "Kneel on a mat with ankles anchored under something sturdy.",
+          "Lower your torso forward as slowly as you can, catching yourself with your hands.",
+          "Use your hands to push back up, then engage hamstrings as they strengthen.",
+          "Stop the set when you can no longer control the lowering."
         ],
-        "difficulty": 1.2,
-        "calories": 28
+        difficulty: 1.6,
+        calories: 30
       },
       {
-        "name": "Face Pull with External Rotation",
-        "target": "Rear delts & rotator cuff",
-        "sets": 3,
-        "reps": "12-15",
-        "rest": "45s",
-        "cue": "Adds a small rotation at the end of the pull, which targets the rotator cuff muscles that a plain Face Pull mostly skips.",
-        "steps": [
-          "Set the cable to face height with a rope attachment.",
-          "Pull the rope toward your face, elbows high.",
-          "At the end of the pull, rotate your hands so your knuckles point toward the ceiling.",
-          "Reverse slowly back to the start."
+        name: "Bulgarian Split Squat",
+        target: "Quads & glutes",
+        sets: 3,
+        reps: "10 each leg",
+        rest: "75s",
+        cue: "One leg does all the work — much harder than a regular squat. Great for fixing imbalances.",
+        steps: [
+          "Stand a long step in front of a bench, rest the top of one foot on it behind you.",
+          "Hold dumbbells by your sides or barbell on your back.",
+          "Lower straight down on your front leg until back knee almost touches the floor.",
+          "Push through your front foot to stand. Complete all reps then switch legs."
         ],
-        "difficulty": 1.2,
-        "calories": 24
+        difficulty: 1.4,
+        calories: 36
       },
       {
-        "name": "Incline Dumbbell Curl",
-        "target": "Biceps",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "45s",
-        "cue": "Lying back on an incline bench stretches the biceps more at the bottom of the curl than standing does.",
-        "steps": [
-          "Lie back on an incline bench, a dumbbell in each hand, arms hanging straight down.",
-          "Curl both arms up without swinging your shoulders forward.",
-          "Squeeze at the top.",
-          "Lower slowly, feeling the stretch at the bottom."
-        ],
-        "difficulty": 1.2,
-        "calories": 22
-      },
-      {
-        "name": "Wrist Curl Drop Set",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15 + 10",
-        "rest": "20s",
-        "cue": "A drop set: 15 reps at your usual weight, only 10 seconds break, then immediately 10 more reps at a lighter weight without stopping. The second set burns — that is exactly the point. The most intense forearm exercise in this program.",
-        "steps": [
-          "Start with your regular wrist curl weight for 15 full reps.",
-          "Rest only 10 seconds — just enough to grab a lighter dumbbell.",
-          "Immediately do 10 more wrist curls at the lighter weight without fully resetting.",
-          "Take the full 20 seconds rest after this combined set before repeating."
-        ],
-        "difficulty": 1.2,
-        "calories": 13
-      },
-      {
-        "name": "Reverse Wrist Curl (Advanced)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Same movement as before at the heaviest weight you have used for this exercise. Forearm extensors are a small muscle group — even at advanced level the weight stays modest, but the visible muscle definition along the top of your forearm will be real.",
-        "steps": [
-          "Forearm resting on your thigh, palm facing down.",
-          "Use the heaviest dumbbell you can curl cleanly for 15 to 20 reps.",
-          "Lift the back of your hand all the way up, pause briefly at the top, then lower under full control.",
-          "Switch arms after completing all reps."
-        ],
-        "difficulty": 1.2,
-        "calories": 10
-      }
-    ],
-    "wed": [
-      {
-        "name": "Front-Loaded Squat",
-        "target": "Quads",
-        "sets": 4,
-        "reps": "8-10",
-        "rest": "90s",
-        "cue": "Holding the weight at your chest/shoulders instead of low forces a more upright torso and demands more from your quads directly.",
-        "steps": [
-          "Hold two dumbbells at shoulder height, elbows pointing forward.",
-          "Squat down keeping your chest tall and elbows up.",
-          "Go as deep as your mobility allows, knees tracking over your toes.",
-          "Drive through your full foot to stand."
-        ],
-        "difficulty": 1.4,
-        "calories": 42
-      },
-      {
-        "name": "Single-Leg Romanian Deadlift",
-        "target": "Hamstrings & balance",
-        "sets": 3,
-        "reps": "8 each leg",
-        "rest": "75s",
-        "cue": "Same balance-and-stretch challenge from Saturday's Build phase — by this level you should be moving it with control, not wobbling through it.",
-        "steps": [
-          "Stand on one leg holding a dumbbell in the opposite hand.",
-          "Hinge forward, letting your free leg extend back.",
-          "Lower the dumbbell toward the floor, then drive your hips forward to return.",
-          "Switch legs after all reps."
-        ],
-        "difficulty": 1.4,
-        "calories": 36
-      },
-      {
-        "name": "Walking Lunge with Overhead Reach",
-        "target": "Quads, glutes & shoulders",
-        "sets": 3,
-        "reps": "10 each leg",
-        "rest": "75s",
-        "cue": "Adding an overhead reach to the lunge challenges your balance and core stability on top of your legs.",
-        "steps": [
-          "Hold a light dumbbell in each hand.",
-          "Step forward into a lunge while raising both dumbbells overhead.",
-          "Lower the dumbbells as you push through your front foot to step forward.",
-          "Continue alternating legs."
-        ],
-        "difficulty": 1.3,
-        "calories": 34
-      },
-      {
-        "name": "Nordic Curl Progression (assisted)",
-        "target": "Hamstrings",
-        "sets": 3,
-        "reps": "6-8",
-        "rest": "75s",
-        "cue": "The hardest hamstring exercise in this program. Use your hands on the floor in front of you for as much assistance as you need — even a couple inches of controlled lowering builds real strength.",
-        "steps": [
-          "Kneel on a cushion with your ankles anchored under something sturdy or held by a partner.",
-          "Lower your torso forward as slowly as you can, using your hands to catch yourself when needed.",
-          "Push back up using your hands for assistance, then your hamstrings as they get stronger.",
-          "Stop the set once you can no longer control the lowering."
-        ],
-        "difficulty": 1.5,
-        "calories": 30
-      },
-      {
-        "name": "Calf Raise Drop Set",
-        "target": "Calves",
-        "sets": 3,
-        "reps": "15 then 15 more",
-        "rest": "45s",
-        "cue": "Do a normal set, rest only 10 seconds instead of the usual 45, then immediately do another set without changing weight — a real finisher for stubborn calves.",
-        "steps": [
-          "Perform a normal set of 15 standing calf raises.",
+        name: "Calf Raise Drop Set",
+        target: "Calves",
+        sets: 3,
+        reps: "15 then 15 more",
+        rest: "45s",
+        cue: "Normal set of 15, rest only 10 seconds, then immediately another 15. Calves will be burning.",
+        steps: [
+          "Perform a normal set of 15 standing calf raises to a full stretch.",
           "Rest only 10 seconds.",
           "Immediately perform another 15 reps at the same weight.",
-          "Take the full 45 second rest after this combined set, then repeat for all 3 sets."
+          "Take the full 45-second rest after this combined set, then repeat."
         ],
-        "difficulty": 1.3,
-        "calories": 24
+        difficulty: 1.4,
+        calories: 28
       },
       {
-        "name": "Wrist Curl Drop Set",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15 + 10",
-        "rest": "20s",
-        "cue": "Forearms are fresh after a leg session — do the full drop set. 15 reps at normal weight, 10 seconds rest, then 10 more at a lighter weight.",
-        "steps": [
-          "Start with your regular wrist curl weight for 15 full reps.",
-          "Rest only 10 seconds, then grab a lighter dumbbell.",
-          "Immediately do 10 more wrist curls at the lighter weight.",
-          "Take the full 20 seconds rest after the combined set before the next round."
+        name: "Abs Tri-Set — Ab Crunches",
+        target: "Upper abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — straight into Reverse Crunches",
+        cue: "Same tri-set structure as Phase 2 but heavier and stricter. No momentum.",
+        steps: [
+          "Lie on your back, knees bent, hands lightly behind head.",
+          "Curl your upper body forward using only your abs — elbows do not pull your neck.",
+          "Hold at the top for 1 second.",
+          "Lower slowly. Move immediately into Reverse Crunches."
         ],
-        "difficulty": 1.2,
-        "calories": 13
+        difficulty: 1.2,
+        calories: 14
       },
       {
-        "name": "Reverse Wrist Curl (Advanced)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Palm facing DOWN — heaviest weight you can manage cleanly. This is immediately before the HIIT, so make the reps count.",
-        "steps": [
-          "Forearm on your thigh, palm facing down.",
-          "Use the heaviest dumbbell you can control for 15 to 20 reps.",
-          "Lift the back of your hand fully upward, pause, then lower with control.",
-          "Switch arms after all reps."
+        name: "Abs Tri-Set — Reverse Crunches",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — straight into Russian Twists",
+        cue: "Hips lift off the floor using your abs. Lower back stays pressed down.",
+        steps: [
+          "Lie flat, hands under hips, legs bent at 90 degrees.",
+          "Contract lower abs to lift hips off the floor, knees moving toward chest.",
+          "Pause at the top, lower slowly.",
+          "Move immediately into Russian Twists."
         ],
-        "difficulty": 1.2,
-        "calories": 10
+        difficulty: 1.2,
+        calories: 14
+      },
+      {
+        name: "Abs Tri-Set — Russian Twists (Weighted)",
+        target: "Obliques",
+        sets: 3,
+        reps: "10 each side",
+        rest: "30s — then repeat tri-set",
+        cue: "Hold a dumbbell or weight plate for extra resistance this phase. Feet lifted.",
+        steps: [
+          "Sit on mat, knees bent, lean back 45 degrees, feet lifted off the floor.",
+          "Hold a light dumbbell or weight plate with both hands.",
+          "Rotate your torso to tap the weight beside each hip alternately.",
+          "Rest 30 seconds, repeat the full tri-set 2 more times."
+        ],
+        difficulty: 1.3,
+        calories: 18
       }
     ],
-    "fri": [
+
+    // FRIDAY — Upper Body Advanced + Cardio
+    fri: [
       {
-        "name": "Archer Push-up",
-        "target": "Chest & triceps",
-        "sets": 3,
-        "reps": "6 each side",
-        "rest": "75s",
-        "cue": "Shifting your weight toward one arm while the other stays nearly straight — a bodyweight way to load one side harder, similar to a single-arm press.",
-        "steps": [
-          "Start in a wide push-up position, hands further apart than shoulder width.",
-          "Lower toward one hand, bending that elbow while the other arm stays mostly straight.",
-          "Push back up to the start.",
-          "Alternate sides each rep."
+        name: "Barbell Bench Press (Heavy)",
+        target: "Chest",
+        sets: 4,
+        reps: "8",
+        rest: "90s",
+        cue: "4 sets of 8 at maximum effort. Spotter recommended. Last set should be absolute limit.",
+        steps: [
+          "Set up with a weight you can barely complete 8 clean reps.",
+          "Lower bar slowly to mid-chest — 3-4 seconds down.",
+          "Drive up powerfully.",
+          "Rack the bar safely. Rest the full 90 seconds."
         ],
-        "difficulty": 1.4,
-        "calories": 34
+        difficulty: 1.5,
+        calories: 42
       },
       {
-        "name": "Renegade Row",
-        "target": "Back & core",
-        "sets": 3,
-        "reps": "8 each side",
-        "rest": "60s",
-        "cue": "Rowing a dumbbell while holding a plank position — your core has to fight rotation the entire time, not just your back.",
-        "steps": [
+        name: "Renegade Row",
+        target: "Back & core",
+        sets: 3,
+        reps: "8 each side",
+        rest: "60s",
+        cue: "Row a dumbbell while holding a push-up position. Core fights rotation the entire time.",
+        steps: [
           "Get into a push-up position with a dumbbell in each hand.",
           "Row one dumbbell up to your hip without rotating your hips.",
-          "Lower it back down and place your hand flat.",
-          "Switch sides, alternating for all reps."
+          "Place it back down firmly before rowing the other side.",
+          "Alternate sides — keep hips completely square throughout."
         ],
-        "difficulty": 1.4,
-        "calories": 32
+        difficulty: 1.5,
+        calories: 34
       },
       {
-        "name": "Lean-Away Cable Lateral Raise",
-        "target": "Shoulders",
-        "sets": 3,
-        "reps": "10-12 each side",
-        "rest": "45s",
-        "cue": "Leaning away from the cable increases the range of motion and tension on your shoulder compared to standing straight.",
-        "steps": [
-          "Stand beside a low cable pulley and hold the handle in the far hand.",
-          "Lean your upper body away from the machine, holding onto something stable if needed.",
-          "Raise your arm out to the side to shoulder height.",
-          "Lower slowly, then switch sides after all reps."
+        name: "Push Press (Heavier)",
+        target: "Shoulders",
+        sets: 3,
+        reps: "8",
+        rest: "75s",
+        cue: "Heavier than Wednesday's version. The leg drive allows you to press more weight than strict pressing.",
+        steps: [
+          "Hold heavier dumbbells at shoulder height.",
+          "Quick knee dip, then drive up explosively, pressing dumbbells overhead.",
+          "Lower slowly and controlled back to shoulder height.",
+          "Use the full 75 seconds of rest — you will need it."
         ],
-        "difficulty": 1.2,
-        "calories": 24
+        difficulty: 1.5,
+        calories: 36
       },
       {
-        "name": "Diamond Push-up",
-        "target": "Triceps & chest",
-        "sets": 3,
-        "reps": "10-12",
-        "rest": "45s",
-        "cue": "Hands close together in a diamond shape under your chest shifts most of the work onto your triceps.",
-        "steps": [
-          "Get into a push-up position with your thumbs and index fingers touching, forming a diamond.",
+        name: "Diamond Push-up",
+        target: "Triceps",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Hands close in a diamond shape shifts most of the work onto your triceps.",
+        steps: [
+          "Get into push-up position with thumbs and index fingers touching — forming a diamond.",
           "Lower your chest toward your hands.",
           "Push back up to straight arms.",
-          "Keep your elbows close to your body throughout."
+          "Keep elbows close to your body throughout."
         ],
-        "difficulty": 1.3,
-        "calories": 28
+        difficulty: 1.4,
+        calories: 28
       },
       {
-        "name": "Weighted Dip",
-        "target": "Triceps & chest",
-        "sets": 3,
-        "reps": "8-10",
-        "rest": "60s",
-        "cue": "Same advanced dip from Monday's Advanced phase — Friday repeats it since this is your second push-focused day of the week.",
-        "steps": [
-          "Add light weight via a dip belt, or hold a dumbbell between your feet.",
-          "Lower your body until your elbows reach about 90 degrees.",
-          "Press back up to straight arms.",
-          "If a dip station isn't available, use close-grip push-ups instead."
+        name: "Incline Dumbbell Curl (Heavier)",
+        target: "Biceps",
+        sets: 4,
+        reps: "10",
+        rest: "45s",
+        cue: "Heavier than Tuesday's version. Same stretched range of motion — maximize it.",
+        steps: [
+          "Lie on 45-60 degree incline bench, heavier dumbbells in each hand.",
+          "Arms hanging straight down at your sides.",
+          "Curl both arms simultaneously, keeping shoulders back.",
+          "Lower all the way to full extension — feel the complete stretch."
         ],
-        "difficulty": 1.3,
-        "calories": 30
+        difficulty: 1.4,
+        calories: 26
       },
       {
-        "name": "Heavy Farmer's Carry",
-        "target": "Forearms, grip, traps & core",
-        "sets": 3,
-        "reps": "45s",
-        "rest": "45s",
-        "cue": "The heaviest carry in the entire program. If you can hold on for 45 seconds per set without the dumbbells slipping, your grip and forearm strength are genuinely advanced. Visible veins across your forearm during this exercise mean the training is working.",
-        "steps": [
-          "Pick up the heaviest pair of dumbbells you can hold — grip should start to genuinely fail around the 40-second mark if the weight is right.",
-          "Walk with perfect posture: shoulders packed back, core tight, spine straight.",
-          "If the gym space is too small to walk, do a stationary hold instead.",
-          "Lower the dumbbells under full control at the end — never drop them. Rest the full 45 seconds before the next set."
+        name: "LISS Cardio Finisher",
+        target: "Cardio & fat burn",
+        sets: 1,
+        reps: "20 min",
+        rest: "-",
+        cue: "Final cardio of the week. Push the incline higher than Phase 2 if your body can handle it.",
+        steps: [
+          "Treadmill: speed 6.5-7 km/h, incline 6-8% — higher than Phase 2.",
+          "Walk briskly for 20 minutes without holding the rails.",
+          "Upright posture, arms swinging naturally.",
+          "Elliptical or bike at elevated resistance as alternatives."
         ],
-        "difficulty": 1.3,
-        "calories": 18
+        difficulty: 1.2,
+        calories: 170
       }
     ],
-    "sat": [
+
+    // SATURDAY — Lower Body Advanced + Abs
+    sat: [
       {
-        "name": "Jump Squat",
-        "target": "Quads & power",
-        "sets": 3,
-        "reps": "10",
-        "rest": "60s",
-        "cue": "Explosive — you leave the ground at the top of each rep. This is genuinely higher impact, so land soft and skip it if your knees complain.",
-        "steps": [
-          "Stand with feet shoulder-width apart.",
-          "Squat down to about the same depth as a regular squat.",
+        name: "Jump Squat",
+        target: "Quads & power",
+        sets: 3,
+        reps: "10",
+        rest: "75s",
+        cue: "Explosive — you leave the ground at the top. Land softly on bent knees. Skip if knees complain.",
+        steps: [
+          "Stand feet shoulder-width, bodyweight only or very light dumbbells.",
+          "Squat down to a regular squat depth.",
           "Explode upward, leaving the ground briefly.",
-          "Land softly with bent knees and go straight into the next rep."
+          "Land softly on bent knees and go straight into the next rep."
         ],
-        "difficulty": 1.4,
-        "calories": 40
+        difficulty: 1.5,
+        calories: 44
       },
       {
-        "name": "Single-Leg Deadlift to Balance",
-        "target": "Hamstrings & balance",
-        "sets": 3,
-        "reps": "8 each leg",
-        "rest": "60s",
-        "cue": "Similar hinge pattern to the Single-Leg RDL, but focused on holding a stable balanced position at the bottom rather than just touching and returning.",
-        "steps": [
-          "Stand on one leg, dumbbell in the opposite hand.",
-          "Hinge forward, reaching the dumbbell toward the floor while your free leg lifts behind you.",
-          "Pause for 1 to 2 seconds at the bottom, balanced.",
-          "Return to standing, then switch legs."
+        name: "Leg Press (Heavy)",
+        target: "Quads & glutes",
+        sets: 4,
+        reps: "10",
+        rest: "75s",
+        cue: "4 sets, heavier than Phase 2. Drive through the full foot — not just your toes.",
+        steps: [
+          "Set the leg press heavier than last phase.",
+          "Feet shoulder-width on the platform.",
+          "Lower platform slowly until knees are at 90 degrees.",
+          "Drive away powerfully through full foot. Rest the full 75 seconds."
         ],
-        "difficulty": 1.4,
-        "calories": 34
+        difficulty: 1.5,
+        calories: 44
       },
       {
-        "name": "Lateral Lunge",
-        "target": "Quads, glutes & inner thigh",
-        "sets": 3,
-        "reps": "10 each side",
-        "rest": "60s",
-        "cue": "Stepping sideways instead of forward or backward works your legs from a completely different angle than every other lunge in this program.",
-        "steps": [
-          "Stand tall, feet together.",
-          "Step one foot wide to the side, bending that knee and pushing your hips back.",
-          "Keep your other leg straight.",
-          "Push off the bent leg to return to standing, then switch sides."
+        name: "Leg Extension (Drop Set)",
+        target: "Quads",
+        sets: 3,
+        reps: "15 then 10",
+        rest: "45s",
+        cue: "Normal 15 reps, reduce weight immediately, 10 more reps. Quads should be on fire.",
+        steps: [
+          "Do 15 leg extensions at your normal weight.",
+          "Immediately reduce weight by 30-40% without a full rest.",
+          "Do 10 more extensions at the lighter weight.",
+          "Rest 45 seconds. Repeat for all 3 sets."
         ],
-        "difficulty": 1.3,
-        "calories": 32
+        difficulty: 1.4,
+        calories: 30
       },
       {
-        "name": "Calf Raise + Hop",
-        "target": "Calves & power",
-        "sets": 3,
-        "reps": "12",
-        "rest": "45s",
-        "cue": "Adds a small hop at the top of the raise — more explosive than a standard calf raise, similar to the jump in Jump Squats.",
-        "steps": [
-          "Stand on the edge of a step.",
-          "Rise onto your toes, then push off into a small hop.",
-          "Land softly back on the edge of the step.",
-          "Lower your heels for a brief stretch before the next rep."
+        name: "Seated Calf Raise (Heavy)",
+        target: "Calves",
+        sets: 4,
+        reps: "15",
+        rest: "45s",
+        cue: "Heavier than Phase 2. The soleus muscle responds well to heavy, slow reps.",
+        steps: [
+          "Add more weight to the seated calf raise machine.",
+          "Rise onto your toes as high as possible, pause for 2 seconds.",
+          "Lower heels slowly all the way to a full stretch.",
+          "4 sets of 15 — keep every rep clean and controlled."
         ],
-        "difficulty": 1.2,
-        "calories": 22
+        difficulty: 1.3,
+        calories: 26
       },
       {
-        "name": "Plank with Shoulder Taps",
-        "target": "Core & shoulders",
-        "sets": 3,
-        "reps": "16 taps",
-        "rest": "45s",
-        "cue": "A regular plank with a twist — lifting one hand to tap the opposite shoulder forces your core to resist rotation.",
-        "steps": [
-          "Start in a high plank, hands under your shoulders.",
-          "Lift one hand and tap the opposite shoulder, keeping your hips still.",
-          "Place it back down and repeat with the other hand.",
-          "Keep alternating, fighting the urge to rock side to side."
+        name: "Abs Tri-Set — Knee Raises (Weighted)",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10-12",
+        rest: "0s — straight into Flutter Kicks",
+        cue: "Hold a dumbbell between your feet for extra resistance this phase.",
+        steps: [
+          "Use the captain's chair or hang from a pull-up bar.",
+          "Hold a light dumbbell between your feet (or use ankle weights).",
+          "Pull knees up toward chest using lower abs.",
+          "Lower slowly. Move immediately into Flutter Kicks."
         ],
-        "difficulty": 1.3,
-        "calories": 20
+        difficulty: 1.4,
+        calories: 22
       },
       {
-        "name": "Wrist Curl Drop Set",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15 + 10",
-        "rest": "20s",
-        "cue": "The hardest forearm finisher in the program, on the highest-intensity day of the week. 15 reps at normal weight, 10 seconds rest, 10 more at lighter weight — do not skip this on a heavy Saturday.",
-        "steps": [
-          "Start with your regular wrist curl weight for 15 full reps.",
-          "Rest only 10 seconds, then grab a lighter dumbbell.",
-          "Immediately do 10 more wrist curls at the lighter weight.",
-          "Take the full 20 seconds rest after the combined set before the next round."
+        name: "Abs Tri-Set — Flutter Kicks",
+        target: "Lower abs",
+        sets: 3,
+        reps: "15 each side",
+        rest: "0s — straight into High-Knee Crunches",
+        cue: "More reps than Phase 2. Keep lower back pinned to the mat throughout.",
+        steps: [
+          "Lie flat, hands under hips, legs 6 inches off the floor.",
+          "Alternate kicking legs in small controlled movements.",
+          "Lower back stays pressed into the mat the entire time.",
+          "Move straight into High-Knee Crunches."
         ],
-        "difficulty": 1.2,
-        "calories": 13
+        difficulty: 1.3,
+        calories: 18
       },
       {
-        "name": "Reverse Wrist Curl (Advanced)",
-        "target": "Forearms",
-        "sets": 3,
-        "reps": "15-20",
-        "rest": "30s",
-        "cue": "Final strength exercise of the week before HIIT — palm DOWN, heaviest clean weight. Finish strong.",
-        "steps": [
-          "Forearm on your thigh, palm facing down.",
-          "Use the heaviest dumbbell you can control for 15 to 20 reps.",
-          "Lift the back of your hand fully upward, pause, then lower with control.",
-          "Switch arms after all reps."
+        name: "Abs Tri-Set — High-Knee Crunches (Weighted)",
+        target: "Full core",
+        sets: 3,
+        reps: "10",
+        rest: "30s — then repeat tri-set",
+        cue: "Hold a weight plate behind your head for extra resistance this phase.",
+        steps: [
+          "Lie on your back, hold a light weight plate behind your head.",
+          "Simultaneously pull one knee toward your chest and crunch the opposite elbow toward it.",
+          "Alternate sides explosively but under control.",
+          "Rest 30 seconds, then repeat the full tri-set 2 more times."
         ],
-        "difficulty": 1.2,
-        "calories": 10
+        difficulty: 1.4,
+        calories: 22
       }
     ]
   }
@@ -1688,104 +1690,104 @@ export const MAIN_PROGRAM: MainPhase[] = [
 export const MAIN_PROGRAM_ABS: Exercise[][] = [
   [
     {
-      "name": "Plank Hold",
-      "target": "Core",
-      "sets": 3,
-      "reps": "30-45s",
-      "rest": "45s",
-      "cue": "Squeeze glutes and abs. Keep a straight line from head to heels. Breathe.",
-      "steps": [
-        "Start in push-up position on forearms.",
-        "Body straight from head to heels.",
-        "Squeeze abs and glutes.",
-        "Breathe normally. Stop if your back sags."
+      name: "Hanging Knee Raises",
+      target: "Core",
+      sets: 3,
+      reps: "10",
+      rest: "45s",
+      cue: "Pull knees toward chest using core only — not momentum. Control the lowering.",
+      steps: [
+        "Hang from a pull-up bar, hands slightly wider than shoulder-width.",
+        "Pull both knees up toward your chest, squeezing your abs.",
+        "Lower legs slowly — do not drop them.",
+        "Reverse Crunches on a mat are a valid substitute."
       ],
-      "difficulty": 1,
-      "calories": 14
+      difficulty: 1,
+      calories: 18
     },
     {
-      "name": "Crunches or Hanging Knee Raises",
-      "target": "Core",
-      "sets": 2,
-      "reps": "12-15",
-      "rest": "45s",
-      "cue": "Pull knees toward chest using core muscles only. Not momentum.",
-      "steps": [
-        "For crunches: lie on back, curl upper body toward knees.",
-        "For knee raises: hang from a bar and pull knees to chest.",
-        "Control the descent.",
-        "Never use momentum."
+      name: "Russian Twists",
+      target: "Obliques",
+      sets: 3,
+      reps: "10 each side",
+      rest: "45s",
+      cue: "Lean back 45 degrees, rotate side to side. Feet lifted for more challenge.",
+      steps: [
+        "Sit on mat, knees bent, lean back to 45 degrees.",
+        "Lift feet slightly off the floor.",
+        "Rotate torso to tap the floor beside each hip alternately.",
+        "Keep the movement controlled — not rushed."
       ],
-      "difficulty": 1,
-      "calories": 18
+      difficulty: 1,
+      calories: 14
     }
   ],
   [
     {
-      "name": "Side Plank",
-      "target": "Obliques",
-      "sets": 3,
-      "reps": "30s each side",
-      "rest": "45s",
-      "cue": "Targets the sides of your core, which a front plank barely touches.",
-      "steps": [
-        "Lie on your side, prop up on one forearm, elbow under shoulder.",
-        "Lift your hips so your body forms a straight line.",
-        "Hold steady without letting your hips sag.",
-        "Switch sides after the hold."
+      name: "Abs Tri-Set — Crunches",
+      target: "Upper abs",
+      sets: 3,
+      reps: "10",
+      rest: "0s",
+      cue: "First of three. Go into Reverse Crunches immediately after.",
+      steps: [
+        "Lie on back, knees bent, hands lightly behind head.",
+        "Curl upper body toward your knees using abs.",
+        "Hold 1 second at the top.",
+        "Lower slowly. Move straight to Reverse Crunches."
       ],
-      "difficulty": 1.1,
-      "calories": 14
+      difficulty: 1.1,
+      calories: 14
     },
     {
-      "name": "Bicycle Crunch",
-      "target": "Core & obliques",
-      "sets": 3,
-      "reps": "20 each side",
-      "rest": "45s",
-      "cue": "Adds rotation on top of a normal crunch, hitting your obliques as well as your central abs.",
-      "steps": [
-        "Lie on your back, hands lightly behind your head, knees bent.",
-        "Bring one knee toward your chest while rotating to touch it with the opposite elbow.",
-        "Switch sides in a smooth pedaling motion.",
-        "Keep your lower back pressed into the floor throughout."
+      name: "Abs Tri-Set — Russian Twists",
+      target: "Obliques",
+      sets: 3,
+      reps: "10 each side",
+      rest: "30s",
+      cue: "Final exercise of the tri-set. Rest 30 sec then repeat from Crunches.",
+      steps: [
+        "Sit on mat, lean back, feet lifted.",
+        "Rotate torso to touch floor beside each hip.",
+        "Controlled rotation — not momentum.",
+        "Rest 30 seconds, repeat the full circuit 2 more times."
       ],
-      "difficulty": 1.2,
-      "calories": 18
+      difficulty: 1.1,
+      calories: 16
     }
   ],
   [
     {
-      "name": "Weighted Plank",
-      "target": "Core",
-      "sets": 3,
-      "reps": "45-60s hold",
-      "rest": "45s",
-      "cue": "Same plank position, but with a light plate or backpack on your back — by this level, time alone isn't enough of a challenge.",
-      "steps": [
-        "Get into a forearm plank position.",
-        "Have a light weight plate or a backpack placed gently on your upper back.",
-        "Hold the position, keeping your hips level and not sagging.",
-        "Remove the weight carefully at the end of the hold."
+      name: "Abs Tri-Set — Knee Raises",
+      target: "Lower abs",
+      sets: 3,
+      reps: "10-12",
+      rest: "0s",
+      cue: "Weighted version. Hold dumbbell between feet. Move straight into Flutter Kicks.",
+      steps: [
+        "Use captain's chair or hang from bar. Hold light dumbbell between feet.",
+        "Pull knees up toward chest using lower abs.",
+        "Lower slowly.",
+        "Move immediately into Flutter Kicks."
       ],
-      "difficulty": 1.3,
-      "calories": 20
+      difficulty: 1.3,
+      calories: 20
     },
     {
-      "name": "Weighted Russian Twist",
-      "target": "Obliques",
-      "sets": 3,
-      "reps": "16 each side",
-      "rest": "45s",
-      "cue": "Holding a weight while rotating adds real resistance compared to a bodyweight twist.",
-      "steps": [
-        "Sit on the floor, knees bent, leaning back slightly, holding a light dumbbell or plate with both hands.",
-        "Lift your feet slightly off the floor for more challenge, or keep them down if that's too hard.",
-        "Rotate the weight to touch the floor beside one hip.",
-        "Rotate to the other side, alternating for all reps."
+      name: "Abs Tri-Set — High-Knee Crunches",
+      target: "Full core",
+      sets: 3,
+      reps: "10",
+      rest: "30s",
+      cue: "Hold a weight plate. Final exercise of the advanced tri-set.",
+      steps: [
+        "Lie on back, light weight plate behind head.",
+        "Pull knee to chest and crunch opposite elbow toward it.",
+        "Alternate sides for each rep.",
+        "Rest 30 seconds, repeat 2 more times."
       ],
-      "difficulty": 1.3,
-      "calories": 20
+      difficulty: 1.3,
+      calories: 20
     }
   ]
 ];

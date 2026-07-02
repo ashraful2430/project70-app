@@ -14,13 +14,17 @@ import TrainingTab from "@/components/TrainingTab";
 import DietTab from "@/components/DietTab";
 import DrinksTab from "@/components/DrinksTab";
 import ProfileModal from "@/components/ProfileModal";
+import BodyGuide from "@/components/BodyGuide";
+import CalorieTracker from "@/components/CalorieTracker";
 
-type Tab = "training" | "diet" | "drinks";
+type Tab = "training" | "diet" | "drinks" | "body" | "calories";
 
 const TAB_LABELS: Record<Tab, string> = {
   training: "🏋️ Training",
   diet:     "🥗 Diet",
   drinks:   "💧 Hydration",
+  body:     "🫀 Body Guide",
+  calories: "🔥 Calories",
 };
 
 export default function AppRoot() {
@@ -96,13 +100,18 @@ export default function AppRoot() {
           >
             <WeekNav selectedId={selectedId} todayId={todayId} onSelect={setSelectedId} />
 
-            <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
+            <div style={{
+              display: "flex", gap: 6, marginTop: 16,
+              overflowX: "auto", paddingBottom: 4,
+              scrollbarWidth: "none",
+            }}>
               {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
                 <motion.button
                   key={t}
                   className={`tab-btn ${tab === t ? "active" : ""}`}
                   onClick={() => setTab(t)}
                   whileTap={{ scale: 0.97 }}
+                  style={{ flex: "0 0 auto", whiteSpace: "nowrap", fontSize: 12, padding: "10px 14px" }}
                 >
                   {TAB_LABELS[t]}
                 </motion.button>
@@ -121,8 +130,10 @@ export default function AppRoot() {
                 {tab === "training" && (
                   <TrainingTab day={day} phaseIndex={phaseIndex} isComplete={isComplete} onToggle={toggle} />
                 )}
-                {tab === "diet"    && <DietTab day={day} />}
-                {tab === "drinks"  && <DrinksTab />}
+                {tab === "diet"     && <DietTab day={day} />}
+                {tab === "drinks"   && <DrinksTab />}
+                {tab === "body"     && <BodyGuide />}
+                {tab === "calories" && <CalorieTracker uid={uid} />}
               </motion.div>
             </AnimatePresence>
           </motion.main>
