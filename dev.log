@@ -261,3 +261,5 @@ https://react.dev/link/hydration-mismatch
     at performWorkOnRoot (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
     at performWorkOnRootViaSchedulerTask (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
     at MessagePort.performWorkUntilDeadline (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64) (file://D:/Learning/Student Learning Materials/project70-app/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3439:25)
+✓ Compiled in 970ms
+ GET /anatomy-front.jpg 404 in 1353ms (next.js: 650ms, application-code: 702ms)
