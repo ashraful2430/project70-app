@@ -6,6 +6,39 @@ import { useRecipes, type Recipe } from "@/lib/hooks/useRecipes";
 import RecipeBuilder from "@/components/RecipeBuilder";
 import type { RecipeIngredient } from "@/lib/hooks/useRecipes";
 
+// ─── Nutrition goals calculator ───────────────────────────────────────────────
+
+interface MacroGoals {
+  calories: number; // kcal/day
+  protein: number;  // grams
+  fiber: number;    // grams
+  carbs: number;    // grams
+  fat: number;      // grams
+}
+
+// Uses Mifflin-St Jeor with moderate-activity TDEE and a 500 kcal deficit for fat loss.
+// Protein high (2g/kg) to preserve muscle while losing fat.
+function calcGoals(weightKg: number): MacroGoals {
+  // Simple weight-only estimate: ~28 kcal/kg for moderate activity, minus 500 deficit
+  const tdee = Math.round(weightKg * 28);
+  const calories = Math.max(1200, tdee - 500);
+  const protein = Math.round(weightKg * 2.0);     // 2g/kg — muscle retention during cut
+  const fat     = Math.round(calories * 0.25 / 9); // 25% of calories from fat
+  const carbs   = Math.round((calories - protein * 4 - fat * 9) / 4);
+  const fiber   = 28;                              // WHO recommendation
+  return { calories, protein, fiber, carbs, fat };
+}
+
+interface DayMacros { protein: number; fiber: number; carbs: number; fat: number; }
+const ZERO_MACROS: DayMacros = { protein: 0, fiber: 0, carbs: 0, fat: 0 };
+
+const MACRO_META = [
+  { key: "protein" as keyof DayMacros, label: "Protein",  emoji: "🥩", unit: "g",   color: "#f87171", step: 5  },
+  { key: "carbs"   as keyof DayMacros, label: "Carbs",    emoji: "🍚", unit: "g",   color: "#fcd34d", step: 10 },
+  { key: "fat"     as keyof DayMacros, label: "Fat",      emoji: "🧈", unit: "g",   color: "#fb923c", step: 5  },
+  { key: "fiber"   as keyof DayMacros, label: "Fiber",    emoji: "🌾", unit: "g",   color: "#4ade80", step: 2  },
+] as const;
+
 const DAILY_GOAL = 1800;
 
 function formatDate(dateStr: string): string {
@@ -13,9 +46,9 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 }
 
-function GoalBar({ total, goal }: { total: number; goal: number }) {
+function GoalBar({ total, goal, color = "" }: { total: number; goal: number; color?: string }) {
   const pct = Math.min(100, (total / goal) * 100);
-  const color = total > goal ? "#ef4444" : total > goal * 0.9 ? "#f59e0b" : "#10b981";
+  const barColor = color || (total > goal ? "#ef4444" : total > goal * 0.9 ? "#f59e0b" : "#10b981");
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
@@ -31,8 +64,173 @@ function GoalBar({ total, goal }: { total: number; goal: number }) {
         <motion.div
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ height: "100%", borderRadius: 6, background: color }}
+          style={{ height: "100%", borderRadius: 6, background: barColor }}
         />
+      </div>
+    </div>
+  );
+}
+
+// ── Nutrition Goals Card ───────────────────────────────────────────────────────
+function NutritionGoals({
+  weight, onWeightChange,
+  macros, onMacroChange,
+  calTotal, calGoal,
+}: {
+  weight: number;
+  onWeightChange: (w: number) => void;
+  macros: DayMacros;
+  onMacroChange: (key: keyof DayMacros, val: number) => void;
+  calTotal: number;
+  calGoal: number;
+}) {
+  const [editWeight, setEditWeight] = useState(false);
+  const [draftW, setDraftW]         = useState(String(weight));
+  const goals = calcGoals(weight);
+
+  const commitWeight = () => {
+    const parsed = parseFloat(draftW);
+    if (!isNaN(parsed) && parsed > 0) onWeightChange(parsed);
+    setEditWeight(false);
+  };
+
+  return (
+    <div style={{
+      background: "var(--surface2)", borderRadius: 14,
+      border: "1px solid var(--border)", overflow: "hidden",
+    }}>
+      {/* Weight header */}
+      <div style={{
+        padding: "12px 14px",
+        background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(99,102,241,0.06))",
+        borderBottom: "1px solid var(--border)",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+      }}>
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+            Daily Nutrition Goals
+          </div>
+          <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>
+            Based on your weight · auto-calculated
+          </div>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontSize: 9, color: "var(--text-muted)", textTransform: "uppercase" }}>Current</div>
+            {editWeight ? (
+              <input
+                type="number"
+                value={draftW}
+                onChange={e => setDraftW(e.target.value)}
+                onBlur={commitWeight}
+                onKeyDown={e => e.key === "Enter" && commitWeight()}
+                autoFocus
+                style={{
+                  width: 56, background: "var(--surface)", border: "1px solid var(--purple)",
+                  borderRadius: 6, color: "var(--text)", fontSize: 13, fontWeight: 700,
+                  padding: "2px 6px", textAlign: "center",
+                }}
+              />
+            ) : (
+              <button onClick={() => { setDraftW(String(weight)); setEditWeight(true); }} style={{
+                background: "none", border: "none", cursor: "pointer",
+                fontSize: 14, fontWeight: 800, color: "var(--purple)",
+                padding: 0,
+              }}>
+                {weight} kg ✎
+              </button>
+            )}
+          </div>
+          <div style={{
+            fontSize: 10, color: "var(--text-muted)", padding: "3px 8px",
+            background: "var(--surface)", borderRadius: 20, border: "1px solid var(--border)",
+          }}>
+            Goal: 70 kg
+          </div>
+        </div>
+      </div>
+
+      {/* Calorie row */}
+      <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>
+            🔥 Calories
+          </span>
+          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+            <span style={{ fontWeight: 700, color: calTotal > goals.calories ? "#ef4444" : "var(--text)" }}>{calTotal}</span>
+            {" / "}{goals.calories} kcal
+          </span>
+        </div>
+        <div style={{ height: 8, borderRadius: 4, background: "var(--surface)", overflow: "hidden" }}>
+          <motion.div
+            animate={{ width: `${Math.min(100, (calTotal / goals.calories) * 100)}%` }}
+            transition={{ duration: 0.5 }}
+            style={{
+              height: "100%", borderRadius: 4,
+              background: calTotal > goals.calories ? "#ef4444" : calTotal > goals.calories * 0.9 ? "#f59e0b" : "#10b981",
+            }}
+          />
+        </div>
+        <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 4, textAlign: "right" }}>
+          {calTotal > goals.calories
+            ? `${calTotal - goals.calories} kcal over`
+            : `${goals.calories - calTotal} kcal remaining`}
+        </div>
+      </div>
+
+      {/* Macro rows */}
+      <div style={{ padding: "8px 14px 12px", display: "flex", flexDirection: "column", gap: 10 }}>
+        {MACRO_META.map(m => {
+          const consumed = macros[m.key];
+          const goal     = goals[m.key];
+          const pct      = Math.min(100, (consumed / goal) * 100);
+          return (
+            <div key={m.key}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
+                  {m.emoji} {m.label}
+                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  {/* decrement */}
+                  <button onClick={() => onMacroChange(m.key, Math.max(0, consumed - m.step))}
+                    style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    −
+                  </button>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", minWidth: 52, textAlign: "center" }}>
+                    <span style={{ color: consumed >= goal ? m.color : "var(--text)" }}>{consumed}</span>
+                    <span style={{ color: "var(--text-muted)", fontWeight: 400 }}> / {goal}{m.unit}</span>
+                  </span>
+                  {/* increment */}
+                  <button onClick={() => onMacroChange(m.key, consumed + m.step)}
+                    style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    +
+                  </button>
+                </div>
+              </div>
+              <div style={{ height: 6, borderRadius: 3, background: "var(--surface)", overflow: "hidden" }}>
+                <motion.div
+                  animate={{ width: `${pct}%` }}
+                  transition={{ duration: 0.4 }}
+                  style={{ height: "100%", borderRadius: 3, background: m.color, opacity: 0.85 }}
+                />
+              </div>
+              <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 3, textAlign: "right" }}>
+                {consumed >= goal
+                  ? `✓ Goal reached!`
+                  : `${goal - consumed}${m.unit} to go`}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Info footer */}
+      <div style={{
+        padding: "8px 14px", borderTop: "1px solid var(--border)",
+        fontSize: 10, color: "var(--text-muted)", lineHeight: 1.5,
+      }}>
+        <strong style={{ color: "var(--text)" }}>Tip:</strong> Use +/− to manually log each macro after eating.
+        Protein goal = {calcGoals(weight).protein}g · keeps muscle while losing fat.
       </div>
     </div>
   );
@@ -134,6 +332,34 @@ export default function CalorieTracker({ uid }: Props) {
   const [showBuilder, setShowBuilder] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [recipesLoaded, setRecipesLoaded] = useState(false);
+  const [showGoals, setShowGoals] = useState(true);
+
+  // ── Weight (persists across sessions) ──────────────────────────────────────
+  const [weight, setWeightState] = useState<number>(86);
+  useEffect(() => {
+    const stored = localStorage.getItem("project70-weight");
+    if (stored) setWeightState(Number(stored) || 86);
+  }, []);
+  const handleWeightChange = (w: number) => {
+    setWeightState(w);
+    localStorage.setItem("project70-weight", String(w));
+  };
+
+  // ── Daily macros (per date, manual logging) ────────────────────────────────
+  const [macros, setMacros] = useState<DayMacros>(ZERO_MACROS);
+  useEffect(() => {
+    const raw = localStorage.getItem(`project70-macros-${viewDate}`);
+    setMacros(raw ? (JSON.parse(raw) as DayMacros) : ZERO_MACROS);
+  }, [viewDate]);
+  const handleMacroChange = (key: keyof DayMacros, val: number) => {
+    setMacros(prev => {
+      const next = { ...prev, [key]: val };
+      localStorage.setItem(`project70-macros-${viewDate}`, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const goals = calcGoals(weight);
 
   useEffect(() => {
     if (subTab === "recipes" && !recipesLoaded) {
@@ -238,16 +464,52 @@ export default function CalorieTracker({ uid }: Props) {
                   </button>
                 </div>
 
-                <GoalBar total={total} goal={DAILY_GOAL} />
+                {/* Nutrition Goals card (collapsible) */}
+                <div>
+                  <button
+                    onClick={() => setShowGoals(g => !g)}
+                    style={{
+                      width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+                      background: "none", border: "none", cursor: "pointer",
+                      padding: "0 0 8px 0",
+                    }}
+                  >
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>📊 Nutrition Goals</span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{showGoals ? "▲ hide" : "▼ show"}</span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {showGoals && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        style={{ overflow: "hidden" }}
+                      >
+                        <NutritionGoals
+                          weight={weight}
+                          onWeightChange={handleWeightChange}
+                          macros={macros}
+                          onMacroChange={handleMacroChange}
+                          calTotal={total}
+                          calGoal={goals.calories}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
+                {/* Big calorie number */}
                 <div style={{ textAlign: "center" }}>
                   <div style={{
                     fontSize: 52, fontWeight: 900, lineHeight: 1,
-                    color: total > DAILY_GOAL ? "#ef4444" : "var(--text)",
+                    color: total > goals.calories ? "#ef4444" : "var(--text)",
                   }}>
                     {total}
                   </div>
-                  <div style={{ fontSize: 11, color: "var(--text-muted)" }}>kcal consumed</div>
+                  <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                    kcal consumed · goal {goals.calories} kcal
+                  </div>
                 </div>
 
                 {entries.length === 0 ? (
@@ -404,7 +666,7 @@ export default function CalorieTracker({ uid }: Props) {
                       <div style={{ textAlign: "right" }}>
                         <div style={{
                           fontSize: 18, fontWeight: 900,
-                          color: day.total > DAILY_GOAL ? "#ef4444" : day.total > DAILY_GOAL * 0.9 ? "#f59e0b" : "#10b981",
+                          color: day.total > goals.calories ? "#ef4444" : day.total > goals.calories * 0.9 ? "#f59e0b" : "#10b981",
                         }}>
                           {day.total}
                         </div>
