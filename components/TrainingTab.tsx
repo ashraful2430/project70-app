@@ -1,13 +1,20 @@
 "use client";
 import { motion, type Variants } from "framer-motion";
 import type { Day } from "@/types";
-import { WARMUPS_BY_DAY, MAIN_PROGRAM, MAIN_PROGRAM_ABS, PELVIC_PROGRAM } from "@/lib/data";
+import {
+  WARMUPS_BY_PHASE,
+  MAIN_PROGRAM,
+  MAIN_PROGRAM_ABS,
+  PELVIC_PROGRAM,
+  HEIGHT_EXERCISES,
+} from "@/lib/data";
 import ExerciseCard from "./ExerciseCard";
 import { getWatchUrl } from "@/lib/youtube";
 
 interface Props {
   day: Day;
   phaseIndex: number;
+  planPhase: 0 | 1;
   isComplete: (id: string) => boolean;
   onToggle: (id: string) => void;
 }
@@ -21,17 +28,36 @@ const item: Variants = {
   show:   { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: Props) {
-  const warmup = WARMUPS_BY_DAY[day.id];
-  const gymDayKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "fri" | "sat";
+export default function TrainingTab({ day, phaseIndex, planPhase, isComplete, onToggle }: Props) {
+  const warmups = WARMUPS_BY_PHASE[planPhase] ?? WARMUPS_BY_PHASE[0];
+  const warmup = warmups[day.id];
 
+  const gymDayKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
   const phase = MAIN_PROGRAM[phaseIndex];
-  const mainExercises = day.type === "gym" ? (phase[gymDayKey] ?? []) : [];
-  const absExercises = day.id === 3 ? MAIN_PROGRAM_ABS[phaseIndex] : [];
 
-  const pelvicPhase = phaseIndex <= 0 ? PELVIC_PROGRAM[0] : phaseIndex === 1 ? PELVIC_PROGRAM[1] : PELVIC_PROGRAM[2];
-  const pelvicExercises = day.id === 4 ? pelvicPhase.thu : day.id === 0 ? pelvicPhase.sun : [];
-  const homeExercises = day.exercises ?? [];
+  const isActiveRest = day.type === "active-rest";
+
+  const mainExercises = (!isActiveRest && day.type === "gym")
+    ? (phase[gymDayKey] ?? [])
+    : [];
+
+  // Phase 1 Wednesday (shoulders) has no built-in abs tri-set
+  const absExercises = (planPhase === 0 && day.id === 3)
+    ? MAIN_PROGRAM_ABS[phaseIndex]
+    : [];
+
+  const pelvicPhase = phaseIndex <= 0
+    ? PELVIC_PROGRAM[0]
+    : phaseIndex === 1
+      ? PELVIC_PROGRAM[1]
+      : PELVIC_PROGRAM[2];
+
+  // Active rest kegel: Sunday uses sun set, all other active rest days use thu set
+  const kegelExercises = isActiveRest
+    ? (day.id === 0 ? pelvicPhase.sun : pelvicPhase.thu)
+    : [];
+
+  const homeExercises = day.type === "home" ? (day.exercises ?? []) : [];
 
   return (
     <div>
@@ -62,7 +88,7 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
                       onClick={() => onToggle(id)}
                       whileTap={{ scale: 0.85 }}
                       animate={done ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-                      transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                      transition={{ duration: 0.3, ease: "easeOut" }}
                     >
                       {done && <CheckIcon />}
                     </motion.button>
@@ -135,7 +161,7 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
         </>
       )}
 
-      {/* Wednesday abs */}
+      {/* Abs section (Phase 1 Wednesday - optional extra abs) */}
       {absExercises.length > 0 && (
         <>
           <p className="section-label">Core & abs</p>
@@ -169,7 +195,7 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
                   style={{ marginTop: 2 }}
                   whileTap={{ scale: 0.85 }}
                   animate={isComplete(`fin-${day.id}`) ? { scale: [1, 1.2, 1] } : { scale: 1 }}
-                  transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                 >
                   {isComplete(`fin-${day.id}`) && <CheckIcon />}
                 </motion.button>
@@ -200,19 +226,46 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
         </>
       )}
 
-      {/* Pelvic floor */}
-      {pelvicExercises.length > 0 && (
+      {/* ── ACTIVE REST DAY: Kegel + Height Training ─────────────────────────── */}
+      {isActiveRest && (
         <>
-          <p className="section-label">
-            Pelvic floor · {pelvicPhase.label}
-            <span className="pill pill-purple">{pelvicPhase.levelRange}</span>
+          <ActiveRestBanner />
+
+          {/* Kegel / Pelvic Floor */}
+          {kegelExercises.length > 0 && (
+            <>
+              <p className="section-label">
+                Pelvic floor · {pelvicPhase.label}
+                <span className="pill pill-purple">{pelvicPhase.levelRange}</span>
+              </p>
+              <div className="safety-note" style={{ marginBottom: 12 }}>
+                Private training — no one else needs to know. These exercises build real strength over time.
+              </div>
+              <motion.div variants={stagger} initial="hidden" animate="show">
+                {kegelExercises.map((ex) => {
+                  const id = `${day.id}-kegel-${ex.name.replace(/\W+/g, "_")}`;
+                  return (
+                    <motion.div key={id} variants={item}>
+                      <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            </>
+          )}
+
+          {/* Height-increasing stretches */}
+          <p className="section-label" style={{ marginTop: 20 }}>
+            Height stretching · Spinal decompression
+            <span className="pill pill-green">All phases</span>
           </p>
           <div className="safety-note" style={{ marginBottom: 12 }}>
-            These exercises change as you level up. Private training — no one else needs to know.
+            Done consistently on rest days, these stretches decompress the spine and correct posture —
+            both add real visible height over weeks.
           </div>
           <motion.div variants={stagger} initial="hidden" animate="show">
-            {pelvicExercises.map((ex) => {
-              const id = `${day.id}-pelvic-${ex.name.replace(/\W+/g, "_")}`;
+            {HEIGHT_EXERCISES.map((ex) => {
+              const id = `${day.id}-height-${ex.name.replace(/\W+/g, "_")}`;
               return (
                 <motion.div key={id} variants={item}>
                   <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
@@ -223,6 +276,31 @@ export default function TrainingTab({ day, phaseIndex, isComplete, onToggle }: P
         </>
       )}
     </div>
+  );
+}
+
+function ActiveRestBanner() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      style={{
+        background: "linear-gradient(135deg, rgba(124,58,237,0.12), rgba(16,185,129,0.08))",
+        border: "1px solid rgba(124,58,237,0.2)",
+        borderRadius: 14,
+        padding: "14px 18px",
+        marginBottom: 20,
+      }}
+    >
+      <div style={{ fontWeight: 700, fontSize: 14, color: "var(--purple)", marginBottom: 4 }}>
+        Active Rest Day
+      </div>
+      <div style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6 }}>
+        No gym today. Your muscles grow during rest — not during the workout.
+        Do the kegel sequence and height stretches below, then sleep 7–8 hours tonight.
+      </div>
+    </motion.div>
   );
 }
 

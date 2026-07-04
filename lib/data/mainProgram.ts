@@ -292,7 +292,123 @@ export const MAIN_PROGRAM: MainPhase[] = [
       }
     ],
 
-    // FRIDAY — Legs & Abs (moved from Thursday to fit your schedule)
+    // THURSDAY — Legs & Abs
+    thu: [
+      {
+        name: "Stiff-Legged Deadlift",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "Knees stay almost straight. Push hips back and feel the hamstring stretch at the bottom.",
+        steps: [
+          "Hold dumbbells or a barbell in front of your thighs.",
+          "Keep knees very slightly bent — almost straight — throughout.",
+          "Hinge at your hips, pushing them back as you lower the weight.",
+          "Stop when you feel a deep hamstring stretch, then drive hips forward to stand."
+        ],
+        difficulty: 1.3,
+        calories: 34
+      },
+      {
+        name: "Smith Machine Squats",
+        target: "Quads & glutes",
+        sets: 3,
+        reps: "12",
+        rest: "75s",
+        cue: "Bar on upper traps, squat below parallel. Drive through full foot to stand.",
+        steps: [
+          "Set bar on Smith machine at shoulder height, step under it and rest on upper traps.",
+          "Feet shoulder-width apart, toes slightly out.",
+          "Squat down until thighs are at or below parallel — do not cut it short.",
+          "Drive through your heels to stand. No Smith machine? Use Goblet Squat."
+        ],
+        difficulty: 1.3,
+        calories: 38
+      },
+      {
+        name: "Leg Curl (Machine)",
+        target: "Hamstrings",
+        sets: 3,
+        reps: "12",
+        rest: "45s",
+        cue: "Squeeze your hamstring at the bottom of the movement. Control the return up.",
+        steps: [
+          "Lie face-down on the leg curl machine, pad against the back of your ankles.",
+          "Curl your heels upward toward your glutes.",
+          "Squeeze hard at the top for 1 second.",
+          "Lower slowly back to the start — resist on the way down."
+        ],
+        difficulty: 1.1,
+        calories: 26
+      },
+      {
+        name: "Barbell Hip Thrust",
+        target: "Glutes",
+        sets: 3,
+        reps: "12",
+        rest: "60s",
+        cue: "The best glute builder. Drive hips up until your body forms a straight line from knees to shoulders. Squeeze hard at the top.",
+        steps: [
+          "Sit on the floor with your upper back against a bench, a barbell padded with a mat across your hips.",
+          "Feet flat on the floor, shoulder-width apart, toes slightly out.",
+          "Drive your hips upward by squeezing your glutes hard.",
+          "Hold at the top for 1 second, then lower slowly. Do not arch your lower back at the top."
+        ],
+        difficulty: 1.2,
+        calories: 30
+      },
+      {
+        name: "Standing Calf Raise",
+        target: "Calves",
+        sets: 3,
+        reps: "15",
+        rest: "45s",
+        cue: "Rise fully on tiptoes. Lower heel down past neutral for a full stretch.",
+        steps: [
+          "Stand on the edge of a step or use the calf raise machine.",
+          "Rise up onto your tiptoes as high as possible.",
+          "Pause at the top for 1 second.",
+          "Lower your heel slowly below the step level for a full calf stretch."
+        ],
+        difficulty: 1,
+        calories: 20
+      },
+      {
+        name: "Abs Circuit — Leg Raises",
+        target: "Lower abs",
+        sets: 3,
+        reps: "10",
+        rest: "0s — go straight into Russian Twists",
+        cue: "Superset: do 10 Leg Raises immediately into 10 Russian Twists. Rest 30 sec then repeat.",
+        steps: [
+          "Lie flat on a mat, hands under your hips for support.",
+          "Keep legs straight (or slightly bent) and raise them to 90 degrees.",
+          "Lower legs slowly back down without letting heels touch the floor.",
+          "Immediately move into Russian Twists — no rest between the two exercises."
+        ],
+        difficulty: 1.1,
+        calories: 16
+      },
+      {
+        name: "Abs Circuit — Russian Twists",
+        target: "Obliques & core",
+        sets: 3,
+        reps: "10",
+        rest: "30s — then repeat the superset",
+        cue: "After Leg Raises, go straight into this. Lean back 45 degrees, rotate side to side.",
+        steps: [
+          "Sit on the mat, knees bent, lean back to about 45 degrees.",
+          "Lift feet slightly off the floor for extra challenge (or keep them down).",
+          "Rotate your torso to tap the floor beside each hip alternately — that is 1 rep each side.",
+          "Rest 30 seconds, then repeat the full Leg Raises + Russian Twists circuit 2 more times."
+        ],
+        difficulty: 1.1,
+        calories: 14
+      }
+    ],
+
+    // FRIDAY — Active Rest day (no gym exercises in Phase 1)
     fri: [
       {
         name: "Stiff-Legged Deadlift",

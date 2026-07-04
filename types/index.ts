@@ -33,7 +33,7 @@ export interface Day {
   id: number;
   day: string;
   abbr: string;
-  type: "gym" | "home";
+  type: "gym" | "home" | "active-rest";
   focus: string;
   duration: string;
   note: string;
@@ -47,6 +47,7 @@ export interface MainPhase {
   mon: Exercise[];
   tue: Exercise[];
   wed: Exercise[];
+  thu?: Exercise[];
   fri: Exercise[];
   sat: Exercise[];
 }
@@ -55,6 +56,7 @@ export interface PelvicPhase {
   label: string;
   levelRange: string;
   thu: Exercise[];
+  fri?: Exercise[];
   sun: Exercise[];
 }
 

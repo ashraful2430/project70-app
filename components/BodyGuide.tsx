@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import Model, { type IMuscleStats, type Muscle } from "react-body-highlighter";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -16,7 +16,6 @@ interface MuscleInfo {
   exercises: string[];
   category: Category;
   accent: string;
-  // which views this muscle appears in
   views: View[];
 }
 
@@ -120,196 +119,48 @@ const MUSCLES: MuscleInfo[] = [
     category: "legs", accent: "#93c5fd", views: ["front", "back"],
   },
   {
-    id: "tibialis", label: "Tibialis Anterior (Shin)", shortLabel: "Tibialis",
-    desc: "Runs along the outer shin. Dorsiflexes the foot (pulls toes up). Balances calf strength — important for ankle and knee health.",
-    exercises: ["Tibialis Raise", "Toe Walk", "Band Dorsiflexion", "Reverse Calf Raise"],
-    category: "legs", accent: "#c4b5fd", views: ["front"],
+    id: "adductor", label: "Adductors (Inner Thigh)", shortLabel: "Inner Thigh",
+    desc: "Group of five muscles on the inner thigh that pull the leg toward the midline. Heavily involved in squats, sumo stance work, and lateral movement. Weak adductors are a common cause of groin strains.",
+    exercises: ["Sumo Squat", "Adductor Machine", "Copenhagen Plank", "Side Lunge", "Deep Squat Hold"],
+    category: "legs", accent: "#fda4af", views: ["front"],
   },
 ];
 
 const CAT_LABEL: Record<Category, string> = { push: "Push", pull: "Pull", legs: "Legs", core: "Core" };
 const CAT_COLOR: Record<Category, string> = { push: "#fb923c", pull: "#60a5fa", legs: "#a3e635", core: "#f87171" };
 
-// ─── Muscle Region Polygons ───────────────────────────────────────────────────
-// SVG viewBox: "0 0 400 560"
-// Coordinates mapped to a standard anatomy front/back figure at this scale.
-// Each muscle has a list of polygon point strings (bilateral = render both sides).
-// "bilateral" means the LEFT side polygon is also mirrored for the RIGHT side
-// using transform="scale(-1,1) translate(-400,0)"
+// ─── Map our muscle ids → react-body-highlighter muscle names per view ────────
 
-interface MusclePoly {
-  id: string;
-  view: View;
-  // Array of SVG polygon "points" strings (space-separated x,y pairs)
-  polys: string[];
-  // If true, also render mirror-image polygon on the other side
-  bilateral?: boolean;
+const LIB_MUSCLES: Record<string, { front: Muscle[]; back: Muscle[] }> = {
+  trap:       { front: ["trapezius"],       back: ["trapezius"] },
+  delt:       { front: ["front-deltoids"],  back: ["back-deltoids"] },
+  pec:        { front: ["chest"],           back: [] },
+  serratus:   { front: [],                  back: [] },  // not in the model — chip-only
+  biceps:     { front: ["biceps"],          back: [] },
+  triceps:    { front: [],                  back: ["triceps"] },
+  forearm:    { front: ["forearm"],         back: ["forearm"] },
+  abs:        { front: ["abs"],             back: [] },
+  oblique:    { front: ["obliques"],        back: [] },
+  lats:       { front: [],                  back: ["upper-back"] },
+  rhomboid:   { front: [],                  back: [] },  // covered visually by trapezius — chip-only
+  erector:    { front: [],                  back: ["lower-back"] },
+  glutes:     { front: [],                  back: ["gluteal"] },
+  quads:      { front: ["quadriceps"],      back: [] },
+  hamstrings: { front: [],                  back: ["hamstring"] },
+  calves:     { front: ["calves"],          back: ["calves", "left-soleus", "right-soleus"] },
+  adductor:   { front: ["adductor"],        back: [] },
+};
+
+function libFor(id: string, view: View): Muscle[] {
+  return LIB_MUSCLES[id]?.[view] ?? [];
 }
 
-const MUSCLE_POLYS: MusclePoly[] = [
-  // ── FRONT VIEW ──────────────────────────────────────────────────────────────
-
-  // Upper Trapezius (front slope, bilateral)
-  {
-    id: "trap", view: "front", bilateral: true,
-    polys: ["148,130 120,140 106,152 110,162 126,158 148,148 156,138"],
-  },
-  // Deltoid front (bilateral)
-  {
-    id: "delt", view: "front", bilateral: true,
-    polys: ["106,135 86,145 76,160 80,182 92,188 106,180 114,162 112,148"],
-  },
-  // Pectoralis Major left (bilateral)
-  {
-    id: "pec", view: "front", bilateral: true,
-    polys: ["148,138 116,150 110,162 112,185 124,198 148,202 162,195 168,178 162,158"],
-  },
-  // Serratus (fingers, bilateral)
-  {
-    id: "serratus", view: "front", bilateral: true,
-    polys: [
-      "118,195 112,205 118,210 128,202",
-      "116,210 110,220 116,226 126,218",
-      "114,226 108,236 114,242 124,234",
-    ],
-  },
-  // Biceps (bilateral)
-  {
-    id: "biceps", view: "front", bilateral: true,
-    polys: ["88,188 72,196 66,216 68,240 76,254 88,256 100,250 106,232 104,210 96,194"],
-  },
-  // Forearm flexors (bilateral)
-  {
-    id: "forearm", view: "front", bilateral: true,
-    polys: ["80,256 62,264 56,285 58,315 68,328 82,326 94,316 96,290 92,268"],
-  },
-  // Rectus Abdominis (center, 6 segments)
-  {
-    id: "abs", view: "front", bilateral: false,
-    polys: [
-      // top row
-      "168,200 168,220 184,220 184,200",
-      "216,200 216,220 232,220 232,200",
-      // mid row
-      "168,224 168,244 184,244 184,224",
-      "216,224 216,244 232,244 232,224",
-      // bottom row
-      "170,248 170,266 184,266 184,248",
-      "216,248 216,266 230,266 230,248",
-    ],
-  },
-  // External Obliques (bilateral)
-  {
-    id: "oblique", view: "front", bilateral: true,
-    polys: ["152,198 136,210 128,230 130,260 140,274 154,278 162,265 164,240 162,215"],
-  },
-  // Quadriceps (bilateral — each has 3 shapes)
-  {
-    id: "quads", view: "front", bilateral: true,
-    polys: [
-      // Vastus lateralis
-      "136,290 118,300 110,325 112,365 120,385 132,390 140,378 140,340 138,310",
-      // Rectus femoris center
-      "156,285 148,295 146,320 148,362 156,386 168,390 174,376 174,340 170,310 164,292",
-      // Vastus medialis teardrop
-      "148,372 140,384 140,398 150,408 166,410 176,402 178,390 168,378",
-    ],
-  },
-  // Tibialis Anterior (bilateral)
-  {
-    id: "tibialis", view: "front", bilateral: true,
-    polys: ["126,400 116,415 114,450 118,480 130,488 140,484 144,466 142,430 134,410"],
-  },
-  // Calves front edge (bilateral)
-  {
-    id: "calves", view: "front", bilateral: true,
-    polys: ["142,402 136,415 136,455 140,478 152,486 160,480 162,456 160,422 152,406"],
-  },
-
-  // ── BACK VIEW ───────────────────────────────────────────────────────────────
-
-  // Full Trapezius (bilateral, back)
-  {
-    id: "trap", view: "back", bilateral: true,
-    polys: [
-      // upper slope (bilateral)
-      "156,125 134,135 114,148 110,162 124,168 148,158 160,145",
-      // middle diamond
-      "156,145 148,162 152,192 168,200 180,190 188,172 176,148",
-    ],
-  },
-  // Posterior Deltoid (bilateral)
-  {
-    id: "delt", view: "back", bilateral: true,
-    polys: ["110,138 88,150 78,170 80,196 94,204 108,198 116,182 116,160"],
-  },
-  // Rhomboids (between scapulae)
-  {
-    id: "rhomboid", view: "back", bilateral: false,
-    polys: [
-      "156,162 138,172 134,195 142,210 162,215 180,208 184,190 172,168",
-    ],
-  },
-  // Infraspinatus / Teres (bilateral)
-  {
-    id: "rhomboid", view: "back", bilateral: true,
-    polys: ["114,162 108,180 108,200 116,218 130,224 142,218 148,200 146,175 136,160"],
-  },
-  // Triceps (bilateral)
-  {
-    id: "triceps", view: "back", bilateral: true,
-    polys: ["92,188 74,198 64,220 64,252 70,272 82,278 96,274 104,254 106,228 100,205"],
-  },
-  // Forearm extensors (bilateral)
-  {
-    id: "forearm", view: "back", bilateral: true,
-    polys: ["80,278 62,288 56,310 56,342 66,354 80,352 92,342 96,316 90,292"],
-  },
-  // Latissimus Dorsi (bilateral)
-  {
-    id: "lats", view: "back", bilateral: true,
-    polys: ["116,200 108,220 106,250 108,280 116,305 128,315 140,312 148,295 148,260 144,228 136,205"],
-  },
-  // Erector Spinae (bilateral, columns beside spine)
-  {
-    id: "erector", view: "back", bilateral: true,
-    polys: ["172,200 165,225 164,260 165,300 170,320 180,322 188,318 190,295 190,258 188,220 182,200"],
-  },
-  // Gluteus Maximus (bilateral)
-  {
-    id: "glutes", view: "back", bilateral: true,
-    polys: ["148,310 126,322 116,340 116,368 124,388 140,400 158,402 172,392 178,372 176,344 166,320"],
-  },
-  // Hamstrings (bilateral — 2 heads)
-  {
-    id: "hamstrings", view: "back", bilateral: true,
-    polys: [
-      // Biceps femoris outer
-      "128,398 112,410 108,440 110,480 118,500 132,504 140,496 144,468 142,432 134,412",
-      // Semitendinosus inner
-      "150,398 142,410 140,444 142,480 150,500 164,504 172,494 174,466 172,432 162,412",
-    ],
-  },
-  // Gastrocnemius calves (bilateral)
-  {
-    id: "calves", view: "back", bilateral: true,
-    polys: ["130,504 118,520 116,552 120,578 132,588 144,586 152,574 154,546 150,518 140,506"],
-  },
-];
-
 // ─── Component ────────────────────────────────────────────────────────────────
-
-const VIEWBOX_W = 400;
-const VIEWBOX_H = 560;
-// Mirror transform: flip horizontally around center x=200
-const MIRROR = `scale(-1,1) translate(-${VIEWBOX_W},0)`;
 
 export default function BodyGuide() {
   const [view, setView]         = useState<View>("front");
   const [selected, setSelected] = useState<string | null>(null);
-  const [hovering, setHovering] = useState<string | null>(null);
   const [filter, setFilter]     = useState<Category | "all">("all");
-  const [imgMissing, setImgMissing] = useState(false);
 
   const selectedInfo = selected ? MUSCLES.find(m => m.id === selected) ?? null : null;
 
@@ -321,27 +172,24 @@ export default function BodyGuide() {
     setSelected(p => p === id ? null : id);
   };
 
-  const getPolyOpacity = (id: string) => {
-    if (selected === id || hovering === id) return 0.55;
-    if (selected && selected !== id) return 0;
-    if (filter !== "all") {
-      const info = MUSCLES.find(m => m.id === id);
-      if (!info || info.category !== filter) return 0;
-    }
-    return 0.18;
+  // Clicking a region on the model — reverse-map lib muscle name → our muscle id
+  const handleModelClick = (stats: IMuscleStats) => {
+    const hit = MUSCLES.find(m =>
+      libFor(m.id, view).includes(stats.muscle) &&
+      (filter === "all" || m.category === filter)
+    );
+    if (hit) handleSelect(hit.id);
   };
 
-  const getPolyFill = (id: string) => {
-    if (selected === id) {
-      return MUSCLES.find(m => m.id === id)?.accent ?? "#FF4020";
-    }
-    if (hovering === id) {
-      return MUSCLES.find(m => m.id === id)?.accent ?? "#FF4020";
-    }
-    return "#FF5520";
-  };
+  // Model highlight data: selected muscle in its accent color,
+  // otherwise all (filtered) muscles dimly lit so regions are discoverable
+  const modelData = selectedInfo
+    ? [{ name: selectedInfo.label, muscles: libFor(selectedInfo.id, view) }]
+    : MUSCLES
+        .filter(m => (filter === "all" || m.category === filter) && libFor(m.id, view).length > 0)
+        .map(m => ({ name: m.label, muscles: libFor(m.id, view) }));
 
-  const viewPolys = MUSCLE_POLYS.filter(p => p.view === view);
+  const highlightColor = selectedInfo ? selectedInfo.accent : "#5b4a91";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: "100%", background: "var(--surface)" }}>
@@ -392,7 +240,7 @@ export default function BodyGuide() {
           const active = filter === cat;
           const color  = cat === "all" ? "var(--purple)" : CAT_COLOR[cat];
           return (
-            <button key={cat} onClick={() => setFilter(f => f === cat ? "all" : cat as typeof filter)} style={{
+            <button key={cat} onClick={() => { setFilter(f => f === cat ? "all" : cat as typeof filter); setSelected(null); }} style={{
               padding: "4px 14px", borderRadius: 20, fontSize: 11, fontWeight: 600,
               border: `1px solid ${active ? color : "var(--border)"}`,
               background: active ? `${color}22` : "transparent",
@@ -408,112 +256,26 @@ export default function BodyGuide() {
       {/* Main content */}
       <div style={{ display: "flex", flex: 1, minHeight: 0, flexWrap: "wrap" }}>
 
-        {/* Body diagram */}
+        {/* Body diagram — same model as the exercise cards */}
         <div style={{
           flex: "0 0 auto",
           display: "flex", flexDirection: "column", alignItems: "center",
-          padding: "12px 8px",
-          minWidth: 200,
+          padding: "16px 12px",
+          minWidth: 220,
         }}>
-          <div style={{ position: "relative", width: "100%", maxWidth: 260 }}>
-            {/* Anatomy image */}
-            {!imgMissing ? (
-              <img
-                src={view === "front" ? "/anatomy-front.jpg" : "/anatomy-back.jpg"}
-                alt={`${view} anatomy`}
-                style={{ width: "100%", height: "auto", display: "block", borderRadius: 8 }}
-                onError={() => setImgMissing(true)}
-              />
-            ) : (
-              /* Fallback when images not yet added */
-              <div style={{
-                width: "100%", aspectRatio: "400/560",
-                background: "linear-gradient(180deg, #1a0a0a 0%, #0d0505 100%)",
-                borderRadius: 8,
-                display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center",
-                gap: 10, padding: 20,
-              }}>
-                <div style={{ fontSize: 36 }}>🫀</div>
-                <div style={{ fontSize: 12, color: "#888", textAlign: "center", lineHeight: 1.5 }}>
-                  Save your anatomy image as:<br />
-                  <code style={{ fontSize: 10, color: "#aaa" }}>public/anatomy-front.jpg</code><br />
-                  <code style={{ fontSize: 10, color: "#aaa" }}>public/anatomy-back.jpg</code>
-                </div>
-              </div>
-            )}
+          <Model
+            type={view === "front" ? "anterior" : "posterior"}
+            data={modelData}
+            highlightedColors={[highlightColor]}
+            bodyColor="#33333f"
+            onClick={handleModelClick}
+            style={{ width: 220, padding: 0 }}
+          />
 
-            {/* SVG overlay with clickable muscle regions */}
-            <svg
-              viewBox={`0 0 ${VIEWBOX_W} ${VIEWBOX_H}`}
-              style={{
-                position: "absolute", inset: 0,
-                width: "100%", height: "100%",
-                cursor: "crosshair",
-              }}
-              onClick={() => { if (!hovering) setSelected(null); }}
-            >
-              {viewPolys.map((polyDef, di) =>
-                polyDef.polys.map((pts, pi) => {
-                  const key = `${polyDef.id}-${di}-${pi}`;
-                  const fill = getPolyFill(polyDef.id);
-                  const opacity = getPolyOpacity(polyDef.id);
-
-                  return (
-                    <g key={key}>
-                      {/* Left / center polygon */}
-                      <polygon
-                        points={pts}
-                        fill={fill}
-                        opacity={opacity}
-                        stroke={selected === polyDef.id ? fill : "transparent"}
-                        strokeWidth={1.5}
-                        style={{ cursor: "pointer", transition: "opacity 0.15s" }}
-                        onClick={e => { e.stopPropagation(); handleSelect(polyDef.id); }}
-                        onMouseEnter={() => setHovering(polyDef.id)}
-                        onMouseLeave={() => setHovering(null)}
-                      />
-                      {/* Mirrored right polygon (bilateral) */}
-                      {polyDef.bilateral && (
-                        <polygon
-                          points={pts}
-                          fill={fill}
-                          opacity={opacity}
-                          stroke={selected === polyDef.id ? fill : "transparent"}
-                          strokeWidth={1.5}
-                          transform={MIRROR}
-                          style={{ cursor: "pointer", transition: "opacity 0.15s" }}
-                          onClick={e => { e.stopPropagation(); handleSelect(polyDef.id); }}
-                          onMouseEnter={() => setHovering(polyDef.id)}
-                          onMouseLeave={() => setHovering(null)}
-                        />
-                      )}
-                    </g>
-                  );
-                })
-              )}
-
-              {/* Hover label */}
-              {hovering && !selected && (() => {
-                const info = MUSCLES.find(m => m.id === hovering);
-                return info ? (
-                  <text
-                    x={VIEWBOX_W / 2} y={VIEWBOX_H - 14}
-                    textAnchor="middle" fontSize={13} fontWeight="bold"
-                    fill={info.accent} stroke="#000" strokeWidth={3} paintOrder="stroke"
-                    style={{ pointerEvents: "none", userSelect: "none" }}
-                  >
-                    {info.shortLabel}
-                  </text>
-                ) : null;
-              })()}
-            </svg>
-          </div>
-
-          {/* Legend dots */}
+          {/* Legend chips */}
           <div style={{
             display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center",
-            padding: "10px 4px 0",
+            padding: "12px 4px 0",
             maxWidth: 260,
           }}>
             {MUSCLES
@@ -604,7 +366,8 @@ export default function BodyGuide() {
                     : view === "front" ? "Front Body Muscles" : "Back Body Muscles"}
                 </div>
                 <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5, marginBottom: 16 }}>
-                  Hover or tap any highlighted region. Use the {view === "front" ? "Back →" : "Front →"} button to flip.
+                  Tap any highlighted region on the body, or use the chips below it.
+                  Use the {view === "front" ? "Back" : "Front"} button to flip the figure.
                 </div>
                 {(["push", "pull", "legs", "core"] as Category[])
                   .filter(cat => filter === "all" || filter === cat)

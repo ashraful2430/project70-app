@@ -6,26 +6,31 @@ import { useRecipes, type Recipe } from "@/lib/hooks/useRecipes";
 import RecipeBuilder from "@/components/RecipeBuilder";
 import type { RecipeIngredient } from "@/lib/hooks/useRecipes";
 
-// ─── Nutrition goals calculator ───────────────────────────────────────────────
+// ─── Nutrition goals calculator (Mifflin-St Jeor + moderate activity) ────────
 
 interface MacroGoals {
-  calories: number; // kcal/day
-  protein: number;  // grams
-  fiber: number;    // grams
-  carbs: number;    // grams
-  fat: number;      // grams
+  calories: number;
+  protein: number;
+  fiber: number;
+  carbs: number;
+  fat: number;
 }
 
-// Uses Mifflin-St Jeor with moderate-activity TDEE and a 500 kcal deficit for fat loss.
-// Protein high (2g/kg) to preserve muscle while losing fat.
-function calcGoals(weightKg: number): MacroGoals {
-  // Simple weight-only estimate: ~28 kcal/kg for moderate activity, minus 500 deficit
-  const tdee = Math.round(weightKg * 28);
-  const calories = Math.max(1200, tdee - 500);
-  const protein = Math.round(weightKg * 2.0);     // 2g/kg — muscle retention during cut
-  const fat     = Math.round(calories * 0.25 / 9); // 25% of calories from fat
+interface BodyStats {
+  weightKg: number;
+  heightCm: number;
+  age: number;
+}
+
+function calcGoals(stats: BodyStats): MacroGoals {
+  const { weightKg, heightCm, age } = stats;
+  const bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5; // Mifflin-St Jeor (male)
+  const tdee = Math.round(bmr * 1.55);                         // moderate activity (gym 4-5x/week)
+  const calories = Math.max(1400, tdee - 500);                 // 500 kcal deficit for fat loss
+  const protein = Math.round(weightKg * 2.0);                  // 2g/kg — muscle retention
+  const fat     = Math.round(calories * 0.25 / 9);
   const carbs   = Math.round((calories - protein * 4 - fat * 9) / 4);
-  const fiber   = 28;                              // WHO recommendation
+  const fiber   = 28;
   return { calories, protein, fiber, carbs, fat };
 }
 
@@ -33,210 +38,559 @@ interface DayMacros { protein: number; fiber: number; carbs: number; fat: number
 const ZERO_MACROS: DayMacros = { protein: 0, fiber: 0, carbs: 0, fat: 0 };
 
 const MACRO_META = [
-  { key: "protein" as keyof DayMacros, label: "Protein",  emoji: "🥩", unit: "g",   color: "#f87171", step: 5  },
-  { key: "carbs"   as keyof DayMacros, label: "Carbs",    emoji: "🍚", unit: "g",   color: "#fcd34d", step: 10 },
-  { key: "fat"     as keyof DayMacros, label: "Fat",      emoji: "🧈", unit: "g",   color: "#fb923c", step: 5  },
-  { key: "fiber"   as keyof DayMacros, label: "Fiber",    emoji: "🌾", unit: "g",   color: "#4ade80", step: 2  },
+  { key: "protein" as keyof DayMacros, label: "Protein", emoji: "🥩", unit: "g", color: "#f87171", step: 5  },
+  { key: "carbs"   as keyof DayMacros, label: "Carbs",   emoji: "🍚", unit: "g", color: "#fcd34d", step: 10 },
+  { key: "fat"     as keyof DayMacros, label: "Fat",     emoji: "🧈", unit: "g", color: "#fb923c", step: 5  },
+  { key: "fiber"   as keyof DayMacros, label: "Fiber",   emoji: "🌾", unit: "g", color: "#4ade80", step: 2  },
 ] as const;
 
-const DAILY_GOAL = 1800;
+// ─── Macro food info ──────────────────────────────────────────────────────────
+
+interface MacroInfo {
+  why: string;
+  foods: Array<{ name: string; amount: string; per: string }>;
+  tips: string[];
+}
+
+const MACRO_INFO: Record<string, MacroInfo> = {
+  protein: {
+    why: "Protein preserves muscle while you lose fat. At 2g per kg of bodyweight, your muscles get enough amino acids to rebuild and grow even in a calorie deficit.",
+    foods: [
+      { name: "Chicken breast", amount: "31g protein", per: "100g cooked" },
+      { name: "Eggs",           amount: "6g protein",  per: "1 egg" },
+      { name: "Tuna (canned)",  amount: "25g protein", per: "100g" },
+      { name: "Salmon",         amount: "22g protein", per: "100g" },
+      { name: "Greek yogurt",   amount: "17g protein", per: "150g" },
+      { name: "Beef (lean)",    amount: "26g protein", per: "100g" },
+      { name: "Mutton (lean)",  amount: "25g protein", per: "100g" },
+      { name: "Motor dal",      amount: "9g protein",  per: "100g cooked" },
+      { name: "Chana (boiled)", amount: "9g protein",  per: "100g" },
+      { name: "Cottage cheese", amount: "11g protein", per: "100g" },
+    ],
+    tips: [
+      "Spread protein across every meal — your body uses roughly 30–40g per sitting.",
+      "Eggs at breakfast is the fastest way to hit your morning protein target.",
+      "Dal + rice together form a complete protein — good for rest days.",
+    ],
+  },
+  carbs: {
+    why: "Carbs are your primary workout fuel. Eating most of your carbs around training times gives you energy for lifting and helps muscles recover faster after sessions.",
+    foods: [
+      { name: "Brown rice",       amount: "45g carbs",  per: "1 cup cooked" },
+      { name: "White rice",       amount: "53g carbs",  per: "1 cup cooked" },
+      { name: "Oats",             amount: "27g carbs",  per: "40g dry" },
+      { name: "Sweet potato",     amount: "20g carbs",  per: "100g" },
+      { name: "Whole wheat roti", amount: "25g carbs",  per: "1 roti (40g)" },
+      { name: "Banana",           amount: "27g carbs",  per: "1 medium" },
+      { name: "Dates",            amount: "18g carbs",  per: "3 pieces" },
+      { name: "Bread (whole grain)", amount: "13g carbs", per: "1 slice" },
+      { name: "Potato (boiled)",  amount: "17g carbs",  per: "100g" },
+      { name: "Lentils",          amount: "20g carbs",  per: "100g cooked" },
+    ],
+    tips: [
+      "Eat your biggest carb serving 1–2 hours before gym for maximum energy.",
+      "After training, fast carbs (banana, white rice) help recovery.",
+      "On rest days, reduce carbs slightly and keep protein and fat the same.",
+    ],
+  },
+  fat: {
+    why: "Healthy fats support testosterone production, joint health, and fat-soluble vitamin absorption. You need fat to lose fat — just stick to unsaturated sources most of the time.",
+    foods: [
+      { name: "Eggs (whole)",    amount: "5g fat",   per: "1 egg" },
+      { name: "Almonds",        amount: "14g fat",  per: "25g (handful)" },
+      { name: "Walnuts",        amount: "18g fat",  per: "25g" },
+      { name: "Olive oil",      amount: "14g fat",  per: "1 tbsp" },
+      { name: "Peanut butter",  amount: "16g fat",  per: "2 tbsp" },
+      { name: "Salmon",         amount: "13g fat",  per: "100g" },
+      { name: "Ghee",           amount: "12g fat",  per: "1 tbsp — use sparingly" },
+      { name: "Avocado",        amount: "15g fat",  per: "100g" },
+      { name: "Coconut (fresh)", amount: "9g fat",  per: "30g" },
+      { name: "Fatty fish (hilsa)", amount: "12g fat", per: "100g" },
+    ],
+    tips: [
+      "Fat is 9 kcal/g — it adds up fast. Track it to avoid going over budget.",
+      "A handful of almonds before bed supports overnight muscle repair.",
+      "Replace saturated fats (fried food) with unsaturated fats to keep arteries clean.",
+    ],
+  },
+  fiber: {
+    why: "Fiber slows digestion, keeps you full longer, and prevents blood sugar spikes. High fiber intake while cutting is one of the best strategies to stay satisfied on fewer calories.",
+    foods: [
+      { name: "Spinach",         amount: "2.2g fiber", per: "100g raw" },
+      { name: "Broccoli",        amount: "2.6g fiber", per: "100g" },
+      { name: "Lentils (dal)",   amount: "8g fiber",   per: "100g cooked" },
+      { name: "Chana (boiled)",  amount: "7.6g fiber", per: "100g" },
+      { name: "Oats",            amount: "4g fiber",   per: "40g dry" },
+      { name: "Apple (with skin)", amount: "4.4g fiber", per: "1 medium" },
+      { name: "Banana",          amount: "3.1g fiber", per: "1 medium" },
+      { name: "Papaya",          amount: "1.7g fiber", per: "100g" },
+      { name: "Chia seeds",      amount: "10g fiber",  per: "2 tbsp" },
+      { name: "Whole wheat roti", amount: "2g fiber",  per: "1 roti" },
+    ],
+    tips: [
+      "Add vegetables to every meal — they fill you up with almost no calories.",
+      "Start meals with a vegetable salad to naturally eat less of everything else.",
+      "High fiber intake reduces hunger hormone (ghrelin) levels over the day.",
+    ],
+  },
+};
+
+// ─── Testosterone foods ───────────────────────────────────────────────────────
+
+const TESTO_FOODS = [
+  {
+    name: "Eggs (whole egg)",
+    why: "Egg yolks contain cholesterol and vitamin D — both direct precursors for testosterone synthesis. Do not discard the yolk.",
+    how: "3–4 whole eggs daily. Boiled, scrambled, or omelette.",
+    icon: "🥚",
+  },
+  {
+    name: "Tuna / Fatty Fish",
+    why: "High in vitamin D (which acts like a hormone to boost T levels) and omega-3 fatty acids that reduce cortisol.",
+    how: "2–3 servings per week. Canned tuna, salmon, hilsa (ilish mach).",
+    icon: "🐟",
+  },
+  {
+    name: "Garlic",
+    why: "Allicin in garlic lowers cortisol — the hormone that directly blocks testosterone. Lower cortisol = higher T.",
+    how: "2–4 raw cloves daily, crushed and added to food. Raw is more potent than cooked.",
+    icon: "🧄",
+  },
+  {
+    name: "Ginger",
+    why: "Shown in research to increase luteinizing hormone (LH), which signals the testes to produce more testosterone.",
+    how: "Fresh ginger in tea or cooking daily. Ginger-honey-lemon water in the morning.",
+    icon: "🫚",
+  },
+  {
+    name: "Pomegranate",
+    why: "Strong antioxidant content reduces oxidative stress, which protects Leydig cells (the cells that produce testosterone).",
+    how: "1 pomegranate or 240ml juice daily. Best in the morning.",
+    icon: "🍎",
+  },
+  {
+    name: "Almonds & Nuts",
+    why: "Rich in zinc and magnesium — both minerals are directly involved in testosterone production and are commonly deficient in men.",
+    how: "A small handful (25–30g) daily. Almonds, walnuts, Brazil nuts.",
+    icon: "🌰",
+  },
+  {
+    name: "Lean Beef / Mutton",
+    why: "Excellent source of zinc and saturated fat — both support T levels. Red meat 2–3 times per week significantly raises zinc intake.",
+    how: "100–150g lean cuts 2–3 times per week. Avoid excessive processing.",
+    icon: "🥩",
+  },
+  {
+    name: "Leafy Greens (Spinach, Kale)",
+    why: "Rich in magnesium, which is associated with higher free testosterone levels. Boiling reduces magnesium — eat lightly cooked or in smoothies.",
+    how: "A large handful with every meal possible. Saag, palak dishes, or add raw to any dish.",
+    icon: "🥬",
+  },
+  {
+    name: "Olive Oil",
+    why: "Monounsaturated fats in olive oil have been shown in studies to raise testosterone by up to 17% when used regularly as a fat source.",
+    how: "2 tbsp daily in cooking or on salads. Use cold-pressed extra virgin.",
+    icon: "🫒",
+  },
+  {
+    name: "Onions",
+    why: "Quercetin in onions increases LH and reduces the enzyme that converts testosterone into estrogen.",
+    how: "Include raw or cooked onions in every savory meal. More is better.",
+    icon: "🧅",
+  },
+  {
+    name: "Ashwagandha (adaptogen herb)",
+    why: "Clinical trials show 15–17% increase in testosterone with 600mg daily. Also reduces cortisol by 25–30%.",
+    how: "600mg capsule or 1 tsp powder in warm milk before bed.",
+    icon: "🌿",
+  },
+  {
+    name: "Dark Chocolate (70%+)",
+    why: "Contains zinc and magnesium, and reduces cortisol through flavonoids. Also improves blood flow.",
+    how: "1–2 squares (20–30g) of 70%+ cocoa dark chocolate per day.",
+    icon: "🍫",
+  },
+];
 
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00");
   return d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
 }
 
-function GoalBar({ total, goal, color = "" }: { total: number; goal: number; color?: string }) {
-  const pct = Math.min(100, (total / goal) * 100);
-  const barColor = color || (total > goal ? "#ef4444" : total > goal * 0.9 ? "#f59e0b" : "#10b981");
+// ── Macro Info Modal ──────────────────────────────────────────────────────────
+function MacroInfoModal({ macroKey, onClose }: { macroKey: keyof DayMacros; onClose: () => void }) {
+  const info = MACRO_INFO[macroKey];
+  const meta = MACRO_META.find(m => m.key === macroKey)!;
+
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>
-          {total}{" "}
-          <span style={{ fontSize: 10, fontWeight: 400, color: "var(--text-muted)" }}>/ {goal} kcal goal</span>
-        </span>
-        <span style={{ fontSize: 11, color: total > goal ? "#ef4444" : "var(--text-muted)" }}>
-          {total > goal ? `+${total - goal} over` : `${goal - total} remaining`}
-        </span>
-      </div>
-      <div style={{ height: 10, borderRadius: 6, background: "var(--surface2)", overflow: "hidden" }}>
-        <motion.div
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          style={{ height: "100%", borderRadius: 6, background: barColor }}
-        />
-      </div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      style={{
+        position: "fixed", inset: 0, zIndex: 200,
+        background: "rgba(0,0,0,0.75)",
+        display: "flex", alignItems: "flex-end", justifyContent: "center",
+      }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <motion.div
+        initial={{ y: 80, opacity: 0 }} animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 80, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 28 }}
+        style={{
+          width: "100%", maxWidth: 500,
+          background: "var(--surface)", borderRadius: "20px 20px 0 0",
+          padding: "20px 20px 36px", maxHeight: "80vh", overflowY: "auto",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <div style={{ fontWeight: 800, fontSize: 16, color: meta.color }}>
+            {meta.emoji} {meta.label} — Food Guide
+          </div>
+          <button onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", fontSize: 20 }}>
+            ×
+          </button>
+        </div>
+
+        <div style={{
+          background: "rgba(255,255,255,0.04)", borderRadius: 10, padding: "10px 14px",
+          fontSize: 12, color: "var(--text-muted)", lineHeight: 1.65, marginBottom: 16,
+          borderLeft: `3px solid ${meta.color}`,
+        }}>
+          {info.why}
+        </div>
+
+        <div style={{ fontWeight: 700, fontSize: 12, color: "var(--text)", marginBottom: 8 }}>
+          Best food sources
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 16 }}>
+          {info.foods.map(f => (
+            <div key={f.name} style={{
+              display: "flex", justifyContent: "space-between", alignItems: "center",
+              padding: "7px 12px", borderRadius: 8,
+              background: "var(--surface2)", border: "1px solid var(--border)",
+            }}>
+              <span style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{f.name}</span>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: meta.color }}>{f.amount}</div>
+                <div style={{ fontSize: 10, color: "var(--text-muted)" }}>per {f.per}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ fontWeight: 700, fontSize: 12, color: "var(--text)", marginBottom: 8 }}>
+          Pro tips
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {info.tips.map((t, i) => (
+            <div key={i} style={{
+              fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6,
+              paddingLeft: 12, borderLeft: "2px solid var(--border)",
+            }}>
+              {t}
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 // ── Nutrition Goals Card ───────────────────────────────────────────────────────
 function NutritionGoals({
-  weight, onWeightChange,
+  stats, onStatsChange,
   macros, onMacroChange,
-  calTotal, calGoal,
+  calTotal,
 }: {
-  weight: number;
-  onWeightChange: (w: number) => void;
+  stats: BodyStats;
+  onStatsChange: (s: BodyStats) => void;
   macros: DayMacros;
   onMacroChange: (key: keyof DayMacros, val: number) => void;
   calTotal: number;
-  calGoal: number;
 }) {
-  const [editWeight, setEditWeight] = useState(false);
-  const [draftW, setDraftW]         = useState(String(weight));
-  const goals = calcGoals(weight);
+  const [editingField, setEditingField] = useState<"weight" | "height" | "age" | null>(null);
+  const [draft, setDraft] = useState("");
+  const [infoFor, setInfoFor] = useState<keyof DayMacros | null>(null);
+  const goals = calcGoals(stats);
 
-  const commitWeight = () => {
-    const parsed = parseFloat(draftW);
-    if (!isNaN(parsed) && parsed > 0) onWeightChange(parsed);
-    setEditWeight(false);
+  const startEdit = (field: "weight" | "height" | "age") => {
+    setDraft(String(stats[field === "weight" ? "weightKg" : field === "height" ? "heightCm" : "age"]));
+    setEditingField(field);
   };
 
+  const commitEdit = () => {
+    const val = parseFloat(draft);
+    if (!isNaN(val) && val > 0) {
+      if (editingField === "weight") onStatsChange({ ...stats, weightKg: val });
+      if (editingField === "height") onStatsChange({ ...stats, heightCm: val });
+      if (editingField === "age")    onStatsChange({ ...stats, age: val });
+    }
+    setEditingField(null);
+  };
+
+  const calPct = Math.min(100, (calTotal / goals.calories) * 100);
+
   return (
-    <div style={{
-      background: "var(--surface2)", borderRadius: 14,
-      border: "1px solid var(--border)", overflow: "hidden",
-    }}>
-      {/* Weight header */}
+    <>
       <div style={{
-        padding: "12px 14px",
-        background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(99,102,241,0.06))",
-        borderBottom: "1px solid var(--border)",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
+        background: "var(--surface2)", borderRadius: 14,
+        border: "1px solid var(--border)", overflow: "hidden",
       }}>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-            Daily Nutrition Goals
+        {/* Header with body stats */}
+        <div style={{
+          padding: "12px 14px",
+          background: "linear-gradient(135deg, rgba(139,92,246,0.12), rgba(99,102,241,0.06))",
+          borderBottom: "1px solid var(--border)",
+        }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "var(--text)", letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 8 }}>
+            Daily Nutrition Goals · Mifflin-St Jeor TDEE
           </div>
-          <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2 }}>
-            Based on your weight · auto-calculated
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ fontSize: 9, color: "var(--text-muted)", textTransform: "uppercase" }}>Current</div>
-            {editWeight ? (
-              <input
-                type="number"
-                value={draftW}
-                onChange={e => setDraftW(e.target.value)}
-                onBlur={commitWeight}
-                onKeyDown={e => e.key === "Enter" && commitWeight()}
-                autoFocus
-                style={{
-                  width: 56, background: "var(--surface)", border: "1px solid var(--purple)",
-                  borderRadius: 6, color: "var(--text)", fontSize: 13, fontWeight: 700,
-                  padding: "2px 6px", textAlign: "center",
-                }}
-              />
-            ) : (
-              <button onClick={() => { setDraftW(String(weight)); setEditWeight(true); }} style={{
-                background: "none", border: "none", cursor: "pointer",
-                fontSize: 14, fontWeight: 800, color: "var(--purple)",
-                padding: 0,
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {[
+              { label: "Weight", value: stats.weightKg, unit: "kg",  field: "weight" as const },
+              { label: "Height", value: stats.heightCm, unit: "cm",  field: "height" as const },
+              { label: "Age",    value: stats.age,       unit: "yrs", field: "age"    as const },
+            ].map(s => (
+              <div key={s.field} style={{
+                background: "var(--surface)", border: "1px solid var(--border)",
+                borderRadius: 8, padding: "6px 10px", display: "flex", alignItems: "center", gap: 6,
               }}>
-                {weight} kg ✎
-              </button>
-            )}
-          </div>
-          <div style={{
-            fontSize: 10, color: "var(--text-muted)", padding: "3px 8px",
-            background: "var(--surface)", borderRadius: 20, border: "1px solid var(--border)",
-          }}>
-            Goal: 70 kg
-          </div>
-        </div>
-      </div>
-
-      {/* Calorie row */}
-      <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>
-            🔥 Calories
-          </span>
-          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-            <span style={{ fontWeight: 700, color: calTotal > goals.calories ? "#ef4444" : "var(--text)" }}>{calTotal}</span>
-            {" / "}{goals.calories} kcal
-          </span>
-        </div>
-        <div style={{ height: 8, borderRadius: 4, background: "var(--surface)", overflow: "hidden" }}>
-          <motion.div
-            animate={{ width: `${Math.min(100, (calTotal / goals.calories) * 100)}%` }}
-            transition={{ duration: 0.5 }}
-            style={{
-              height: "100%", borderRadius: 4,
-              background: calTotal > goals.calories ? "#ef4444" : calTotal > goals.calories * 0.9 ? "#f59e0b" : "#10b981",
-            }}
-          />
-        </div>
-        <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 4, textAlign: "right" }}>
-          {calTotal > goals.calories
-            ? `${calTotal - goals.calories} kcal over`
-            : `${goals.calories - calTotal} kcal remaining`}
-        </div>
-      </div>
-
-      {/* Macro rows */}
-      <div style={{ padding: "8px 14px 12px", display: "flex", flexDirection: "column", gap: 10 }}>
-        {MACRO_META.map(m => {
-          const consumed = macros[m.key];
-          const goal     = goals[m.key];
-          const pct      = Math.min(100, (consumed / goal) * 100);
-          return (
-            <div key={m.key}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
-                  {m.emoji} {m.label}
-                </span>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  {/* decrement */}
-                  <button onClick={() => onMacroChange(m.key, Math.max(0, consumed - m.step))}
-                    style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    −
+                <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{s.label}</span>
+                {editingField === s.field ? (
+                  <input
+                    type="number"
+                    value={draft}
+                    onChange={e => setDraft(e.target.value)}
+                    onBlur={commitEdit}
+                    onKeyDown={e => e.key === "Enter" && commitEdit()}
+                    autoFocus
+                    style={{
+                      width: 52, background: "transparent", border: "none",
+                      borderBottom: "1px solid var(--purple)",
+                      color: "var(--text)", fontSize: 13, fontWeight: 700, textAlign: "center",
+                    }}
+                  />
+                ) : (
+                  <button onClick={() => startEdit(s.field)} style={{
+                    background: "none", border: "none", cursor: "pointer",
+                    fontSize: 13, fontWeight: 800, color: "var(--purple)", padding: 0,
+                  }}>
+                    {s.value}{s.unit} ✎
                   </button>
-                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", minWidth: 52, textAlign: "center" }}>
-                    <span style={{ color: consumed >= goal ? m.color : "var(--text)" }}>{consumed}</span>
-                    <span style={{ color: "var(--text-muted)", fontWeight: 400 }}> / {goal}{m.unit}</span>
-                  </span>
-                  {/* increment */}
-                  <button onClick={() => onMacroChange(m.key, consumed + m.step)}
-                    style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    +
-                  </button>
+                )}
+              </div>
+            ))}
+            <div style={{
+              fontSize: 10, color: "var(--text-muted)", padding: "6px 10px",
+              background: "var(--surface)", borderRadius: 8, border: "1px solid var(--border)",
+              display: "flex", alignItems: "center",
+            }}>
+              Goal: 70 kg
+            </div>
+          </div>
+          <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 8 }}>
+            TDEE ~{Math.round(calcGoals(stats).calories + 500)} kcal · deficit 500 kcal · goal {goals.calories} kcal/day
+          </div>
+        </div>
+
+        {/* Calorie row */}
+        <div style={{ padding: "12px 14px", borderBottom: "1px solid var(--border)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)" }}>🔥 Calories</span>
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
+              <span style={{ fontWeight: 700, color: calTotal > goals.calories ? "#ef4444" : "var(--text)" }}>{calTotal}</span>
+              {" / "}{goals.calories} kcal
+            </span>
+          </div>
+          <div style={{ height: 8, borderRadius: 4, background: "var(--surface)", overflow: "hidden" }}>
+            <motion.div
+              animate={{ width: `${calPct}%` }}
+              transition={{ duration: 0.5 }}
+              style={{
+                height: "100%", borderRadius: 4,
+                background: calTotal > goals.calories ? "#ef4444" : calTotal > goals.calories * 0.9 ? "#f59e0b" : "#10b981",
+              }}
+            />
+          </div>
+          <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 4, textAlign: "right" }}>
+            {calTotal > goals.calories
+              ? `${calTotal - goals.calories} kcal over target`
+              : `${goals.calories - calTotal} kcal remaining`}
+          </div>
+        </div>
+
+        {/* Macro rows */}
+        <div style={{ padding: "8px 14px 12px", display: "flex", flexDirection: "column", gap: 10 }}>
+          {MACRO_META.map(m => {
+            const consumed = macros[m.key];
+            const goal     = goals[m.key];
+            const pct      = Math.min(100, (consumed / goal) * 100);
+            return (
+              <div key={m.key}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
+                      {m.emoji} {m.label}
+                    </span>
+                    {/* Info button */}
+                    <button
+                      onClick={() => setInfoFor(m.key)}
+                      style={{
+                        width: 18, height: 18, borderRadius: "50%",
+                        border: `1px solid ${m.color}`,
+                        background: "transparent", color: m.color,
+                        cursor: "pointer", fontSize: 10, fontWeight: 800,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        lineHeight: 1, padding: 0,
+                      }}
+                      title={`What to eat for ${m.label}`}
+                    >
+                      i
+                    </button>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <button onClick={() => onMacroChange(m.key, Math.max(0, consumed - m.step))}
+                      style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      −
+                    </button>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text)", minWidth: 52, textAlign: "center" }}>
+                      <span style={{ color: consumed >= goal ? m.color : "var(--text)" }}>{consumed}</span>
+                      <span style={{ color: "var(--text-muted)", fontWeight: 400 }}> / {goal}{m.unit}</span>
+                    </span>
+                    <button onClick={() => onMacroChange(m.key, consumed + m.step)}
+                      style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div style={{ height: 6, borderRadius: 3, background: "var(--surface)", overflow: "hidden" }}>
+                  <motion.div
+                    animate={{ width: `${pct}%` }}
+                    transition={{ duration: 0.4 }}
+                    style={{ height: "100%", borderRadius: 3, background: m.color, opacity: 0.85 }}
+                  />
+                </div>
+                <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 3, textAlign: "right" }}>
+                  {consumed >= goal ? "✓ Goal reached!" : `${goal - consumed}${m.unit} to go`}
                 </div>
               </div>
-              <div style={{ height: 6, borderRadius: 3, background: "var(--surface)", overflow: "hidden" }}>
-                <motion.div
-                  animate={{ width: `${pct}%` }}
-                  transition={{ duration: 0.4 }}
-                  style={{ height: "100%", borderRadius: 3, background: m.color, opacity: 0.85 }}
-                />
-              </div>
-              <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 3, textAlign: "right" }}>
-                {consumed >= goal
-                  ? `✓ Goal reached!`
-                  : `${goal - consumed}${m.unit} to go`}
-              </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        <div style={{
+          padding: "8px 14px", borderTop: "1px solid var(--border)",
+          fontSize: 10, color: "var(--text-muted)", lineHeight: 1.5,
+        }}>
+          Tap the <strong style={{ color: "var(--text)" }}>ⓘ</strong> button next to any macro to see which foods to eat.
+          Use +/− to manually log each macro after eating.
+        </div>
       </div>
 
-      {/* Info footer */}
-      <div style={{
-        padding: "8px 14px", borderTop: "1px solid var(--border)",
-        fontSize: 10, color: "var(--text-muted)", lineHeight: 1.5,
-      }}>
-        <strong style={{ color: "var(--text)" }}>Tip:</strong> Use +/− to manually log each macro after eating.
-        Protein goal = {calcGoals(weight).protein}g · keeps muscle while losing fat.
-      </div>
-    </div>
+      {/* Macro info modal */}
+      <AnimatePresence>
+        {infoFor && (
+          <MacroInfoModal macroKey={infoFor} onClose={() => setInfoFor(null)} />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
-// ── Saved recipe card ──────────────────────────────────────────────────────
+// ── Testosterone Foods Section ────────────────────────────────────────────────
+function TestoFoods() {
+  const [expanded, setExpanded] = useState<number | null>(null);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+      style={{ display: "flex", flexDirection: "column", gap: 0 }}
+    >
+      <div style={{
+        padding: "12px 14px", marginBottom: 12,
+        background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(234,88,12,0.06))",
+        borderRadius: 12, border: "1px solid rgba(245,158,11,0.2)",
+      }}>
+        <div style={{ fontWeight: 800, fontSize: 13, color: "#f59e0b", marginBottom: 4 }}>
+          Testosterone Nutrition Guide
+        </div>
+        <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.6 }}>
+          These foods support natural testosterone production. Combine with compound lifting,
+          sleep 7–8 hours, and keep cortisol low for maximum results.
+        </div>
+      </div>
+
+      {TESTO_FOODS.map((food, i) => (
+        <motion.div
+          key={food.name}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.04 }}
+          style={{
+            borderRadius: 12, marginBottom: 6,
+            background: "var(--surface2)", border: "1px solid var(--border)",
+            overflow: "hidden",
+          }}
+        >
+          <button
+            onClick={() => setExpanded(expanded === i ? null : i)}
+            style={{
+              width: "100%", display: "flex", alignItems: "center", gap: 12,
+              padding: "11px 14px", background: "none", border: "none",
+              cursor: "pointer", textAlign: "left",
+            }}
+          >
+            <span style={{ fontSize: 22, flexShrink: 0 }}>{food.icon}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>{food.name}</div>
+              <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                {expanded === i ? "▲ hide" : "▼ why + how"}
+              </div>
+            </div>
+            <div style={{
+              fontSize: 10, fontWeight: 700, color: "#f59e0b",
+              padding: "3px 8px", borderRadius: 20,
+              background: "rgba(245,158,11,0.1)",
+              border: "1px solid rgba(245,158,11,0.2)",
+              flexShrink: 0,
+            }}>
+              T-Boost
+            </div>
+          </button>
+          <AnimatePresence>
+            {expanded === i && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ overflow: "hidden" }}
+              >
+                <div style={{ padding: "0 14px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+                  <div style={{
+                    fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6,
+                    paddingLeft: 10, borderLeft: "2px solid #f59e0b",
+                  }}>
+                    <strong style={{ color: "var(--text)" }}>Why it works:</strong> {food.why}
+                  </div>
+                  <div style={{
+                    fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6,
+                    paddingLeft: 10, borderLeft: "2px solid #10b981",
+                  }}>
+                    <strong style={{ color: "var(--text)" }}>How to eat it:</strong> {food.how}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
+// ── Saved recipe card ──────────────────────────────────────────────────────────
 function RecipeCard({ recipe, onAdd, onDelete }: {
   recipe: Recipe;
   onAdd: () => void;
@@ -310,10 +664,10 @@ function RecipeCard({ recipe, onAdd, onDelete }: {
   );
 }
 
-// ── Main component ─────────────────────────────────────────────────────────
+// ── Main component ─────────────────────────────────────────────────────────────
 interface Props { uid: string | null }
 
-type SubTab = "log" | "recipes";
+type SubTab = "log" | "recipes" | "testo";
 
 export default function CalorieTracker({ uid }: Props) {
   const {
@@ -334,15 +688,25 @@ export default function CalorieTracker({ uid }: Props) {
   const [recipesLoaded, setRecipesLoaded] = useState(false);
   const [showGoals, setShowGoals] = useState(true);
 
-  // ── Weight (persists across sessions) ──────────────────────────────────────
-  const [weight, setWeightState] = useState<number>(86);
+  // ── Body stats (persist across sessions) ──────────────────────────────────
+  const [stats, setStatsState] = useState<BodyStats>({ weightKg: 86, heightCm: 170, age: 22 });
+
   useEffect(() => {
-    const stored = localStorage.getItem("project70-weight");
-    if (stored) setWeightState(Number(stored) || 86);
+    const w = localStorage.getItem("project70-weight");
+    const h = localStorage.getItem("project70-height");
+    const a = localStorage.getItem("project70-age");
+    setStatsState({
+      weightKg: w ? Number(w) || 86 : 86,
+      heightCm: h ? Number(h) || 170 : 170,
+      age:      a ? Number(a) || 22 : 22,
+    });
   }, []);
-  const handleWeightChange = (w: number) => {
-    setWeightState(w);
-    localStorage.setItem("project70-weight", String(w));
+
+  const handleStatsChange = (s: BodyStats) => {
+    setStatsState(s);
+    localStorage.setItem("project70-weight", String(s.weightKg));
+    localStorage.setItem("project70-height", String(s.heightCm));
+    localStorage.setItem("project70-age",    String(s.age));
   };
 
   // ── Daily macros (per date, manual logging) ────────────────────────────────
@@ -351,6 +715,7 @@ export default function CalorieTracker({ uid }: Props) {
     const raw = localStorage.getItem(`project70-macros-${viewDate}`);
     setMacros(raw ? (JSON.parse(raw) as DayMacros) : ZERO_MACROS);
   }, [viewDate]);
+
   const handleMacroChange = (key: keyof DayMacros, val: number) => {
     setMacros(prev => {
       const next = { ...prev, [key]: val };
@@ -359,7 +724,7 @@ export default function CalorieTracker({ uid }: Props) {
     });
   };
 
-  const goals = calcGoals(weight);
+  const goals = calcGoals(stats);
 
   useEffect(() => {
     if (subTab === "recipes" && !recipesLoaded) {
@@ -383,6 +748,12 @@ export default function CalorieTracker({ uid }: Props) {
   }
 
   const dotColors = ["#10b981","#f59e0b","#f97316","#22c55e","#ec4899","#60a5fa","#a78bfa","#34d399"];
+
+  const SUB_TABS: { key: SubTab; label: string }[] = [
+    { key: "log",     label: "📋 Log" },
+    { key: "recipes", label: "📖 Recipes" },
+    { key: "testo",   label: "⚡ Testosterone" },
+  ];
 
   return (
     <>
@@ -410,23 +781,21 @@ export default function CalorieTracker({ uid }: Props) {
         </div>
 
         {/* Sub tabs */}
-        <div style={{
-          display: "flex", borderBottom: "1px solid var(--border)",
-        }}>
-          {(["log", "recipes"] as SubTab[]).map(t => (
+        <div style={{ display: "flex", borderBottom: "1px solid var(--border)" }}>
+          {SUB_TABS.map(t => (
             <button
-              key={t}
-              onClick={() => setSubTab(t)}
+              key={t.key}
+              onClick={() => setSubTab(t.key)}
               style={{
                 flex: 1, padding: "10px 0",
                 background: "none", border: "none",
-                borderBottom: subTab === t ? "2px solid var(--purple)" : "2px solid transparent",
-                color: subTab === t ? "var(--purple-light)" : "var(--text-muted)",
-                fontWeight: subTab === t ? 700 : 500, fontSize: 13, cursor: "pointer",
+                borderBottom: subTab === t.key ? "2px solid var(--purple)" : "2px solid transparent",
+                color: subTab === t.key ? "var(--purple-light)" : "var(--text-muted)",
+                fontWeight: subTab === t.key ? 700 : 500, fontSize: 12, cursor: "pointer",
                 transition: "all 0.2s",
               }}
             >
-              {t === "log" ? "📋 Today's Log" : "📖 Saved Recipes"}
+              {t.label}
             </button>
           ))}
         </div>
@@ -487,12 +856,11 @@ export default function CalorieTracker({ uid }: Props) {
                         style={{ overflow: "hidden" }}
                       >
                         <NutritionGoals
-                          weight={weight}
-                          onWeightChange={handleWeightChange}
+                          stats={stats}
+                          onStatsChange={handleStatsChange}
                           macros={macros}
                           onMacroChange={handleMacroChange}
                           calTotal={total}
-                          calGoal={goals.calories}
                         />
                       </motion.div>
                     )}
@@ -606,6 +974,16 @@ export default function CalorieTracker({ uid }: Props) {
                 )}
               </motion.div>
             )}
+
+            {/* ── TESTOSTERONE FOODS TAB ── */}
+            {subTab === "testo" && (
+              <motion.div key="testo"
+                initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+              >
+                <TestoFoods />
+              </motion.div>
+            )}
+
           </AnimatePresence>
         </div>
       </div>

@@ -5,6 +5,8 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import { useLevel } from "@/lib/hooks/useLevel";
 import { useCompletion } from "@/lib/hooks/useCompletion";
 import { useDay } from "@/lib/hooks/useDay";
+import { WEEKS } from "@/lib/data";
+import { wipeAllData } from "@/lib/wipeData";
 import LoginScreen from "@/components/LoginScreen";
 import Header from "@/components/Header";
 import WeekNav from "@/components/WeekNav";
@@ -31,10 +33,13 @@ export default function AppRoot() {
   const { user, loading: authLoading, error: authError, signIn, signOut } = useAuth();
   const uid = user?.uid ?? null;
 
+  const [planPhase, setPlanPhase] = useState<0 | 1>(0);
+  const currentWeek = WEEKS[planPhase];
+
   const { toggle, isComplete, countCompleted, totalCompleted, resetCompletions } = useCompletion(uid);
   const { xp, level, maxLevel, xpProgress, xpIntoLevel, xpForNext, phaseIndex, rank, title } = useLevel(totalCompleted);
 
-  const { day, selectedId, setSelectedId, todayId } = useDay();
+  const { day, selectedId, setSelectedId, todayId } = useDay(currentWeek);
 
   const [tab, setTab]               = useState<Tab>("training");
   const [showProfile, setShowProfile] = useState(false);
@@ -84,7 +89,7 @@ export default function AppRoot() {
               user={user}
             />
             <div style={{ marginTop: 16 }}>
-              <TodayCard day={day} phaseIndex={phaseIndex} countCompleted={countCompleted} />
+              <TodayCard day={day} phaseIndex={phaseIndex} planPhase={planPhase} countCompleted={countCompleted} />
             </div>
             <div style={{ marginTop: 16 }}>
               <SidebarStats phaseIndex={phaseIndex} level={level} />
@@ -98,13 +103,51 @@ export default function AppRoot() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
           >
-            <WeekNav selectedId={selectedId} todayId={todayId} onSelect={setSelectedId} />
+            <WeekNav selectedId={selectedId} todayId={todayId} onSelect={setSelectedId} week={currentWeek} />
 
+            {/* Phase toggle + tab bar */}
             <div style={{
-              display: "flex", gap: 6, marginTop: 16,
+              display: "flex", gap: 6, marginTop: 16, alignItems: "center",
               overflowX: "auto", paddingBottom: 4,
               scrollbarWidth: "none",
             }}>
+              {/* Phase 1 / Phase 2 toggle */}
+              <div style={{
+                display: "flex",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: 10,
+                padding: 3,
+                gap: 3,
+                flexShrink: 0,
+              }}>
+                {([0, 1] as const).map((p) => (
+                  <motion.button
+                    key={p}
+                    onClick={() => setPlanPhase(p)}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                      padding: "7px 12px",
+                      borderRadius: 8,
+                      border: "none",
+                      cursor: "pointer",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      letterSpacing: "0.3px",
+                      background: planPhase === p
+                        ? "linear-gradient(135deg, var(--purple), #9333ea)"
+                        : "transparent",
+                      color: planPhase === p ? "#fff" : "var(--text-muted)",
+                      transition: "all 0.2s ease",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    Phase {p + 1}
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Tab buttons */}
               {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
                 <motion.button
                   key={t}
@@ -128,7 +171,13 @@ export default function AppRoot() {
                 style={{ marginTop: 16 }}
               >
                 {tab === "training" && (
-                  <TrainingTab day={day} phaseIndex={phaseIndex} isComplete={isComplete} onToggle={toggle} />
+                  <TrainingTab
+                    day={day}
+                    phaseIndex={phaseIndex}
+                    planPhase={planPhase}
+                    isComplete={isComplete}
+                    onToggle={toggle}
+                  />
                 )}
                 {tab === "diet"     && <DietTab day={day} />}
                 {tab === "drinks"   && <DrinksTab />}
@@ -175,7 +224,12 @@ export default function AppRoot() {
             level={level} rank={rank} title={title} user={user}
             onClose={() => setShowProfile(false)}
             onSignOut={async () => { await signOut(); setShowProfile(false); }}
-            onReset={() => { resetCompletions(); setShowProfile(false); }}
+            onReset={async () => {
+              await wipeAllData(uid);
+              resetCompletions();
+              setShowProfile(false);
+              window.location.reload();
+            }}
           />
         )}
       </AnimatePresence>

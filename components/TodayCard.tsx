@@ -1,31 +1,42 @@
 "use client";
 import type { Day } from "@/types";
-import { WARMUPS_BY_DAY, MAIN_PROGRAM, MAIN_PROGRAM_ABS, PELVIC_PROGRAM } from "@/lib/data";
+import {
+  WARMUPS_BY_PHASE,
+  MAIN_PROGRAM,
+  MAIN_PROGRAM_ABS,
+  PELVIC_PROGRAM,
+  HEIGHT_EXERCISES,
+} from "@/lib/data";
 
 interface Props {
   day: Day;
   phaseIndex: number;
+  planPhase: 0 | 1;
   countCompleted: (ids: string[]) => number;
 }
 
-export default function TodayCard({ day, phaseIndex, countCompleted }: Props) {
+export default function TodayCard({ day, phaseIndex, planPhase, countCompleted }: Props) {
   const ids: string[] = [];
-  const warmup = WARMUPS_BY_DAY[day.id];
+  const warmups = WARMUPS_BY_PHASE[planPhase] ?? WARMUPS_BY_PHASE[0];
+  const warmup = warmups[day.id];
   if (warmup) warmup.items.forEach((_, i) => ids.push(`wu-${day.id}-${i}`));
 
   if (day.type === "gym") {
     const phase = MAIN_PROGRAM[phaseIndex];
-    const gymKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "fri" | "sat";
+    const gymKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
     (phase[gymKey] ?? []).forEach((ex) => ids.push(`${day.id}-main-${ex.name.replace(/\W+/g, "_")}`));
-    if (day.id === 3) {
+    // Phase 1 Wednesday shoulders gets the abs appendix
+    if (planPhase === 0 && day.id === 3) {
       MAIN_PROGRAM_ABS[phaseIndex].forEach((ex) => ids.push(`${day.id}-abs-${ex.name.replace(/\W+/g, "_")}`));
     }
     if (day.finisher) ids.push(`fin-${day.id}`);
+  } else if (day.type === "active-rest") {
+    const pelvicPhase = PELVIC_PROGRAM[phaseIndex];
+    const kegelEx = day.id === 0 ? pelvicPhase.sun : pelvicPhase.thu;
+    kegelEx.forEach((ex) => ids.push(`${day.id}-kegel-${ex.name.replace(/\W+/g, "_")}`));
+    HEIGHT_EXERCISES.forEach((ex) => ids.push(`${day.id}-height-${ex.name.replace(/\W+/g, "_")}`));
   } else {
     (day.exercises ?? []).forEach((ex) => ids.push(`${day.id}-home-${ex.name.replace(/\W+/g, "_")}`));
-    const pelvicPhase = PELVIC_PROGRAM[phaseIndex];
-    const pelvicEx = day.id === 4 ? pelvicPhase.thu : day.id === 0 ? pelvicPhase.sun : [];
-    pelvicEx.forEach((ex) => ids.push(`${day.id}-pelvic-${ex.name.replace(/\W+/g, "_")}`));
   }
 
   const total = ids.length;

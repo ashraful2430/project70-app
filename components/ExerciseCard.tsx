@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Model from "react-body-highlighter";
 import type { Exercise } from "@/types";
 import { NO_EQUIPMENT_ALT } from "@/lib/data";
 import { getWatchUrl } from "@/lib/youtube";
+import { getMuscleData } from "@/lib/muscleMap";
 
 interface Props {
   exercise: Exercise;
@@ -16,6 +18,7 @@ interface Props {
 export default function ExerciseCard({ exercise, completionId, done, onToggle, category }: Props) {
   const [expanded, setExpanded] = useState(false);
   const alt = NO_EQUIPMENT_ALT[exercise.name];
+  const muscleData = getMuscleData(exercise.target);
 
   return (
     <motion.div
@@ -38,7 +41,7 @@ export default function ExerciseCard({ exercise, completionId, done, onToggle, c
           style={{ marginTop: 1 }}
           whileTap={{ scale: 0.85 }}
           animate={done ? { scale: [1, 1.25, 1] } : { scale: 1 }}
-          transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <AnimatePresence>
             {done && (
@@ -143,6 +146,31 @@ export default function ExerciseCard({ exercise, completionId, done, onToggle, c
             </ol>
           </div>
         </div>
+
+        {/* Muscle map — which area this exercise hits */}
+        {muscleData && (
+          <div style={{
+            flexShrink: 0, width: 74, textAlign: "center",
+            display: "flex", flexDirection: "column", alignItems: "center", gap: 2,
+          }}>
+            <Model
+              type={muscleData.view}
+              data={[{ name: exercise.name, muscles: muscleData.muscles }]}
+              highlightedColors={["#a78bfa"]}
+              bodyColor="#33333f"
+              style={{ width: 64, padding: 0 }}
+            />
+            <span style={{
+              fontSize: 9, color: "var(--text-muted)",
+              textTransform: "uppercase", letterSpacing: "0.5px",
+            }}>
+              {muscleData.view === "anterior" ? "Front" : "Back"}
+            </span>
+            <span style={{ fontSize: 9, color: "#a78bfa", fontWeight: 600, lineHeight: 1.3 }}>
+              {exercise.target}
+            </span>
+          </div>
+        )}
       </div>
     </motion.div>
   );

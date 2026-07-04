@@ -208,10 +208,10 @@ export default function ProfileModal({ level, rank, title, user, onClose, onSign
               }}
             >
               <p style={{ fontSize: 13, color: "var(--text)", fontWeight: 600, marginBottom: 4 }}>
-                Clear all completed exercises? Level resets to 1.
+                Delete ALL data? Exercises, calorie logs, recipes, macros and body stats. Level resets to 1.
               </p>
               <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 12 }}>
-                This cannot be undone.
+                This wipes Firebase + local data. It cannot be undone.
               </p>
               <div style={{ display: "flex", gap: 8 }}>
                 <button
