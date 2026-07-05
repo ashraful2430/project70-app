@@ -6,6 +6,22 @@ interface UsdaFood {
   foodNutrients?: { nutrientId: number; nutrientName?: string; value?: number }[];
 }
 
+// USDA FoodData Central nutrient IDs
+const NUTRIENT = {
+  energy: 1008,
+  protein: 1003,
+  fat: 1004,
+  carbs: 1005,
+  fiber: 1079,
+} as const;
+
+function nutrient(f: UsdaFood, id: number, nameHint?: string): number {
+  const hit = f.foodNutrients?.find(
+    (n) => n.nutrientId === id || (nameHint && n.nutrientName?.toLowerCase().includes(nameHint))
+  );
+  return Math.round((hit?.value ?? 0) * 10) / 10;
+}
+
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
   if (!q) return Response.json([]);
@@ -23,17 +39,16 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
 
     const results = ((data.foods as UsdaFood[]) ?? [])
-      .map((f) => {
-        const energy = f.foodNutrients?.find(
-          (n) => n.nutrientId === 1008 || n.nutrientName?.toLowerCase().includes("energy")
-        );
-        return {
-          id: `usda-${f.fdcId}`,
-          name: f.description,
-          cal100: Math.round(energy?.value ?? 0),
-          source: "USDA",
-        };
-      })
+      .map((f) => ({
+        id: `usda-${f.fdcId}`,
+        name: f.description,
+        cal100: Math.round(nutrient(f, NUTRIENT.energy, "energy")),
+        protein100: nutrient(f, NUTRIENT.protein, "protein"),
+        carbs100: nutrient(f, NUTRIENT.carbs, "carbohydrate"),
+        fat100: nutrient(f, NUTRIENT.fat, "lipid"),
+        fiber100: nutrient(f, NUTRIENT.fiber, "fiber"),
+        source: "USDA",
+      }))
       .filter((f) => f.cal100 > 0)
       .slice(0, 6);
 

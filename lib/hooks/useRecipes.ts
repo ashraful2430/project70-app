@@ -12,6 +12,11 @@ export interface RecipeIngredient {
   unit: string;
   cal100: number;     // for recalculation
   calories: number;
+  // macros in grams for this amount (auto-calculated; absent on old saved recipes)
+  protein?: number;
+  carbs?: number;
+  fat?: number;
+  fiber?: number;
 }
 
 export interface Recipe {

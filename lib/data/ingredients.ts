@@ -616,6 +616,13 @@ export const INGREDIENTS: Ingredient[] = [
     defaultUnit: "g", defaultAmount: 100,
   },
   {
+    id: "borboti", name: "Borboti / Yardlong Bean",
+    aliases: ["borboti", "barbati", "yardlong bean", "long bean", "string bean", "বরবটি"],
+    cal100: 47, category: "vegetable",
+    units: ["g", "piece"], gramsPerUnit: { piece: 10 },
+    defaultUnit: "g", defaultAmount: 100,
+  },
+  {
     id: "bitter-gourd", name: "Bitter Gourd / Korola (Karela)",
     aliases: ["bitter gourd", "korola", "karela", "করলা", "bittermelon"],
     cal100: 17, category: "vegetable",
@@ -1445,6 +1452,27 @@ export const INGREDIENTS: Ingredient[] = [
     cal100: 104, category: "other",
     units: ["g", "tbsp", "tsp"], gramsPerUnit: { tbsp: 17, tsp: 6 },
     defaultUnit: "tbsp", defaultAmount: 1,
+  },
+  {
+    id: "pizza-sauce", name: "Pizza Sauce",
+    aliases: ["pizza sauce", "pizza sause", "marinara", "pasta sauce", "পিজা সস"],
+    cal100: 54, category: "other",
+    units: ["g", "tbsp", "cup"], gramsPerUnit: { tbsp: 16, cup: 250 },
+    defaultUnit: "tbsp", defaultAmount: 2,
+  },
+  {
+    id: "mozzarella", name: "Mozzarella Cheese",
+    aliases: ["mozzarella", "mozarella", "pizza cheese", "cheese", "মোজারেলা"],
+    cal100: 280, category: "dairy",
+    units: ["g", "cup", "tbsp"], gramsPerUnit: { cup: 112, tbsp: 7 },
+    defaultUnit: "g", defaultAmount: 50,
+  },
+  {
+    id: "cheddar", name: "Cheddar / Processed Cheese",
+    aliases: ["cheddar", "cheese slice", "processed cheese", "চেডার"],
+    cal100: 403, category: "dairy",
+    units: ["g", "piece", "tbsp"], gramsPerUnit: { piece: 20, tbsp: 8 },
+    defaultUnit: "piece", defaultAmount: 1,
   },
   {
     id: "soy-sauce", name: "Soy Sauce",

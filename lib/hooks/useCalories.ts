@@ -10,6 +10,11 @@ export interface CalEntry {
   unit: string;
   calories: number;
   time: string;
+  // macros in grams (auto-calculated from ingredients; absent on old entries)
+  protein?: number;
+  carbs?: number;
+  fat?: number;
+  fiber?: number;
 }
 
 export interface DayLog {

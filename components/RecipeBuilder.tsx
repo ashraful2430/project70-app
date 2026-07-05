@@ -5,12 +5,17 @@ import {
   INGREDIENTS, searchIngredients, calcIngredientCal,
   CATEGORY_COLOR, type Ingredient, type UnitKey,
 } from "@/lib/data/ingredients";
+import { getMacros100, macrosForGrams } from "@/lib/data/ingredientMacros";
 import type { RecipeIngredient } from "@/lib/hooks/useRecipes";
 
 interface OnlineResult {
   id: string;
   name: string;
   cal100: number;
+  protein100?: number;
+  carbs100?: number;
+  fat100?: number;
+  fiber100?: number;
   source: "USDA";
 }
 
@@ -88,6 +93,10 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
   function addToRecipe() {
     const cal = calForSelection();
     if (selectedIng) {
+      const grams = (selUnit === "g" || selUnit === "ml")
+        ? selAmount
+        : (selectedIng.gramsPerUnit[selUnit] ?? 0) * selAmount;
+      const macros = macrosForGrams(getMacros100(selectedIng.id, selectedIng.cal100), grams);
       setAddedItems(prev => [...prev, {
         id: selectedIng.id,
         name: selectedIng.name,
@@ -95,8 +104,19 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
         unit: selUnit,
         cal100: selectedIng.cal100,
         calories: cal,
+        ...macros,
       }]);
     } else if (selectedOnline) {
+      // USDA results carry their own macros; fall back to a generic estimate
+      const m100 = selectedOnline.protein100 !== undefined
+        ? {
+            protein: selectedOnline.protein100 ?? 0,
+            carbs:   selectedOnline.carbs100   ?? 0,
+            fat:     selectedOnline.fat100     ?? 0,
+            fiber:   selectedOnline.fiber100   ?? 0,
+          }
+        : getMacros100(selectedOnline.id, selectedOnline.cal100);
+      const macros = macrosForGrams(m100, selAmount);
       setAddedItems(prev => [...prev, {
         id: selectedOnline.id,
         name: selectedOnline.name,
@@ -104,6 +124,7 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
         unit: "g",
         cal100: selectedOnline.cal100,
         calories: cal,
+        ...macros,
       }]);
     }
     setSelectedIng(null);
@@ -119,6 +140,12 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
   }
 
   const totalCal = addedItems.reduce((s, i) => s + i.calories, 0);
+  const totalMacros = {
+    protein: Math.round(addedItems.reduce((s, i) => s + (i.protein ?? 0), 0)),
+    carbs:   Math.round(addedItems.reduce((s, i) => s + (i.carbs   ?? 0), 0)),
+    fat:     Math.round(addedItems.reduce((s, i) => s + (i.fat     ?? 0), 0)),
+    fiber:   Math.round(addedItems.reduce((s, i) => s + (i.fiber   ?? 0), 0)),
+  };
   const hasSelection = selectedIng !== null || selectedOnline !== null;
   const showOnline = onlineResults.length > 0 || onlineLoading;
 
@@ -371,13 +398,31 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
 
               {/* Total */}
               <div style={{
-                display: "flex", justifyContent: "space-between", alignItems: "center",
                 padding: "12px 14px", borderRadius: 12,
                 background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)",
                 marginBottom: 12,
               }}>
-                <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>Total Calories</div>
-                <div style={{ fontSize: 28, fontWeight: 900, color: "var(--purple)" }}>{totalCal} kcal</div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)" }}>Total Calories</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, color: "var(--purple)" }}>{totalCal} kcal</div>
+                </div>
+                {/* Auto macro breakdown */}
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {[
+                    { label: "Protein", val: totalMacros.protein, color: "#f87171" },
+                    { label: "Carbs",   val: totalMacros.carbs,   color: "#fcd34d" },
+                    { label: "Fat",     val: totalMacros.fat,     color: "#fb923c" },
+                    { label: "Fiber",   val: totalMacros.fiber,   color: "#4ade80" },
+                  ].map(m => (
+                    <span key={m.label} style={{
+                      fontSize: 11, fontWeight: 700, color: m.color,
+                      padding: "3px 10px", borderRadius: 20,
+                      background: `${m.color}18`, border: `1px solid ${m.color}44`,
+                    }}>
+                      {m.label} {m.val}g
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           )}

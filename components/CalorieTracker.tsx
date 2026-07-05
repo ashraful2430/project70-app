@@ -301,12 +301,14 @@ function MacroInfoModal({ macroKey, onClose }: { macroKey: keyof DayMacros; onCl
 function NutritionGoals({
   stats, onStatsChange,
   macros, onMacroChange,
+  autoMacros,
   calTotal,
 }: {
   stats: BodyStats;
   onStatsChange: (s: BodyStats) => void;
-  macros: DayMacros;
+  macros: DayMacros;          // manual adjustments (food eaten outside the app)
   onMacroChange: (key: keyof DayMacros, val: number) => void;
+  autoMacros: DayMacros;      // auto-calculated from logged dishes
   calTotal: number;
 }) {
   const [editingField, setEditingField] = useState<"weight" | "height" | "age" | null>(null);
@@ -423,7 +425,7 @@ function NutritionGoals({
         {/* Macro rows */}
         <div style={{ padding: "8px 14px 12px", display: "flex", flexDirection: "column", gap: 10 }}>
           {MACRO_META.map(m => {
-            const consumed = macros[m.key];
+            const consumed = Math.round((autoMacros[m.key] + macros[m.key]) * 10) / 10;
             const goal     = goals[m.key];
             const pct      = Math.min(100, (consumed / goal) * 100);
             return (
@@ -450,7 +452,8 @@ function NutritionGoals({
                     </button>
                   </div>
                   <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <button onClick={() => onMacroChange(m.key, Math.max(0, consumed - m.step))}
+                    {/* +/− adjust only the manual layer; auto part comes from logged dishes */}
+                    <button onClick={() => onMacroChange(m.key, Math.max(-autoMacros[m.key], macros[m.key] - m.step))}
                       style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       −
                     </button>
@@ -458,7 +461,7 @@ function NutritionGoals({
                       <span style={{ color: consumed >= goal ? m.color : "var(--text)" }}>{consumed}</span>
                       <span style={{ color: "var(--text-muted)", fontWeight: 400 }}> / {goal}{m.unit}</span>
                     </span>
-                    <button onClick={() => onMacroChange(m.key, consumed + m.step)}
+                    <button onClick={() => onMacroChange(m.key, macros[m.key] + m.step)}
                       style={{ width: 22, height: 22, borderRadius: 6, border: "1px solid var(--border)", background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 14, lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       +
                     </button>
@@ -483,8 +486,8 @@ function NutritionGoals({
           padding: "8px 14px", borderTop: "1px solid var(--border)",
           fontSize: 10, color: "var(--text-muted)", lineHeight: 1.5,
         }}>
-          Tap the <strong style={{ color: "var(--text)" }}>ⓘ</strong> button next to any macro to see which foods to eat.
-          Use +/− to manually log each macro after eating.
+          Macros are <strong style={{ color: "var(--text)" }}>calculated automatically</strong> from every dish you log.
+          Use +/− only for food eaten outside the app. Tap <strong style={{ color: "var(--text)" }}>ⓘ</strong> to see which foods to eat.
         </div>
       </div>
 
@@ -726,6 +729,14 @@ export default function CalorieTracker({ uid }: Props) {
 
   const goals = calcGoals(stats);
 
+  // Auto macros — summed live from the day's logged entries
+  const autoMacros: DayMacros = {
+    protein: Math.round(entries.reduce((s, e) => s + (e.protein ?? 0), 0) * 10) / 10,
+    carbs:   Math.round(entries.reduce((s, e) => s + (e.carbs   ?? 0), 0) * 10) / 10,
+    fat:     Math.round(entries.reduce((s, e) => s + (e.fat     ?? 0), 0) * 10) / 10,
+    fiber:   Math.round(entries.reduce((s, e) => s + (e.fiber   ?? 0), 0) * 10) / 10,
+  };
+
   useEffect(() => {
     if (subTab === "recipes" && !recipesLoaded) {
       loadRecipes();
@@ -733,17 +744,32 @@ export default function CalorieTracker({ uid }: Props) {
     }
   }, [subTab, recipesLoaded, loadRecipes]);
 
-  function handleSaveRecipe(name: string, ingredients: RecipeIngredient[], totalCalories: number) {
-    saveRecipe({ name, ingredients, totalCalories });
-    addEntry({ name, amount: 1, unit: "serving", calories: totalCalories });
+  // Sum macros across a dish's ingredients (old saved recipes without macro data → 0)
+  function macroTotals(ingredients: RecipeIngredient[]) {
+    const r = (n: number) => Math.round(n * 10) / 10;
+    return {
+      protein: r(ingredients.reduce((s, i) => s + (i.protein ?? 0), 0)),
+      carbs:   r(ingredients.reduce((s, i) => s + (i.carbs   ?? 0), 0)),
+      fat:     r(ingredients.reduce((s, i) => s + (i.fat     ?? 0), 0)),
+      fiber:   r(ingredients.reduce((s, i) => s + (i.fiber   ?? 0), 0)),
+    };
   }
 
-  function handleAddToLog(name: string, _ingredients: RecipeIngredient[], totalCalories: number) {
-    addEntry({ name, amount: 1, unit: "serving", calories: totalCalories });
+  function handleSaveRecipe(name: string, ingredients: RecipeIngredient[], totalCalories: number) {
+    saveRecipe({ name, ingredients, totalCalories });
+    addEntry({ name, amount: 1, unit: "serving", calories: totalCalories, ...macroTotals(ingredients) });
+  }
+
+  function handleAddToLog(name: string, ingredients: RecipeIngredient[], totalCalories: number) {
+    addEntry({ name, amount: 1, unit: "serving", calories: totalCalories, ...macroTotals(ingredients) });
   }
 
   function handleAddSavedRecipe(recipe: Recipe) {
-    addEntry({ name: recipe.name, amount: 1, unit: "serving", calories: recipe.totalCalories });
+    addEntry({
+      name: recipe.name, amount: 1, unit: "serving",
+      calories: recipe.totalCalories,
+      ...macroTotals(recipe.ingredients),
+    });
     setSubTab("log");
   }
 
@@ -860,6 +886,7 @@ export default function CalorieTracker({ uid }: Props) {
                           onStatsChange={handleStatsChange}
                           macros={macros}
                           onMacroChange={handleMacroChange}
+                          autoMacros={autoMacros}
                           calTotal={total}
                         />
                       </motion.div>
@@ -910,6 +937,14 @@ export default function CalorieTracker({ uid }: Props) {
                             {e.amount} {e.unit} ·{" "}
                             <span style={{ color: "var(--text)" }}>{e.calories} kcal</span>
                           </div>
+                          {(e.protein !== undefined || e.carbs !== undefined) && (
+                            <div style={{ fontSize: 10, marginTop: 2, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                              <span style={{ color: "#f87171" }}>P {e.protein ?? 0}g</span>
+                              <span style={{ color: "#fcd34d" }}>C {e.carbs ?? 0}g</span>
+                              <span style={{ color: "#fb923c" }}>F {e.fat ?? 0}g</span>
+                              <span style={{ color: "#4ade80" }}>Fb {e.fiber ?? 0}g</span>
+                            </div>
+                          )}
                         </div>
                         {isToday && (
                           <button

@@ -1,0 +1,270 @@
+// Macros per 100g for every ingredient in ingredients.ts.
+// Format: [protein g, carbs g, fat g, fiber g] per 100g (or 100ml for liquids).
+// Values from standard nutrition databases (USDA / Indian Food Composition Tables).
+
+export interface Macros100 {
+  protein: number;
+  carbs: number;
+  fat: number;
+  fiber: number;
+}
+
+const M: Record<string, [number, number, number, number]> = {
+  // ── Flours & starches ──
+  "maida":            [10.3, 76.0,  1.0,  2.7],
+  "atta":             [12.0, 72.0,  1.7, 10.7],
+  "rice-flour":       [ 6.0, 80.0,  1.4,  2.4],
+  "suji":             [12.7, 73.0,  1.1,  3.9],
+  "besan":            [22.0, 58.0,  6.7, 10.8],
+  "cornflour":        [ 0.3, 91.0,  0.1,  0.9],
+  "arrowroot-flour":  [ 0.3, 88.0,  0.1,  3.4],
+  "barley-flour":     [10.5, 74.5,  1.6, 10.1],
+
+  // ── Oils & fats ──
+  "soyabean-oil":     [0, 0, 100, 0],
+  "mustard-oil":      [0, 0, 100, 0],
+  "coconut-oil":      [0, 0, 100, 0],
+  "palm-oil":         [0, 0, 100, 0],
+  "sunflower-oil":    [0, 0, 100, 0],
+  "olive-oil":        [0, 0, 100, 0],
+  "rice-bran-oil":    [0, 0, 100, 0],
+  "ghee":             [0,   0,   99.5, 0],
+  "butter":           [0.9, 0.1, 81.0, 0],
+  "margarine":        [0.2, 0.7, 80.0, 0],
+
+  // ── Seeds ──
+  "chia-seeds":       [16.5, 42.1, 30.7, 34.4],
+  "flax-seeds":       [18.3, 28.9, 42.2, 27.3],
+  "sesame-seeds":     [17.7, 23.4, 49.7, 11.8],
+  "sunflower-seeds":  [20.8, 20.0, 51.5,  8.6],
+  "pumpkin-seeds":    [30.2, 10.7, 49.0,  6.0],
+  "poppy-seeds":      [18.0, 28.1, 41.6, 19.5],
+  "isabgul":          [ 2.4, 80.0,  0.6, 71.0],
+
+  // ── Eggs ──
+  "egg-whole":        [12.6, 0.7,  9.5, 0],
+  "egg-white":        [10.9, 0.7,  0.2, 0],
+  "egg-yolk":         [15.9, 3.6, 26.5, 0],
+  "duck-egg":         [12.8, 1.5, 13.8, 0],
+
+  // ── Poultry & meat ──
+  "chicken-breast":   [31.0, 0,    3.6, 0],
+  "chicken-thigh":    [24.8, 0,   10.9, 0],
+  "chicken-wing":     [23.8, 0,   16.5, 0],
+  "chicken-liver":    [24.5, 0.9,  6.5, 0],
+  "duck-meat":        [19.0, 0,   28.4, 0],
+  "beef-lean":        [26.0, 0,   15.0, 0],
+  "beef-liver":       [26.5, 3.9,  4.7, 0],
+  "mutton-goat":      [25.5, 0,   14.0, 0],
+
+  // ── Fish & seafood ──
+  "tilapia":          [26.2, 0,    2.7, 0],
+  "rohu":             [16.6, 4.4,  1.4, 0],
+  "catla":            [18.5, 3.0,  2.5, 0],
+  "hilsha":           [21.8, 3.0, 19.4, 0],
+  "pangash":          [15.0, 0,    3.0, 0],
+  "bhetki":           [19.0, 0,    1.5, 0],
+  "rupchanda":        [18.8, 0,   10.0, 0],
+  "koi-fish":         [15.0, 3.0,  5.0, 0],
+  "pabda":            [19.0, 2.0,  4.0, 0],
+  "magur":            [15.0, 0,    1.0, 0],
+  "shol-fish":        [16.2, 0,    0.5, 0],
+  "puti-mach":        [18.0, 2.0,  4.0, 0],
+  "tengra":           [19.0, 2.0,  2.0, 0],
+  "baim-fish":        [18.0, 0,    2.0, 0],
+  "chital-fish":      [19.0, 2.0,  7.0, 0],
+  "prawn":            [24.0, 0.2,  0.3, 0],
+  "crab":             [19.0, 0,    1.5, 0],
+  "shutki":           [62.0, 0,    5.0, 0],
+
+  // ── Dals & legumes (raw) ──
+  "masoor-dal":       [25.8, 60.1,  1.1, 10.7],
+  "mung-dal":         [23.9, 62.6,  1.2, 16.3],
+  "chana-dal":        [21.6, 60.0,  5.3, 12.0],
+  "motor-dal":        [24.6, 60.4,  1.2, 25.5],
+  "biuli-dal":        [25.2, 59.0,  1.6, 18.3],
+  "khesari-dal":      [28.2, 57.0,  0.6, 10.0],
+  "chickpeas-whole":  [20.5, 63.0,  6.0, 12.2],
+  "kidney-beans":     [23.6, 60.0,  0.8, 24.9],
+  "soyabean-grain":   [36.5, 30.2, 19.9,  9.3],
+
+  // ── Vegetables ──
+  "onion":            [1.1,  9.3, 0.1, 1.7],
+  "garlic":           [6.4, 33.1, 0.5, 2.1],
+  "ginger":           [1.8, 17.8, 0.8, 2.0],
+  "green-chili":      [2.0,  9.5, 0.2, 1.5],
+  "tomato":           [0.9,  3.9, 0.2, 1.2],
+  "potato":           [2.0, 17.5, 0.1, 2.2],
+  "sweet-potato":     [1.6, 20.1, 0.1, 3.0],
+  "spinach":          [2.9,  3.6, 0.4, 2.2],
+  "red-amaranth":     [2.5,  4.6, 0.5, 2.2],
+  "water-spinach":    [2.6,  3.1, 0.2, 2.1],
+  "mustard-greens":   [2.9,  4.7, 0.4, 3.2],
+  "cabbage":          [1.3,  5.8, 0.1, 2.5],
+  "cauliflower":      [1.9,  5.0, 0.3, 2.0],
+  "broccoli":         [2.8,  6.6, 0.4, 2.6],
+  "eggplant":         [1.0,  5.9, 0.2, 3.0],
+  "okra":             [1.9,  7.5, 0.2, 3.2],
+  "borboti":          [2.8,  8.4, 0.4, 3.0],
+  "bitter-gourd":     [1.0,  3.7, 0.2, 2.8],
+  "bottle-gourd":     [0.6,  3.4, 0.0, 0.5],
+  "pointed-gourd":    [2.0,  2.2, 0.3, 3.0],
+  "ash-gourd":        [0.4,  3.0, 0.2, 2.9],
+  "ridge-gourd":      [1.2,  3.4, 0.2, 2.0],
+  "snake-gourd":      [0.5,  3.3, 0.3, 0.8],
+  "pumpkin":          [1.0,  6.5, 0.1, 0.5],
+  "raw-banana":       [1.3, 26.9, 0.3, 2.6],
+  "jackfruit-raw":    [2.6,  9.4, 0.3, 3.6],
+  "drumstick":        [2.1,  8.5, 0.2, 3.2],
+  "taro":             [1.5, 26.5, 0.2, 4.1],
+  "radish":           [0.7,  3.4, 0.1, 1.6],
+  "beetroot":         [1.6,  9.6, 0.2, 2.8],
+  "carrot":           [0.9,  9.6, 0.2, 2.8],
+  "cucumber":         [0.7,  3.6, 0.1, 0.5],
+  "bell-pepper":      [1.0,  6.0, 0.3, 2.1],
+  "green-peas":       [5.4, 14.5, 0.4, 5.7],
+  "mushroom":         [3.1,  3.3, 0.3, 1.0],
+  "corn-sweet":       [3.3, 18.7, 1.4, 2.0],
+  "green-papaya":     [1.0,  7.0, 0.1, 1.8],
+
+  // ── Spices ──
+  "turmeric":         [ 8.0, 65.0, 10.0, 21.0],
+  "red-chili-powder": [13.5, 50.0, 17.0, 34.8],
+  "dried-red-chili":  [10.6, 69.9,  5.8, 28.7],
+  "cumin-powder":     [17.8, 44.2, 22.3, 10.5],
+  "cumin-seeds":      [17.8, 44.2, 22.3, 10.5],
+  "coriander-powder": [12.4, 55.0, 17.8, 41.9],
+  "coriander-leaves": [ 2.1,  3.7,  0.5,  2.8],
+  "garam-masala":     [10.0, 45.0, 15.0, 25.0],
+  "mustard-seeds":    [26.1, 28.1, 36.2, 12.2],
+  "fenugreek-seeds":  [23.0, 58.4,  6.4, 24.6],
+  "nigella-seeds":    [20.0, 44.0, 22.0, 10.0],
+  "panch-phoron":     [18.0, 40.0, 20.0, 15.0],
+  "bay-leaf":         [ 7.6, 75.0,  8.4, 26.3],
+  "cardamom":         [10.8, 68.5,  6.7, 28.0],
+  "cinnamon":         [ 4.0, 80.6,  1.2, 53.1],
+  "cloves":           [ 6.0, 65.5, 13.0, 33.9],
+  "black-pepper":     [10.4, 63.9,  3.3, 25.3],
+  "star-anise":       [17.6, 50.0, 15.9, 14.6],
+  "asafoetida":       [ 4.0, 67.8,  1.1,  4.1],
+  "salt":             [0, 0, 0, 0],
+  "tamarind":         [ 2.8, 62.5,  0.6,  5.1],
+
+  // ── Dairy ──
+  "milk-full":        [ 3.2,  4.8,  3.9, 0],
+  "milk-skim":        [ 3.4,  5.0,  0.1, 0],
+  "yogurt":           [ 3.5,  4.7,  3.3, 0],
+  "greek-yogurt":     [10.0,  3.6,  0.4, 0],
+  "mishti-doi":       [ 4.5, 25.0,  5.0, 0],
+  "condensed-milk":   [ 7.9, 54.4,  8.7, 0],
+  "cream":            [ 2.1,  2.8, 36.0, 0],
+  "chhana":           [18.3,  1.2, 20.8, 0],
+  "khoa":             [14.6, 25.0, 26.0, 0],
+  "whey-protein":     [75.0, 10.0,  5.0, 1.0],
+
+  // ── Grains & breads ──
+  "white-rice-raw":    [ 7.1, 80.0, 0.7,  1.3],
+  "white-rice-cooked": [ 2.7, 28.2, 0.3,  0.4],
+  "brown-rice-raw":    [ 7.5, 76.2, 2.7,  3.6],
+  "oats-rolled":       [13.2, 67.7, 6.5, 10.1],
+  "oats-instant":      [12.0, 68.0, 6.0,  9.0],
+  "muri":              [ 7.5, 89.8, 0.5,  1.7],
+  "chira":             [ 6.6, 77.3, 1.2,  2.0],
+  "shemai":            [10.0, 75.0, 1.0,  3.0],
+  "noodles-instant":   [ 9.5, 60.0, 17.0, 3.0],
+  "pasta-dry":         [13.0, 74.7, 1.5,  3.2],
+  "quinoa":            [14.1, 64.2, 6.1,  7.0],
+  "barley-grain":      [12.5, 73.5, 2.3, 17.3],
+  "bread-white":       [ 8.9, 49.4, 3.2,  2.7],
+  "bread-wheat":       [11.0, 43.0, 3.5,  6.0],
+  "roti-wheat":        [ 9.0, 46.0, 4.0,  5.0],
+  "paratha":           [ 8.0, 45.0, 13.0, 4.0],
+
+  // ── Fruits ──
+  "banana":           [1.1, 22.8, 0.3, 2.6],
+  "mango":            [0.8, 15.0, 0.4, 1.6],
+  "jackfruit-ripe":   [1.7, 23.2, 0.6, 1.5],
+  "papaya":           [0.5, 10.8, 0.3, 1.7],
+  "guava":            [2.6, 14.3, 1.0, 5.4],
+  "pineapple":        [0.5, 13.1, 0.1, 1.4],
+  "watermelon":       [0.6,  7.6, 0.2, 0.4],
+  "lychee":           [0.8, 16.5, 0.4, 1.3],
+  "apple":            [0.3, 13.8, 0.2, 2.4],
+  "orange":           [0.9, 11.8, 0.1, 2.4],
+  "lemon":            [1.1,  9.3, 0.3, 2.8],
+  "dates":            [1.8, 75.0, 0.2, 6.7],
+  "coconut-fresh":    [3.3, 15.2, 33.5, 9.0],
+  "wood-apple":       [1.8, 31.8, 0.4, 2.9],
+  "jujube":           [1.2, 20.2, 0.2, 1.5],
+  "star-fruit":       [1.0,  6.7, 0.3, 2.8],
+
+  // ── Nuts ──
+  "almonds":          [21.2, 21.6, 49.9, 12.5],
+  "cashews":          [18.2, 30.2, 43.9,  3.3],
+  "walnuts":          [15.2, 13.7, 65.2,  6.7],
+  "peanuts":          [25.8, 16.1, 49.2,  8.5],
+  "pistachios":       [20.2, 27.2, 45.3, 10.6],
+  "peanut-butter":    [25.1, 20.0, 50.4,  6.0],
+
+  // ── Sweeteners ──
+  "sugar":            [0,   100,  0,   0],
+  "jaggery":          [0.4, 98.0, 0.1, 0],
+  "honey":            [0.3, 82.4, 0,   0.2],
+
+  // ── Beverages ──
+  "water":            [0, 0, 0, 0],
+  "green-tea":        [0, 0, 0, 0],
+  "black-tea":        [0, 0.3, 0, 0],
+  "tea-milk-sugar":   [1.5, 10.0, 1.5, 0],
+  "coffee-black":     [0.1, 0, 0, 0],
+  "coconut-water":    [0.7, 3.7, 0.2, 1.1],
+  "lemon-water":      [0.1, 1.0, 0,   0.1],
+  "lassi":            [2.5, 12.0, 2.0, 0],
+  "oats-rolled-fl":   [13.2, 67.7, 6.5, 10.1],
+  "apple-cider-vinegar": [0, 0.9, 0, 0],
+  "turmeric-milk":    [3.2, 6.0, 3.8, 0.3],
+  "protein-bar":      [30.0, 40.0, 12.0, 5.0],
+
+  // ── Prepared dishes ──
+  "khichuri-cooked":  [5.0, 20.0,  3.0, 2.0],
+  "biryani-rice":     [7.0, 25.0,  8.0, 1.0],
+  "halim":            [8.0, 15.0,  5.0, 3.0],
+  "samosa":           [4.0, 32.0, 17.0, 2.5],
+  "puri-fried":       [8.0, 45.0, 18.0, 2.0],
+  "rasgolla":         [4.0, 40.0,  2.0, 0],
+  "jilapi":           [2.0, 60.0, 15.0, 0.5],
+  "halwa-suji":       [5.0, 45.0, 15.0, 1.5],
+  "ketchup":          [1.2, 27.0,  0.2, 0.4],
+  "pizza-sauce":      [1.6,  8.7,  1.5, 1.8],
+  "mozzarella":       [27.5, 3.1, 17.1, 0],
+  "cheddar":          [24.9, 1.3, 33.1, 0],
+  "soy-sauce":        [8.1,  4.9,  0.6, 0.8],
+  "vinegar":          [0,    0.9,  0,   0],
+  "baking-powder":    [0,   28.0,  0,   0.2],
+  "baking-soda":      [0, 0, 0, 0],
+};
+
+// Returns macros per 100g. For unknown ids (e.g. USDA items without macro data)
+// falls back to a generic split of the known calories: 15% protein / 50% carbs /
+// 35% fat, fiber 0 — rough, but far better than counting nothing.
+export function getMacros100(id: string, cal100: number): Macros100 {
+  const hit = M[id];
+  if (hit) return { protein: hit[0], carbs: hit[1], fat: hit[2], fiber: hit[3] };
+  return {
+    protein: Math.round((cal100 * 0.15) / 4 * 10) / 10,
+    carbs:   Math.round((cal100 * 0.50) / 4 * 10) / 10,
+    fat:     Math.round((cal100 * 0.35) / 9 * 10) / 10,
+    fiber:   0,
+  };
+}
+
+// Scales per-100g macros to actual grams eaten, rounded to 1 decimal.
+export function macrosForGrams(m100: Macros100, grams: number): Macros100 {
+  const f = grams / 100;
+  return {
+    protein: Math.round(m100.protein * f * 10) / 10,
+    carbs:   Math.round(m100.carbs   * f * 10) / 10,
+    fat:     Math.round(m100.fat     * f * 10) / 10,
+    fiber:   Math.round(m100.fiber   * f * 10) / 10,
+  };
+}
