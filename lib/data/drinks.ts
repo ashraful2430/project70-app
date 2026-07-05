@@ -64,5 +64,119 @@ export const DRINKS: Drink[] = [
       "serves": "1 bottle",
       "tip": "Skip this on a normal, light session — the added sugar is only worth it when you're genuinely losing a lot of fluid through sweat, otherwise it's just extra calories with no real benefit."
     }
+  },
+  {
+    "title": "Jeera Water (Metabolism Booster)",
+    "items": [
+      "1 tsp cumin seeds (jeera)",
+      "300 ml water"
+    ],
+    "steps": [
+      "Night before: soak 1 tsp jeera in a covered glass of water. (Quick version: boil the jeera in water for 5 minutes instead.)",
+      "In the morning, strain and drink the water warm on an empty stomach.",
+      "Chew a few of the soaked seeds too — they help digestion.",
+      "Wait 20 to 30 minutes before eating breakfast so it works on an empty stomach."
+    ],
+    "info": {
+      "prep": "2 min (overnight soak)",
+      "cook": "0-5 min",
+      "serves": "1",
+      "tip": "The most proven cheap metabolism drink in the subcontinent. Improves digestion, reduces bloating, and mildly increases calorie burn. Rotate it with methi and ginger-lemon water through the week."
+    }
+  },
+  {
+    "title": "Methi Water (Blood Sugar Control)",
+    "items": [
+      "1 tsp fenugreek seeds (methi)",
+      "300 ml water"
+    ],
+    "steps": [
+      "Soak the methi seeds overnight in a covered glass of water.",
+      "Strain and drink warm on an empty stomach in the morning.",
+      "The slightly bitter taste is normal — that bitterness is the active compound.",
+      "Use 2 to 3 mornings per week, alternating with jeera water."
+    ],
+    "info": {
+      "prep": "2 min (overnight soak)",
+      "cook": "0 min",
+      "serves": "1",
+      "tip": "Methi slows carb absorption and controls appetite through the day — fewer blood sugar spikes means fewer cravings. It also supports testosterone; fenugreek extract is literally sold as a T-booster supplement."
+    }
+  },
+  {
+    "title": "Ginger-Lemon Warm Water",
+    "items": [
+      "3-4 thin slices fresh ginger (ada)",
+      "Juice of half a lemon",
+      "300 ml water"
+    ],
+    "steps": [
+      "Boil the ginger slices in the water for 3 to 4 minutes until fragrant.",
+      "Let it cool until comfortably warm — hot enough to sip, not scalding.",
+      "Add the lemon juice after taking it off the heat (boiling lemon destroys the vitamin C).",
+      "Drink on an empty stomach or 30 minutes before a meal."
+    ],
+    "info": {
+      "prep": "3 min",
+      "cook": "4 min",
+      "serves": "1",
+      "tip": "Ginger is thermogenic — it slightly raises your calorie burn for a couple of hours — and also supports luteinizing hormone, a testosterone signal. Great before breakfast or on cold mornings."
+    }
+  },
+  {
+    "title": "Cinnamon Water (Daruchini)",
+    "items": [
+      "1 small cinnamon stick (daruchini)",
+      "300 ml water"
+    ],
+    "steps": [
+      "Boil the cinnamon stick in the water for 5 minutes until the water darkens slightly.",
+      "Cool until warm and sip slowly, ideally in the morning or 30 minutes before your biggest meal.",
+      "The same stick can be reused the next day — it still has flavor left."
+    ],
+    "info": {
+      "prep": "1 min",
+      "cook": "5 min",
+      "serves": "1",
+      "tip": "Cinnamon improves insulin sensitivity, which means the carbs you eat are more likely to go into your muscles than into fat storage. Cheap, available everywhere in BD, and takes 6 minutes."
+    }
+  },
+  {
+    "title": "Green Tea Protocol (2-3 cups/day)",
+    "items": [
+      "1 green tea bag or 1 tsp loose green tea",
+      "1 cup hot (not boiling) water"
+    ],
+    "steps": [
+      "Heat water until just before boiling — around 80°C. Fully boiling water makes green tea bitter.",
+      "Steep the tea for only 2 to 3 minutes, then remove the bag or strain.",
+      "Drink between meals: mid-morning and mid-afternoon are the best slots.",
+      "No sugar, no milk. A squeeze of lemon is fine and actually improves absorption of the catechins."
+    ],
+    "info": {
+      "prep": "2 min",
+      "cook": "3 min",
+      "serves": "1",
+      "tip": "Green tea catechins + caffeine give a small but genuinely proven metabolism boost (roughly 3-4% more daily calorie burn at 2-3 cups). Don't drink it with meals — it slightly blocks iron absorption from food."
+    }
+  },
+  {
+    "title": "Apple Cider Vinegar Water (Pre-Meal)",
+    "items": [
+      "1 tbsp apple cider vinegar",
+      "300 ml water"
+    ],
+    "steps": [
+      "Mix the vinegar into the full glass of water — never drink it undiluted, it damages tooth enamel.",
+      "Drink 15 to 20 minutes before your largest meal of the day (usually lunch).",
+      "Use a straw if you drink it often, again to protect your teeth.",
+      "Start with 1 tsp and work up to 1 tbsp if the taste is too sharp at first."
+    ],
+    "info": {
+      "prep": "2 min",
+      "cook": "0 min",
+      "serves": "1",
+      "tip": "ACV before a big meal blunts the blood sugar spike and increases fullness so you naturally eat a bit less. Available in BD supermarkets. Once daily is enough — more is not better."
+    }
   }
 ];

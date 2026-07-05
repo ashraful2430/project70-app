@@ -145,9 +145,9 @@ const TESTO_FOODS = [
     icon: "🥚",
   },
   {
-    name: "Tuna / Fatty Fish",
-    why: "High in vitamin D (which acts like a hormone to boost T levels) and omega-3 fatty acids that reduce cortisol.",
-    how: "2–3 servings per week. Canned tuna, salmon, hilsa (ilish mach).",
+    name: "Fatty Fish (Ilish, Pangash, Rupchanda)",
+    why: "High in vitamin D (which acts like a hormone to boost T levels) and omega-3 fatty acids that reduce cortisol. Ilish is one of the most omega-3-rich fish in the world — better than salmon.",
+    how: "2–3 servings per week. Best BD options: Ilish (ilish mach), Pangash, Rupchanda (pomfret), Chital, Boal. Small fish like Mola (mola mach) eaten whole are loaded with vitamin D.",
     icon: "🐟",
   },
   {
@@ -163,15 +163,15 @@ const TESTO_FOODS = [
     icon: "🫚",
   },
   {
-    name: "Pomegranate",
+    name: "Pomegranate (Bedana / Anar)",
     why: "Strong antioxidant content reduces oxidative stress, which protects Leydig cells (the cells that produce testosterone).",
-    how: "1 pomegranate or 240ml juice daily. Best in the morning.",
+    how: "1 bedana or a glass of fresh juice, 2–3 times a week. Available in every BD bazaar. Budget swap: guava (peyara) gives similar antioxidants for a fraction of the price.",
     icon: "🍎",
   },
   {
-    name: "Almonds & Nuts",
+    name: "Nuts (Chinabadam & Kath Badam)",
     why: "Rich in zinc and magnesium — both minerals are directly involved in testosterone production and are commonly deficient in men.",
-    how: "A small handful (25–30g) daily. Almonds, walnuts, Brazil nuts.",
+    how: "A small handful (25–30g) daily. Chinabadam (peanuts) are the cheap everyday option; kath badam (almonds) and akhrot (walnuts) when the budget allows.",
     icon: "🌰",
   },
   {
@@ -181,15 +181,15 @@ const TESTO_FOODS = [
     icon: "🥩",
   },
   {
-    name: "Leafy Greens (Spinach, Kale)",
-    why: "Rich in magnesium, which is associated with higher free testosterone levels. Boiling reduces magnesium — eat lightly cooked or in smoothies.",
-    how: "A large handful with every meal possible. Saag, palak dishes, or add raw to any dish.",
+    name: "Shak (Palong, Lal, Pui)",
+    why: "Rich in magnesium, which is associated with higher free testosterone levels. Overboiling destroys magnesium — quick stir-fry (bhaji style) preserves it.",
+    how: "One serving of shak bhaji with lunch or dinner daily. Palong shak (spinach) is the strongest, but lal shak and pui shak also count. Cheap and everywhere.",
     icon: "🥬",
   },
   {
-    name: "Olive Oil",
-    why: "Monounsaturated fats in olive oil have been shown in studies to raise testosterone by up to 17% when used regularly as a fat source.",
-    how: "2 tbsp daily in cooking or on salads. Use cold-pressed extra virgin.",
+    name: "Olive Oil / Mustard Oil",
+    why: "Monounsaturated fats have been shown to raise testosterone by up to 17% when used regularly as the main fat source.",
+    how: "2 tbsp daily in cooking or on salads. Olive oil is in all BD supermarkets now; pure sarisher tel (mustard oil) is the traditional budget option with a similar healthy-fat profile.",
     icon: "🫒",
   },
   {
@@ -199,16 +199,16 @@ const TESTO_FOODS = [
     icon: "🧅",
   },
   {
-    name: "Ashwagandha (adaptogen herb)",
+    name: "Ashwagandha (Herbal Shops)",
     why: "Clinical trials show 15–17% increase in testosterone with 600mg daily. Also reduces cortisol by 25–30%.",
-    how: "600mg capsule or 1 tsp powder in warm milk before bed.",
+    how: "600mg capsule or 1 tsp powder in warm milk before bed. In BD, find it at Hamdard, ayurvedic/unani pharmacies, or online (Daraz). Buy from a reputable brand only.",
     icon: "🌿",
   },
   {
-    name: "Dark Chocolate (70%+)",
-    why: "Contains zinc and magnesium, and reduces cortisol through flavonoids. Also improves blood flow.",
-    how: "1–2 squares (20–30g) of 70%+ cocoa dark chocolate per day.",
-    icon: "🍫",
+    name: "Kacha Chola (Raw Soaked Chickpeas)",
+    why: "Zinc, magnesium, protein and arginine in one cheap package — the traditional Bengali strength food for a reason. Arginine improves blood flow, supporting everything downstream of testosterone.",
+    how: "A small bowl (30–40g dry) soaked overnight, eaten raw in the morning with a little ginger and salt. Available in every mudi dokan.",
+    icon: "🫘",
   },
 ];
 

@@ -12,6 +12,7 @@ interface MuscleInfo {
   id: string;
   label: string;
   shortLabel: string;
+  gymName: string;   // what trainers actually call it in the gym
   desc: string;
   exercises: string[];
   category: Category;
@@ -23,106 +24,106 @@ interface MuscleInfo {
 
 const MUSCLES: MuscleInfo[] = [
   {
-    id: "trap", label: "Trapezius", shortLabel: "Trapezius",
+    id: "trap", label: "Trapezius", shortLabel: "Traps", gymName: "Traps",
     desc: "Diamond-shaped muscle covering the upper back. Upper fibers shrug the shoulder; middle fibers retract the shoulder blades; lower fibers depress them. Key for posture and neck/shoulder stability.",
     exercises: ["Barbell Shrug", "Dumbbell Shrug", "Face Pull", "Rack Pull", "Farmer's Carry"],
     category: "pull", accent: "#60a5fa", views: ["front", "back"],
   },
   {
-    id: "delt", label: "Deltoids (Shoulders)", shortLabel: "Shoulders",
+    id: "delt", label: "Deltoids (Shoulders)", shortLabel: "Delts", gymName: "Delts — front, side & rear delt",
     desc: "Three-headed muscle wrapping the shoulder joint. Front head presses forward; lateral head raises sideways (creates width); rear head extends and externally rotates. Train all three for round shoulders.",
     exercises: ["Overhead Press", "Lateral Raise", "Arnold Press", "Rear Delt Fly", "Face Pull"],
     category: "push", accent: "#a78bfa", views: ["front", "back"],
   },
   {
-    id: "pec", label: "Pectoralis Major (Chest)", shortLabel: "Chest",
+    id: "pec", label: "Pectoralis Major (Chest)", shortLabel: "Pecs", gymName: "Pecs / Chest",
     desc: "Large fan-shaped chest muscle. Clavicular head handles upper chest pressing; sternal head does most horizontal pushing. Responds to flat, incline, and cable variations differently.",
     exercises: ["Bench Press", "Incline Dumbbell Press", "Cable Crossover", "Dips", "Push-Up"],
     category: "push", accent: "#fb923c", views: ["front"],
   },
   {
-    id: "serratus", label: "Serratus Anterior", shortLabel: "Serratus",
+    id: "serratus", label: "Serratus Anterior", shortLabel: "Serratus", gymName: "Serratus / Boxer's muscle",
     desc: "The 'boxer's muscle' — finger-like projections on the ribcage. Protracts and rotates the scapula upward. Visible as 'gills' on lean athletes. Weak serratus causes winging scapula.",
     exercises: ["Push-Up Plus", "Ab Rollout", "Landmine Press", "Overhead Press"],
     category: "push", accent: "#2dd4bf", views: ["front"],
   },
   {
-    id: "biceps", label: "Biceps Brachii", shortLabel: "Biceps",
+    id: "biceps", label: "Biceps Brachii", shortLabel: "Biceps", gymName: "Bis / Guns",
     desc: "Two-headed elbow flexor and forearm supinator. Long head (outer) creates the peak; short head (inner) adds width. Works best through full range — all the way down matters as much as all the way up.",
     exercises: ["Barbell Curl", "Hammer Curl", "Incline Dumbbell Curl", "Preacher Curl", "Cable Curl"],
     category: "pull", accent: "#34d399", views: ["front"],
   },
   {
-    id: "triceps", label: "Triceps Brachii", shortLabel: "Triceps",
+    id: "triceps", label: "Triceps Brachii", shortLabel: "Triceps", gymName: "Tris",
     desc: "Three-headed arm extensor — 2/3 of upper arm size. Long head needs overhead extension to fully stretch; lateral head creates the horseshoe shape; medial head is always active during pressing.",
     exercises: ["Rope Pushdown", "Overhead Extension", "Skull Crusher", "Close-Grip Bench", "Weighted Dips"],
-    category: "push", accent: "#f472b6", views: ["back"],
+    category: "push", accent: "#f472b6", views: ["front", "back"],
   },
   {
-    id: "forearm", label: "Forearms", shortLabel: "Forearms",
+    id: "forearm", label: "Forearms", shortLabel: "Forearms", gymName: "Forearms / Grip",
     desc: "Flexors (front) control grip and wrist curl; extensors (back) stabilize the wrist under load. Grip strength directly limits pulling performance.",
     exercises: ["Wrist Curl", "Reverse Curl", "Farmer's Walk", "Dead Hang", "Plate Pinch"],
     category: "pull", accent: "#fbbf24", views: ["front", "back"],
   },
   {
-    id: "abs", label: "Rectus Abdominis (Abs)", shortLabel: "Abs",
+    id: "abs", label: "Rectus Abdominis (Abs)", shortLabel: "Abs", gymName: "Abs / Six-pack / Core",
     desc: "The six-pack — one muscle sheet divided by tendinous intersections. Flexes the lumbar spine. Visible only at low body fat (under 12–14% for men). Core strength protects the spine in all heavy lifts.",
     exercises: ["Hanging Leg Raise", "Cable Crunch", "Ab Wheel Rollout", "Dragon Flag", "Decline Sit-Up"],
     category: "core", accent: "#f87171", views: ["front"],
   },
   {
-    id: "oblique", label: "External Obliques", shortLabel: "Obliques",
+    id: "oblique", label: "External Obliques", shortLabel: "Obliques", gymName: "Obliques / Side abs",
     desc: "Diagonal abdominal muscles on the sides of the waist. Rotate and laterally bend the torso. Give the V-cut appearance and are essential for rotational power in sports.",
     exercises: ["Russian Twist", "Side Plank", "Pallof Press", "Woodchop", "Landmine Rotation"],
     category: "core", accent: "#c084fc", views: ["front"],
   },
   {
-    id: "lats", label: "Latissimus Dorsi (Lats)", shortLabel: "Lats",
+    id: "lats", label: "Latissimus Dorsi (Lats)", shortLabel: "Lats", gymName: "Lats / Wings",
     desc: "Largest upper-body muscle — the 'wings'. Runs from armpit to lower back. Adducts and extends the arm. Primary driver of the V-taper silhouette. Pull-ups and rows are king.",
     exercises: ["Pull-Up", "Lat Pulldown", "Bent-Over Row", "T-Bar Row", "Single-Arm Row"],
     category: "pull", accent: "#38bdf8", views: ["back"],
   },
   {
-    id: "rhomboid", label: "Rhomboids & Mid-Trap", shortLabel: "Rhomboids",
+    id: "rhomboid", label: "Rhomboids & Mid-Trap", shortLabel: "Mid-Back", gymName: "Mid-back / Upper back",
     desc: "Between the shoulder blades — retract and elevate the scapula. Chronically weak in desk workers, causing rounded shoulders. Rows and face pulls are the fix.",
     exercises: ["Face Pull", "Chest-Supported Row", "Seated Cable Row", "Band Pull-Apart"],
     category: "pull", accent: "#86efac", views: ["back"],
   },
   {
-    id: "erector", label: "Erector Spinae (Lower Back)", shortLabel: "Lower Back",
+    id: "erector", label: "Erector Spinae (Lower Back)", shortLabel: "Lower Back", gymName: "Lower back / Spinal erectors",
     desc: "Column of muscles running the length of the spine. Extends and stabilizes the back under load. The 'Christmas tree' shape when developed. Critical for deadlift and squat safety.",
     exercises: ["Deadlift", "Back Extension", "Romanian Deadlift", "Good Morning", "Hyperextension"],
     category: "pull", accent: "#a3e635", views: ["back"],
   },
   {
-    id: "glutes", label: "Gluteus Maximus (Glutes)", shortLabel: "Glutes",
+    id: "glutes", label: "Gluteus Maximus (Glutes)", shortLabel: "Glutes", gymName: "Glutes",
     desc: "Largest muscle in the body. Extends and externally rotates the hip. Powers sprinting, jumping, and heavy lifting. Weak glutes force the lower back to compensate.",
     exercises: ["Hip Thrust", "Squat", "Romanian Deadlift", "Glute Bridge", "Bulgarian Split Squat"],
     category: "legs", accent: "#f9a8d4", views: ["back"],
   },
   {
-    id: "quads", label: "Quadriceps (Front Thigh)", shortLabel: "Quads",
+    id: "quads", label: "Quadriceps (Front Thigh)", shortLabel: "Quads", gymName: "Quads",
     desc: "Four muscles on the front of the thigh. Rectus femoris (center), vastus lateralis (outer), medialis (inner teardrop by knee), intermedius (hidden). They extend the knee. Largest muscle group in the body.",
     exercises: ["Squat", "Leg Press", "Hack Squat", "Leg Extension", "Lunge", "Bulgarian Split Squat"],
     category: "legs", accent: "#fcd34d", views: ["front"],
   },
   {
-    id: "hamstrings", label: "Hamstrings (Back Thigh)", shortLabel: "Hamstrings",
+    id: "hamstrings", label: "Hamstrings (Back Thigh)", shortLabel: "Hams", gymName: "Hams / Hamstrings",
     desc: "Three muscles on the back of the thigh. Biceps femoris (outer), semitendinosus and semimembranosus (inner). Flex the knee and extend the hip. Often undertrained vs quads — main cause of hamstring tears.",
     exercises: ["Romanian Deadlift", "Leg Curl", "Nordic Curl", "Good Morning", "Glute-Ham Raise"],
     category: "legs", accent: "#6ee7b7", views: ["back"],
   },
   {
-    id: "calves", label: "Gastrocnemius & Soleus (Calves)", shortLabel: "Calves",
+    id: "calves", label: "Gastrocnemius & Soleus (Calves)", shortLabel: "Calves", gymName: "Calves",
     desc: "Two calf muscles — gastrocnemius (visible peak, works with straight knee) and soleus (deeper, works with bent knee). Both plantarflex the ankle. Need high volume — used every step.",
     exercises: ["Standing Calf Raise", "Seated Calf Raise", "Donkey Calf Raise", "Jump Rope"],
     category: "legs", accent: "#93c5fd", views: ["front", "back"],
   },
   {
-    id: "adductor", label: "Adductors (Inner Thigh)", shortLabel: "Inner Thigh",
+    id: "adductor", label: "Adductors (Inner Thigh)", shortLabel: "Inner Thigh", gymName: "Adductors / Groin",
     desc: "Group of five muscles on the inner thigh that pull the leg toward the midline. Heavily involved in squats, sumo stance work, and lateral movement. Weak adductors are a common cause of groin strains.",
     exercises: ["Sumo Squat", "Adductor Machine", "Copenhagen Plank", "Side Lunge", "Deep Squat Hold"],
-    category: "legs", accent: "#fda4af", views: ["front"],
+    category: "legs", accent: "#fda4af", views: ["front", "back"],
   },
 ];
 
@@ -131,29 +132,97 @@ const CAT_COLOR: Record<Category, string> = { push: "#fb923c", pull: "#60a5fa", 
 
 // ─── Map our muscle ids → react-body-highlighter muscle names per view ────────
 
+// Regions that actually exist in the model SVG:
+// anterior:  chest, obliques, abs, biceps, triceps, neck, front-deltoids,
+//            abductors (inner/upper thigh), quadriceps, knees, calves, forearm
+// posterior: trapezius, back-deltoids, upper-back, lower-back, triceps, forearm,
+//            gluteal, adductor (inner thigh), hamstring, knees, calves, soleus
 const LIB_MUSCLES: Record<string, { front: Muscle[]; back: Muscle[] }> = {
-  trap:       { front: ["trapezius"],       back: ["trapezius"] },
+  trap:       { front: ["neck"],            back: ["trapezius"] },  // front: the neck/trap slope region
   delt:       { front: ["front-deltoids"],  back: ["back-deltoids"] },
   pec:        { front: ["chest"],           back: [] },
-  serratus:   { front: [],                  back: [] },  // not in the model — chip-only
+  serratus:   { front: ["obliques"],        back: [] },  // no serratus region — side ribcage is closest
   biceps:     { front: ["biceps"],          back: [] },
-  triceps:    { front: [],                  back: ["triceps"] },
+  triceps:    { front: ["triceps"],         back: ["triceps"] },   // inner arm visible from the front too
   forearm:    { front: ["forearm"],         back: ["forearm"] },
   abs:        { front: ["abs"],             back: [] },
   oblique:    { front: ["obliques"],        back: [] },
   lats:       { front: [],                  back: ["upper-back"] },
-  rhomboid:   { front: [],                  back: [] },  // covered visually by trapezius — chip-only
+  rhomboid:   { front: [],                  back: ["trapezius"] },  // sits under the trapezius region
   erector:    { front: [],                  back: ["lower-back"] },
   glutes:     { front: [],                  back: ["gluteal"] },
   quads:      { front: ["quadriceps"],      back: [] },
   hamstrings: { front: [],                  back: ["hamstring"] },
   calves:     { front: ["calves"],          back: ["calves", "left-soleus", "right-soleus"] },
-  adductor:   { front: ["adductor"],        back: [] },
+  adductor:   { front: ["abductors"],       back: ["adductor"] },  // library names are swapped vs anatomy
 };
 
 function libFor(id: string, view: View): Muscle[] {
   return LIB_MUSCLES[id]?.[view] ?? [];
 }
+
+// Clicking a region resolves to exactly one muscle — this map decides which,
+// so shared regions (e.g. trapezius = traps + rhomboids) go to the primary owner.
+const CLICK_MAP: Record<View, Partial<Record<Muscle, string>>> = {
+  front: {
+    "chest": "pec",
+    "obliques": "oblique",
+    "abs": "abs",
+    "biceps": "biceps",
+    "triceps": "triceps",
+    "front-deltoids": "delt",
+    "forearm": "forearm",
+    "quadriceps": "quads",
+    "calves": "calves",
+    "abductors": "adductor",
+    "neck": "trap",
+  },
+  back: {
+    "trapezius": "trap",
+    "back-deltoids": "delt",
+    "upper-back": "lats",
+    "lower-back": "erector",
+    "triceps": "triceps",
+    "forearm": "forearm",
+    "gluteal": "glutes",
+    "adductor": "adductor",
+    "hamstring": "hamstrings",
+    "calves": "calves",
+    "left-soleus": "calves",
+    "right-soleus": "calves",
+  },
+};
+
+// Gym-name labels floating around the figure, roughly aligned to each muscle.
+// side = which gutter the label sits in; top = vertical position in the container.
+const BODY_LABELS: Record<View, { id: string; side: "left" | "right"; top: string }[]> = {
+  front: [
+    { id: "trap",     side: "left",  top: "8%"  },
+    { id: "delt",     side: "left",  top: "16%" },
+    { id: "biceps",   side: "left",  top: "26%" },
+    { id: "oblique",  side: "left",  top: "36%" },
+    { id: "forearm",  side: "left",  top: "44%" },
+    { id: "quads",    side: "left",  top: "58%" },
+    { id: "pec",      side: "right", top: "19%" },
+    { id: "serratus", side: "right", top: "28%" },
+    { id: "abs",      side: "right", top: "35%" },
+    { id: "adductor", side: "right", top: "50%" },
+    { id: "calves",   side: "right", top: "78%" },
+  ],
+  back: [
+    { id: "trap",       side: "left",  top: "9%"  },
+    { id: "delt",       side: "left",  top: "17%" },
+    { id: "triceps",    side: "left",  top: "26%" },
+    { id: "forearm",    side: "left",  top: "42%" },
+    { id: "adductor",   side: "left",  top: "53%" },
+    { id: "hamstrings", side: "left",  top: "63%" },
+    { id: "rhomboid",   side: "right", top: "20%" },
+    { id: "lats",       side: "right", top: "30%" },
+    { id: "erector",    side: "right", top: "40%" },
+    { id: "glutes",     side: "right", top: "51%" },
+    { id: "calves",     side: "right", top: "78%" },
+  ],
+};
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
@@ -172,13 +241,12 @@ export default function BodyGuide() {
     setSelected(p => p === id ? null : id);
   };
 
-  // Clicking a region on the model — reverse-map lib muscle name → our muscle id
+  // Clicking a region on the model — resolve via CLICK_MAP to a single muscle
   const handleModelClick = (stats: IMuscleStats) => {
-    const hit = MUSCLES.find(m =>
-      libFor(m.id, view).includes(stats.muscle) &&
-      (filter === "all" || m.category === filter)
-    );
-    if (hit) handleSelect(hit.id);
+    const id = CLICK_MAP[view][stats.muscle];
+    if (!id) return;
+    const info = MUSCLES.find(m => m.id === id);
+    if (info && (filter === "all" || info.category === filter)) handleSelect(id);
   };
 
   // Model highlight data: selected muscle in its accent color,
@@ -263,14 +331,69 @@ export default function BodyGuide() {
           padding: "16px 12px",
           minWidth: 220,
         }}>
-          <Model
-            type={view === "front" ? "anterior" : "posterior"}
-            data={modelData}
-            highlightedColors={[highlightColor]}
-            bodyColor="#33333f"
-            onClick={handleModelClick}
-            style={{ width: 220, padding: 0 }}
-          />
+          {/* Figure with gym-name callout labels on both sides */}
+          <div style={{ position: "relative", width: 330 }}>
+            <div style={{ width: 180, margin: "0 auto" }}>
+              <Model
+                type={view === "front" ? "anterior" : "posterior"}
+                data={modelData}
+                highlightedColors={[highlightColor]}
+                bodyColor="#33333f"
+                onClick={handleModelClick}
+                style={{ width: 180, padding: 0 }}
+              />
+            </div>
+            {BODY_LABELS[view]
+              .filter(l => {
+                const m = MUSCLES.find(x => x.id === l.id);
+                return m && (filter === "all" || m.category === filter);
+              })
+              .map(l => {
+                const m = MUSCLES.find(x => x.id === l.id)!;
+                const active = selected === l.id;
+                return (
+                  <button
+                    key={`${view}-${l.id}`}
+                    onClick={() => handleSelect(l.id)}
+                    style={{
+                      position: "absolute",
+                      top: l.top,
+                      ...(l.side === "left" ? { left: 0 } : { right: 0 }),
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 3,
+                      flexDirection: l.side === "left" ? "row" : "row-reverse",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    <span style={{
+                      padding: "2px 8px",
+                      borderRadius: 12,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      whiteSpace: "nowrap",
+                      background: active ? `${m.accent}28` : "var(--bg)",
+                      border: `1px solid ${active ? m.accent : m.accent + "55"}`,
+                      color: active ? m.accent : "var(--text-muted)",
+                      transition: "all 0.15s",
+                    }}>
+                      {m.shortLabel}
+                    </span>
+                    {/* connector line pointing toward the body */}
+                    <span style={{
+                      width: 16,
+                      height: 1,
+                      background: m.accent,
+                      opacity: active ? 1 : 0.45,
+                      flexShrink: 0,
+                    }} />
+                  </button>
+                );
+              })}
+          </div>
 
           {/* Legend chips */}
           <div style={{
@@ -314,13 +437,23 @@ export default function BodyGuide() {
                 <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 10 }}>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>{selectedInfo.label}</div>
-                    <span style={{
-                      display: "inline-block", marginTop: 4,
-                      padding: "2px 10px", borderRadius: 20,
-                      background: `${CAT_COLOR[selectedInfo.category]}22`,
-                      border: `1px solid ${CAT_COLOR[selectedInfo.category]}55`,
-                      fontSize: 10, fontWeight: 600, color: CAT_COLOR[selectedInfo.category],
-                    }}>{CAT_LABEL[selectedInfo.category]}</span>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 4 }}>
+                      <span style={{
+                        display: "inline-block",
+                        padding: "2px 10px", borderRadius: 20,
+                        background: `${CAT_COLOR[selectedInfo.category]}22`,
+                        border: `1px solid ${CAT_COLOR[selectedInfo.category]}55`,
+                        fontSize: 10, fontWeight: 600, color: CAT_COLOR[selectedInfo.category],
+                      }}>{CAT_LABEL[selectedInfo.category]}</span>
+                      {/* Gym slang — what trainers actually call it */}
+                      <span style={{
+                        display: "inline-block",
+                        padding: "2px 10px", borderRadius: 20,
+                        background: "rgba(245,158,11,0.12)",
+                        border: "1px solid rgba(245,158,11,0.4)",
+                        fontSize: 10, fontWeight: 700, color: "#f59e0b",
+                      }}>🗣 Trainers say: {selectedInfo.gymName}</span>
+                    </div>
                   </div>
                   <button onClick={() => setSelected(null)} style={{
                     background: "none", border: "none", color: "var(--muted)",
