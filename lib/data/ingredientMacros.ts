@@ -172,6 +172,7 @@ const M: Record<string, [number, number, number, number]> = {
   "chira":             [ 6.6, 77.3, 1.2,  2.0],
   "shemai":            [10.0, 75.0, 1.0,  3.0],
   "noodles-instant":   [ 9.5, 60.0, 17.0, 3.0],
+  "mr-noodles-pack":   [ 9.0, 61.0, 19.0, 2.5],
   "pasta-dry":         [13.0, 74.7, 1.5,  3.2],
   "quinoa":            [14.1, 64.2, 6.1,  7.0],
   "barley-grain":      [12.5, 73.5, 2.3, 17.3],

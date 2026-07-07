@@ -1055,6 +1055,13 @@ export const INGREDIENTS: Ingredient[] = [
     defaultUnit: "piece", defaultAmount: 1,
   },
   {
+    id: "mr-noodles-pack", name: "Mr. Noodles Big Pack (50৳, with masala)",
+    aliases: ["mr noodles", "mr. noodles", "ramen", "instant ramen", "মিস্টার নুডলস", "pran noodles"],
+    cal100: 448, category: "prepared",
+    units: ["piece", "g"], gramsPerUnit: { piece: 100 },
+    defaultUnit: "piece", defaultAmount: 1,
+  },
+  {
     id: "pasta-dry", name: "Pasta (dry / uncooked)",
     aliases: ["pasta", "পাস্তা"],
     cal100: 371, category: "grain",
