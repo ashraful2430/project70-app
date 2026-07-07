@@ -224,6 +224,7 @@ const M: Record<string, [number, number, number, number]> = {
   "apple-cider-vinegar": [0, 0.9, 0, 0],
   "turmeric-milk":    [3.2, 6.0, 3.8, 0.3],
   "protein-bar":      [30.0, 40.0, 12.0, 5.0],
+  "cream-crackers":   [ 9.0, 65.0, 18.0, 2.5],
 
   // ── Prepared dishes ──
   "khichuri-cooked":  [5.0, 20.0,  3.0, 2.0],

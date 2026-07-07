@@ -1382,6 +1382,13 @@ export const INGREDIENTS: Ingredient[] = [
     units: ["g", "piece"], gramsPerUnit: { piece: 60 },
     defaultUnit: "piece", defaultAmount: 1,
   },
+  {
+    id: "cream-crackers", name: "Cream Crackers (Haque Sugar Free)",
+    aliases: ["cream crackers", "haque exclusive", "sugar free biscuit", "cracker biscuit", "busicut", "biscuit", "ক্র্যাকার"],
+    cal100: 460, category: "prepared",
+    units: ["g", "piece"], gramsPerUnit: { piece: 7.5 },
+    defaultUnit: "piece", defaultAmount: 2,
+  },
 
   // ═══════════════════════════════════════════════════════════════════════════
   // COMMON PREPARED DISHES
