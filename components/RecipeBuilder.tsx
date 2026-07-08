@@ -140,11 +140,12 @@ export default function RecipeBuilder({ onSave, onAddToLog, onClose }: Props) {
   }
 
   const totalCal = addedItems.reduce((s, i) => s + i.calories, 0);
+  const round1 = (n: number) => Math.round(n * 10) / 10;
   const totalMacros = {
-    protein: Math.round(addedItems.reduce((s, i) => s + (i.protein ?? 0), 0)),
-    carbs:   Math.round(addedItems.reduce((s, i) => s + (i.carbs   ?? 0), 0)),
-    fat:     Math.round(addedItems.reduce((s, i) => s + (i.fat     ?? 0), 0)),
-    fiber:   Math.round(addedItems.reduce((s, i) => s + (i.fiber   ?? 0), 0)),
+    protein: round1(addedItems.reduce((s, i) => s + (i.protein ?? 0), 0)),
+    carbs:   round1(addedItems.reduce((s, i) => s + (i.carbs   ?? 0), 0)),
+    fat:     round1(addedItems.reduce((s, i) => s + (i.fat     ?? 0), 0)),
+    fiber:   round1(addedItems.reduce((s, i) => s + (i.fiber   ?? 0), 0)),
   };
   const hasSelection = selectedIng !== null || selectedOnline !== null;
   const showOnline = onlineResults.length > 0 || onlineLoading;
