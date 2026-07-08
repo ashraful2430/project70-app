@@ -1195,8 +1195,8 @@ export const INGREDIENTS: Ingredient[] = [
     defaultUnit: "piece", defaultAmount: 2,
   },
   {
-    id: "roti-wheat", name: "Wheat Roti / Chapati",
-    aliases: ["roti", "chapati", "রুটি", "chapatti", "phulka"],
+    id: "roti-wheat", name: "Atar Ruti / Wheat Roti (no oil)",
+    aliases: ["roti", "ruti", "atar ruti", "atta ruti", "chapati", "রুটি", "chapatti", "phulka", "hand ruti", "tawa ruti", "wheat roti", "plain roti"],
     cal100: 297, category: "grain",
     units: ["g", "piece"], gramsPerUnit: { piece: 27 },
     defaultUnit: "piece", defaultAmount: 2,
