@@ -193,6 +193,7 @@ const M: Record<string, [number, number, number, number]> = {
   "bread-white":       [ 8.9, 49.4, 3.2,  2.7],
   "bread-wheat":       [11.0, 43.0, 3.5,  6.0],
   "roti-wheat":        [ 9.0, 46.0, 4.0,  5.0],
+  "roti-lal-atta":     [10.5, 55.0, 2.2,  9.0],
   "paratha":           [ 8.0, 45.0, 13.0, 4.0],
 
   // ── Fruits ──

@@ -1196,8 +1196,15 @@ export const INGREDIENTS: Ingredient[] = [
   },
   {
     id: "roti-wheat", name: "Atar Ruti / Wheat Roti (no oil)",
-    aliases: ["roti", "ruti", "atar ruti", "atta ruti", "chapati", "রুটি", "chapatti", "phulka", "hand ruti", "tawa ruti", "wheat roti", "plain roti"],
+    aliases: ["roti", "ruti", "atar ruti", "atta ruti", "chapati", "রুটি", "chapatti", "phulka", "hand ruti", "tawa ruti", "wheat roti", "plain roti", "shada atar ruti"],
     cal100: 297, category: "grain",
+    units: ["g", "piece"], gramsPerUnit: { piece: 27 },
+    defaultUnit: "piece", defaultAmount: 2,
+  },
+  {
+    id: "roti-lal-atta", name: "Lal Atar Ruti (Red Whole Wheat, no oil)",
+    aliases: ["lal atar ruti", "lal atta ruti", "red atta roti", "brown roti", "লাল আটার রুটি", "whole wheat roti", "coarse atta roti"],
+    cal100: 285, category: "grain",
     units: ["g", "piece"], gramsPerUnit: { piece: 27 },
     defaultUnit: "piece", defaultAmount: 2,
   },
