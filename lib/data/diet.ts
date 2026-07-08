@@ -600,7 +600,7 @@ export const DIET: DietDay[] = [
           "cook": "18 min",
           "serves": "1",
           "kcal": 440,
-          "tip": "Day total ≈ 2,250 kcal · ~145g protein. On Phase 2 (rest day) skip the 4:30 muri snack → ~2,030 kcal."
+          "tip": "Day total ≈ 2,250 kcal · ~150g protein · ~30g fiber. Optional 250ml milk before bed adds ~8g protein if you want to push toward 160g. On Phase 2 (rest day) skip the 4:30 muri snack → ~2,030 kcal."
         }
       }
     ]
@@ -1011,25 +1011,26 @@ export const DIET: DietDay[] = [
       },
       {
         "time": "8:00 PM",
-        "title": "Dinner: dal, roti, and mixed vegetable bhaji",
+        "title": "Dinner: egg-dal khichuri with vegetable bhaji",
         "items": [
           "150 g cooked masoor dal (thick)",
-          "2 whole-wheat roti",
+          "2 whole-wheat roti (or 100 g rice)",
+          "2 boiled eggs",
           "150 g mixed vegetable bhaji",
           "Cucumber salad"
         ],
         "steps": [
           "Cook the dal thick with garlic tempering (roshun phoron).",
           "Stir-fry whatever vegetables are left from the week — clean-out-the-fridge bhaji.",
-          "Fresh roti, salad on the side. Early, light dinner before the new week.",
-          "Sleep 7–8 hours tonight — tomorrow starts the week strong."
+          "Add 2 boiled eggs on the side — cheapest way to close the day's protein gap.",
+          "Fresh roti, salad on the side. Sleep 7–8 hours tonight — tomorrow starts the week strong."
         ],
         "info": {
           "prep": "10 min",
           "cook": "25 min",
           "serves": "1",
-          "kcal": 430,
-          "tip": "Day total ≈ 2,150 kcal · ~135g protein — slightly lighter on the full rest day is intentional."
+          "kcal": 560,
+          "tip": "Day total ≈ 2,280 kcal · ~150g protein · ~30g fiber. The 2 eggs (~13৳) close the rest-day protein gap cheaply."
         }
       }
     ]
