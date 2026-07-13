@@ -36,7 +36,7 @@ export default function AppRoot() {
   const [planPhase, setPlanPhase] = useState<0 | 1>(0);
   const currentWeek = WEEKS[planPhase];
 
-  const { toggle, isComplete, countCompleted, totalCompleted, resetCompletions } = useCompletion(uid);
+  const { toggle, isComplete, countCompleted, totalCompleted, resetCompletions, loaded } = useCompletion(uid);
   const { xp, level, maxLevel, xpProgress, xpIntoLevel, xpForNext, phaseIndex, rank, title } = useLevel(totalCompleted);
 
   const { day, selectedId, setSelectedId, todayId } = useDay(currentWeek);
@@ -45,11 +45,13 @@ export default function AppRoot() {
   const [showProfile, setShowProfile] = useState(false);
   const [levelUpMsg, setLevelUpMsg]   = useState<string | null>(null);
 
-  // Level-up detection
+  // Level-up detection — only after completion data has loaded, so the initial
+  // async jump from 0 → real level doesn't fire a false "level up" on every open.
   const prevLevelRef = useRef<number | null>(null);
   useEffect(() => {
+    if (!loaded) return;
     if (prevLevelRef.current === null) {
-      prevLevelRef.current = level;
+      prevLevelRef.current = level; // baseline once, silently
       return;
     }
     if (level > prevLevelRef.current) {
@@ -57,7 +59,7 @@ export default function AppRoot() {
       setTimeout(() => setLevelUpMsg(null), 4000);
     }
     prevLevelRef.current = level;
-  }, [level, rank]);
+  }, [loaded, level, rank]);
 
   // ── Auth loading ──────────────────────────────────────────────────────────
   if (authLoading) {
@@ -199,20 +201,21 @@ export default function AppRoot() {
             exit={{ opacity: 0, y: -60, scale: 0.9 }}
             transition={{ type: "spring", stiffness: 320, damping: 22 }}
             style={{
-              position: "fixed", top: 24, left: "50%", transform: "translateX(-50%)",
+              position: "fixed", top: 16, left: 12, right: 12,
+              margin: "0 auto", maxWidth: 420, width: "fit-content",
               zIndex: 9999,
               background: "linear-gradient(135deg, #7c3aed, #f59e0b)",
-              borderRadius: 16, padding: "14px 28px",
+              borderRadius: 16, padding: "12px 18px",
               boxShadow: "0 0 40px rgba(245,158,11,0.5), 0 8px 32px rgba(0,0,0,0.4)",
-              display: "flex", alignItems: "center", gap: 12,
-              whiteSpace: "nowrap",
+              display: "flex", alignItems: "center", gap: 10,
+              boxSizing: "border-box",
             }}
           >
-            <span style={{ fontSize: 24 }}>⚡</span>
-            <span style={{ fontSize: 15, fontWeight: 800, color: "#fff", letterSpacing: "0.3px" }}>
+            <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: "#fff", letterSpacing: "0.3px", textAlign: "center", lineHeight: 1.35 }}>
               {levelUpMsg}
             </span>
-            <span style={{ fontSize: 24 }}>⚡</span>
+            <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
           </motion.div>
         )}
       </AnimatePresence>
