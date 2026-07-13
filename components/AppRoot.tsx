@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/hooks/useAuth";
 import { useLevel } from "@/lib/hooks/useLevel";
@@ -45,16 +45,24 @@ export default function AppRoot() {
   const [showProfile, setShowProfile] = useState(false);
   const [levelUpMsg, setLevelUpMsg]   = useState<string | null>(null);
 
-  // Level-up detection — only after completion data has loaded, so the initial
-  // async jump from 0 → real level doesn't fire a false "level up" on every open.
-  const prevLevelRef = useRef<number | null>(null);
+  // Level-up detection. The message may ONLY fire when the level rises as a
+  // result of the user actually checking off an exercise (interactedRef). A
+  // level jump caused by data loading on page open never sets that flag, so it
+  // can never show the toast on reload.
+  const prevLevelRef  = useRef<number | null>(null);
+  const interactedRef = useRef(false);
+  const handleToggle = useCallback((id: string) => {
+    interactedRef.current = true;
+    toggle(id);
+  }, [toggle]);
+
   useEffect(() => {
     if (!loaded) return;
     if (prevLevelRef.current === null) {
-      prevLevelRef.current = level; // baseline once, silently
+      prevLevelRef.current = level; // baseline silently
       return;
     }
-    if (level > prevLevelRef.current) {
+    if (level > prevLevelRef.current && interactedRef.current) {
       setLevelUpMsg(`LEVEL UP! You reached Level ${level} — Rank ${rank}`);
       setTimeout(() => setLevelUpMsg(null), 4000);
     }
@@ -178,7 +186,7 @@ export default function AppRoot() {
                     phaseIndex={phaseIndex}
                     planPhase={planPhase}
                     isComplete={isComplete}
-                    onToggle={toggle}
+                    onToggle={handleToggle}
                   />
                 )}
                 {tab === "diet"     && <DietTab day={day} />}
