@@ -1,387 +1,70 @@
 import type { Warmup } from "@/types";
 
-// ─── PHASE 1 WARMUPS ─────────────────────────────────────────────────────────
-// Mon: Chest/Tri · Tue: Back/Bi · Wed: Shoulders · Thu: Legs/Abs · Sat: Full Body
+// Muscle-specific warm-ups for the 5-day V-taper split.
+// Keyed by day id: 1 Push · 2 Pull · 3 Legs · 4 Upper · 6 Lower.
+// (Fri=5 and Sun=0 are active rest — no gym warm-up.)
+// Plus the plan's rule: on your ★ heaviest lift, do 2 ramp-up sets
+// (~50% × a few reps, then ~75% × a few reps) before the working sets.
 
-const WARMUPS_P1: Record<number, Warmup> = {
-  // Monday — Push day (Chest & Triceps)
+const WARMUPS: Record<number, Warmup> = {
+  // Monday — Push
   1: {
-    label: "Push day warm-up (10 min) — opens chest and shoulder joints",
+    label: "Push warm-up (8-10 min) — opens chest & shoulders",
     items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — raises heart rate and loosens all joints",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Arm Circles",
-        detail: "1 min forward, 1 min backward — fully warms the shoulder joint",
-        xp: 6,
-        cal: 10
-      },
-      {
-        name: "Incline Push-ups (on bench)",
-        detail: "2 sets × 10 reps — activates chest with low load before lifting",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Shoulder Rolls",
-        detail: "10 forward, 10 backward — prevents shoulder impingement during pressing",
-        xp: 6,
-        cal: 8
-      },
-      {
-        name: "Treadmill Walk",
-        detail: "3 min at speed 5.0, incline 2.0 — full body warm-up to finish",
-        xp: 8,
-        cal: 22
-      }
-    ]
+      { name: "Jumping Jacks", detail: "2 sets × 20 — raise heart rate and loosen joints", xp: 8, cal: 18 },
+      { name: "Arm Circles", detail: "1 min forward, 1 min backward — full shoulder warm-up", xp: 6, cal: 10 },
+      { name: "Band Pull-Aparts", detail: "2 sets × 15 — wakes up rear delts before pressing", xp: 8, cal: 12 },
+      { name: "Incline Push-ups", detail: "2 sets × 10 — primes the chest with low load", xp: 10, cal: 20 },
+      { name: "★ Ramp-up on chest press", detail: "50% × 6 reps, then 75% × 3 reps before working sets", xp: 8, cal: 14 },
+    ],
   },
-
-  // Tuesday — Pull day (Back & Biceps)
+  // Tuesday — Pull
   2: {
-    label: "Pull day warm-up (10 min) — activates back muscles before pulling",
+    label: "Pull warm-up (8-10 min) — activates back & biceps",
     items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — raises heart rate",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Band Pull-Aparts or Towel Rows",
-        detail: "3 sets × 12 reps — activates rear shoulder and upper back",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Bodyweight Good Mornings",
-        detail: "2 sets × 10 reps — hands behind head, hinge forward at hips",
-        xp: 10,
-        cal: 16
-      },
-      {
-        name: "Light Lat Pulldown (30% weight)",
-        detail: "2 sets × 10 reps — warms up the lats before loading",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Stationary Bike (easy pace)",
-        detail: "3 min at easy pace — full body warm-up",
-        xp: 8,
-        cal: 20
-      }
-    ]
+      { name: "Jumping Jacks", detail: "2 sets × 20 — raise heart rate", xp: 8, cal: 18 },
+      { name: "Band Pull-Aparts or Towel Rows", detail: "3 sets × 12 — upper back and rear delts", xp: 10, cal: 14 },
+      { name: "Dead Hang", detail: "2 × 20 sec — decompresses the spine, wakes up the grip", xp: 8, cal: 10 },
+      { name: "Light Lat Pulldown", detail: "2 sets × 12 at 30% — grooves the pull pattern", xp: 10, cal: 14 },
+      { name: "★ Ramp-up on chest-supported row", detail: "50% × 6 reps, then 75% × 3 reps", xp: 8, cal: 14 },
+    ],
   },
-
-  // Wednesday — Shoulder day
+  // Wednesday — Legs & Arms (lighter)
   3: {
-    label: "Shoulder day warm-up (10 min) — opens deltoids and rotator cuff",
+    label: "Leg warm-up (8-10 min) — opens hips, knees & ankles",
     items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — raises heart rate and loosens the whole body",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Arm Circles (Wide)",
-        detail: "1 min each direction — full rotator cuff warm-up, prevents impingement",
-        xp: 6,
-        cal: 10
-      },
-      {
-        name: "Wall Angels",
-        detail: "2 sets × 10 reps — back flat against wall, slide arms up and down slowly",
-        xp: 10,
-        cal: 12
-      },
-      {
-        name: "Band Pull-Aparts or Towel Rows",
-        detail: "2 sets × 12 reps — activates rear deltoid and upper back before pressing",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Treadmill Walk",
-        detail: "3 min at speed 5.0, incline 2.0 — light full-body activation to finish",
-        xp: 8,
-        cal: 20
-      }
-    ]
+      { name: "High Knees", detail: "2 sets × 30 sec — warms hip flexors, raises heart rate", xp: 10, cal: 24 },
+      { name: "Bodyweight Squats", detail: "2 sets × 15 — activates quads and glutes", xp: 10, cal: 20 },
+      { name: "Leg Swings (front & side)", detail: "10 each direction per leg — loosens hips & hamstrings", xp: 8, cal: 12 },
+      { name: "Light Leg Press feeler set", detail: "1-2 easy sets × 12 before working weight", xp: 8, cal: 14 },
+    ],
   },
-
-  // Thursday — Legs & Abs (gym day in Phase 1)
+  // Thursday — Upper
   4: {
-    label: "Leg day warm-up (10 min) — opens hips and activates glutes",
+    label: "Upper warm-up (8-10 min) — full upper body prep",
     items: [
-      {
-        name: "High Knees",
-        detail: "2 sets × 30 seconds — warms up hip flexors and raises heart rate",
-        xp: 10,
-        cal: 24
-      },
-      {
-        name: "Bodyweight Squats",
-        detail: "2 sets × 15 reps — activates quads and glutes with zero load",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Hip Circles",
-        detail: "10 clockwise, 10 anticlockwise each leg — opens the hip joint fully",
-        xp: 8,
-        cal: 10
-      },
-      {
-        name: "Leg Swings (Forward & Sideways)",
-        detail: "10 swings each direction per leg — loosens hamstrings before loading",
-        xp: 8,
-        cal: 12
-      },
-      {
-        name: "Stationary Bike (easy pace)",
-        detail: "3 min at easy pace — prepares knee and ankle joints for squats",
-        xp: 8,
-        cal: 20
-      }
-    ]
+      { name: "Jumping Jacks", detail: "2 sets × 20 — full body activation", xp: 8, cal: 18 },
+      { name: "Wide Arm Circles", detail: "1 min each direction — shoulder joint warm-up", xp: 6, cal: 10 },
+      { name: "Push-ups", detail: "2 sets × 8 — chest, shoulders, triceps", xp: 10, cal: 20 },
+      { name: "Band Pull-Aparts", detail: "2 sets × 12 — upper back & rear delts", xp: 8, cal: 12 },
+      { name: "★ Ramp-up on incline dumbbell press", detail: "50% × 6 reps, then 75% × 3 reps", xp: 8, cal: 14 },
+    ],
   },
-
-  // Saturday — Full Body
+  // Saturday — Lower (heavy)
   6: {
-    label: "Full body warm-up (10 min) — prepares legs and upper body",
+    label: "Heavy leg warm-up (10 min) — protect knees & hips before squats",
     items: [
-      {
-        name: "High Knees",
-        detail: "2 sets × 30 seconds — heart rate up immediately",
-        xp: 10,
-        cal: 24
-      },
-      {
-        name: "Jumping Jacks",
-        detail: "1 set × 20 reps — full body warm-up",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Bodyweight Lunges",
-        detail: "2 sets × 10 reps each leg — activates quads, glutes, and hip flexors",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Arm Circles",
-        detail: "1 min each direction — shoulder joint warm-up before upper body work",
-        xp: 6,
-        cal: 10
-      },
-      {
-        name: "Stationary Bike or Light Jog",
-        detail: "3 min at easy pace — opens knees and ankles before squats",
-        xp: 8,
-        cal: 20
-      }
-    ]
-  }
+      { name: "High Knees", detail: "2 sets × 30 sec — heart rate up fast", xp: 10, cal: 24 },
+      { name: "Bodyweight Squats", detail: "2 sets × 15 — deep and controlled", xp: 10, cal: 20 },
+      { name: "Hip Circles + Leg Swings", detail: "10 each per leg — open the hips fully", xp: 8, cal: 14 },
+      { name: "Walking Lunges (bodyweight)", detail: "2 × 10 per leg — activate glutes and quads", xp: 10, cal: 20 },
+      { name: "★ Ramp-up on hack squat", detail: "50% × 6 reps, then 75% × 3 reps — heaviest lift of the week", xp: 8, cal: 16 },
+    ],
+  },
 };
 
-// ─── PHASE 2 WARMUPS ─────────────────────────────────────────────────────────
-// Mon: Chest/Shoulder/Tri · Tue: Back/Bi · Wed: Legs · Fri: Upper Body · Sat: Lower Body
+// Both plan stages share the same warm-ups.
+export const WARMUPS_BY_PHASE: Record<number, Warmup>[] = [WARMUPS, WARMUPS];
 
-const WARMUPS_P2: Record<number, Warmup> = {
-  // Monday — Chest, Shoulders & Triceps
-  1: {
-    label: "Push + shoulder warm-up (10 min) — prepares chest, delts and triceps",
-    items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — raises heart rate across the whole body",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Arm Circles (Wide)",
-        detail: "1 min each direction — fully warms the shoulder joint for pressing and raises",
-        xp: 6,
-        cal: 10
-      },
-      {
-        name: "Incline Push-ups (on bench)",
-        detail: "2 sets × 10 reps — activates chest and triceps before heavy work",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Band Pull-Aparts or Towel Rows",
-        detail: "2 sets × 12 reps — opens the rear deltoid before pressing",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Treadmill Walk",
-        detail: "3 min at speed 5.5, incline 3.0 — slightly harder than Phase 1",
-        xp: 8,
-        cal: 24
-      }
-    ]
-  },
-
-  // Tuesday — Back & Biceps
-  2: {
-    label: "Pull day warm-up (10 min) — activates back muscles before pulling",
-    items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — raises heart rate",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Band Pull-Aparts or Towel Rows",
-        detail: "3 sets × 12 reps — activates rear shoulder and upper back",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Bodyweight Good Mornings",
-        detail: "2 sets × 10 reps — hands behind head, hinge forward at hips",
-        xp: 10,
-        cal: 16
-      },
-      {
-        name: "Light Lat Pulldown (30% weight)",
-        detail: "2 sets × 10 reps — warms up the lats before loading",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Stationary Bike (easy pace)",
-        detail: "3 min at easy pace — full body warm-up",
-        xp: 8,
-        cal: 20
-      }
-    ]
-  },
-
-  // Wednesday — Legs, Calves & Abs
-  3: {
-    label: "Leg day warm-up (10 min) — opens hips, activates glutes and hamstrings",
-    items: [
-      {
-        name: "High Knees",
-        detail: "2 sets × 30 seconds — warms hip flexors and raises heart rate fast",
-        xp: 10,
-        cal: 24
-      },
-      {
-        name: "Bodyweight Squats",
-        detail: "2 sets × 15 reps — activates quads and glutes with no load",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Hip Circles",
-        detail: "10 clockwise, 10 anticlockwise each leg — opens the hip joint",
-        xp: 8,
-        cal: 10
-      },
-      {
-        name: "Leg Swings (Forward & Sideways)",
-        detail: "10 swings each direction per leg — loosens hamstrings and hip flexors",
-        xp: 8,
-        cal: 12
-      },
-      {
-        name: "Stationary Bike (easy pace)",
-        detail: "3 min at easy pace — prepares knee and ankle joints for heavy squats",
-        xp: 8,
-        cal: 20
-      }
-    ]
-  },
-
-  // Friday — Upper Body (all push + pull together)
-  5: {
-    label: "Upper body warm-up (10 min) — targets full upper body before mixed session",
-    items: [
-      {
-        name: "Jumping Jacks",
-        detail: "2 sets × 20 reps — full body activation",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Push-ups (floor or on knees)",
-        detail: "2 sets × 8 reps — activates chest, shoulders, triceps",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Wide Arm Circles",
-        detail: "1 min each direction — full shoulder joint warm-up",
-        xp: 6,
-        cal: 10
-      },
-      {
-        name: "Band Pull-Aparts or Towel Rows",
-        detail: "2 sets × 12 reps — activates upper back and rear deltoid",
-        xp: 10,
-        cal: 14
-      },
-      {
-        name: "Row Machine or Treadmill",
-        detail: "3 min at easy pace — gets blood moving through upper body",
-        xp: 8,
-        cal: 22
-      }
-    ]
-  },
-
-  // Saturday — Lower Body (Quad focus)
-  6: {
-    label: "Lower body warm-up (10 min) — prepares legs for heavy quad work",
-    items: [
-      {
-        name: "High Knees",
-        detail: "2 sets × 30 seconds — heart rate up immediately",
-        xp: 10,
-        cal: 24
-      },
-      {
-        name: "Jumping Jacks",
-        detail: "1 set × 20 reps — full body warm-up",
-        xp: 8,
-        cal: 18
-      },
-      {
-        name: "Bodyweight Lunges",
-        detail: "2 sets × 10 reps each leg — activates quads and glutes",
-        xp: 10,
-        cal: 20
-      },
-      {
-        name: "Leg Swings (Forward and Sideways)",
-        detail: "10 each direction per leg — loosens hip and hamstring",
-        xp: 8,
-        cal: 12
-      },
-      {
-        name: "Stationary Bike or Light Jog",
-        detail: "3 min at easy pace — opens knees and ankles for heavy squats",
-        xp: 8,
-        cal: 20
-      }
-    ]
-  }
-};
-
-// Indexed by plan phase (0 = Phase 1, 1 = Phase 2)
-export const WARMUPS_BY_PHASE: Record<number, Warmup>[] = [WARMUPS_P1, WARMUPS_P2];
-
-// Legacy export — kept for backward compatibility
-export const WARMUPS_BY_DAY: Record<number, Warmup> = WARMUPS_P1;
+// Legacy export
+export const WARMUPS_BY_DAY: Record<number, Warmup> = WARMUPS;

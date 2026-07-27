@@ -47,8 +47,7 @@ export interface MainPhase {
   mon: Exercise[];
   tue: Exercise[];
   wed: Exercise[];
-  thu?: Exercise[];
-  fri: Exercise[];
+  thu: Exercise[];
   sat: Exercise[];
 }
 

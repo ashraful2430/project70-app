@@ -3,7 +3,6 @@ import type { Day } from "@/types";
 import {
   WARMUPS_BY_PHASE,
   MAIN_PROGRAM,
-  MAIN_PROGRAM_ABS,
   PELVIC_PROGRAM,
   HEIGHT_EXERCISES,
 } from "@/lib/data";
@@ -22,13 +21,9 @@ export default function TodayCard({ day, phaseIndex, planPhase, countCompleted }
   if (warmup) warmup.items.forEach((_, i) => ids.push(`wu-${day.id}-${i}`));
 
   if (day.type === "gym") {
-    const phase = MAIN_PROGRAM[phaseIndex];
-    const gymKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+    const phase = MAIN_PROGRAM[planPhase] ?? MAIN_PROGRAM[0];
+    const gymKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "sat";
     (phase[gymKey] ?? []).forEach((ex) => ids.push(`${day.id}-main-${ex.name.replace(/\W+/g, "_")}`));
-    // Phase 1 Wednesday shoulders gets the abs appendix
-    if (planPhase === 0 && day.id === 3) {
-      MAIN_PROGRAM_ABS[phaseIndex].forEach((ex) => ids.push(`${day.id}-abs-${ex.name.replace(/\W+/g, "_")}`));
-    }
     if (day.finisher) ids.push(`fin-${day.id}`);
   } else if (day.type === "active-rest") {
     const pelvicPhase = PELVIC_PROGRAM[phaseIndex];

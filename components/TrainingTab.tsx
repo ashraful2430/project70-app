@@ -4,7 +4,6 @@ import type { Day } from "@/types";
 import {
   WARMUPS_BY_PHASE,
   MAIN_PROGRAM,
-  MAIN_PROGRAM_ABS,
   PELVIC_PROGRAM,
   HEIGHT_EXERCISES,
 } from "@/lib/data";
@@ -32,8 +31,9 @@ export default function TrainingTab({ day, phaseIndex, planPhase, isComplete, on
   const warmups = WARMUPS_BY_PHASE[planPhase] ?? WARMUPS_BY_PHASE[0];
   const warmup = warmups[day.id];
 
-  const gymDayKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
-  const phase = MAIN_PROGRAM[phaseIndex];
+  const gymDayKey = day.abbr.toLowerCase() as "mon" | "tue" | "wed" | "thu" | "sat";
+  // The plan toggle (planPhase) selects Weeks 1–2 vs Week 3+
+  const phase = MAIN_PROGRAM[planPhase] ?? MAIN_PROGRAM[0];
 
   const isActiveRest = day.type === "active-rest";
 
@@ -41,11 +41,7 @@ export default function TrainingTab({ day, phaseIndex, planPhase, isComplete, on
     ? (phase[gymDayKey] ?? [])
     : [];
 
-  // Phase 1 Wednesday (shoulders) has no built-in abs tri-set
-  const absExercises = (planPhase === 0 && day.id === 3)
-    ? MAIN_PROGRAM_ABS[phaseIndex]
-    : [];
-
+  // Kegel progression still follows the player's level (phaseIndex)
   const pelvicPhase = phaseIndex <= 0
     ? PELVIC_PROGRAM[0]
     : phaseIndex === 1
@@ -151,23 +147,6 @@ export default function TrainingTab({ day, phaseIndex, planPhase, isComplete, on
           <motion.div variants={stagger} initial="hidden" animate="show">
             {mainExercises.map((ex) => {
               const id = `${day.id}-main-${ex.name.replace(/\W+/g, "_")}`;
-              return (
-                <motion.div key={id} variants={item}>
-                  <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </>
-      )}
-
-      {/* Abs section (Phase 1 Wednesday - optional extra abs) */}
-      {absExercises.length > 0 && (
-        <>
-          <p className="section-label">Core & abs</p>
-          <motion.div variants={stagger} initial="hidden" animate="show">
-            {absExercises.map((ex) => {
-              const id = `${day.id}-abs-${ex.name.replace(/\W+/g, "_")}`;
               return (
                 <motion.div key={id} variants={item}>
                   <ExerciseCard exercise={ex} completionId={id} done={isComplete(id)} onToggle={onToggle} />

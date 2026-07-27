@@ -152,7 +152,7 @@ export default function AppRoot() {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    Phase {p + 1}
+                    {p === 0 ? "Weeks 1–2" : "Week 3+"}
                   </motion.button>
                 ))}
               </div>
