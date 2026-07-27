@@ -5,5 +5,6 @@ export * from "./week";
 export * from "./mainProgram";
 export * from "./pelvicProgram";
 export * from "./activeRest";
+export * from "./homeWorkouts";
 export * from "./diet";
 export * from "./drinks";

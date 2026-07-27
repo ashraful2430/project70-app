@@ -13,16 +13,18 @@ import WeekNav from "@/components/WeekNav";
 import TodayCard from "@/components/TodayCard";
 import SidebarStats from "@/components/SidebarStats";
 import TrainingTab from "@/components/TrainingTab";
+import HomeWorkoutTab from "@/components/HomeWorkoutTab";
 import DietTab from "@/components/DietTab";
 import DrinksTab from "@/components/DrinksTab";
 import ProfileModal from "@/components/ProfileModal";
 import BodyGuide from "@/components/BodyGuide";
 import CalorieTracker from "@/components/CalorieTracker";
 
-type Tab = "training" | "diet" | "drinks" | "body" | "calories";
+type Tab = "training" | "home" | "diet" | "drinks" | "body" | "calories";
 
 const TAB_LABELS: Record<Tab, string> = {
   training: "🏋️ Training",
+  home:     "🏠 Home Workout",
   diet:     "🥗 Diet",
   drinks:   "💧 Hydration",
   body:     "🫀 Body Guide",
@@ -189,6 +191,7 @@ export default function AppRoot() {
                     onToggle={handleToggle}
                   />
                 )}
+                {tab === "home"     && <HomeWorkoutTab day={day} planPhase={planPhase} />}
                 {tab === "diet"     && <DietTab day={day} />}
                 {tab === "drinks"   && <DrinksTab />}
                 {tab === "body"     && <BodyGuide />}
@@ -204,26 +207,31 @@ export default function AppRoot() {
         {levelUpMsg && (
           <motion.div
             key="levelup"
-            initial={{ opacity: 0, y: -80, scale: 0.85 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -60, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 320, damping: 22 }}
+            initial={{ opacity: 0, y: -40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            transition={{ type: "spring", stiffness: 320, damping: 24 }}
             style={{
-              position: "fixed", top: 16, left: 12, right: 12,
-              margin: "0 auto", maxWidth: 420, width: "fit-content",
+              position: "fixed", top: 14, left: 0, right: 0,
               zIndex: 9999,
-              background: "linear-gradient(135deg, #7c3aed, #f59e0b)",
-              borderRadius: 16, padding: "12px 18px",
-              boxShadow: "0 0 40px rgba(245,158,11,0.5), 0 8px 32px rgba(0,0,0,0.4)",
-              display: "flex", alignItems: "center", gap: 10,
-              boxSizing: "border-box",
+              display: "flex", justifyContent: "center",
+              padding: "0 12px", pointerEvents: "none",
             }}
           >
-            <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
-            <span style={{ fontSize: 14, fontWeight: 800, color: "#fff", letterSpacing: "0.3px", textAlign: "center", lineHeight: 1.35 }}>
-              {levelUpMsg}
-            </span>
-            <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
+            <div style={{
+              maxWidth: 440, width: "auto",
+              background: "linear-gradient(135deg, #7c3aed, #f59e0b)",
+              borderRadius: 18, padding: "12px 18px",
+              boxShadow: "0 0 40px rgba(245,158,11,0.45), 0 12px 40px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.25)",
+              display: "flex", alignItems: "center", gap: 10,
+              pointerEvents: "auto", boxSizing: "border-box",
+            }}>
+              <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
+              <span style={{ fontSize: 13.5, fontWeight: 800, color: "#fff", letterSpacing: "0.2px", textAlign: "center", lineHeight: 1.4 }}>
+                {levelUpMsg}
+              </span>
+              <span style={{ fontSize: 20, flexShrink: 0 }}>⚡</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

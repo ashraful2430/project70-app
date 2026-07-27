@@ -13,9 +13,9 @@ const WARMUPS: Record<number, Warmup> = {
     items: [
       { name: "Jumping Jacks", detail: "2 sets × 20 — raise heart rate and loosen joints", xp: 8, cal: 18 },
       { name: "Arm Circles", detail: "1 min forward, 1 min backward — full shoulder warm-up", xp: 6, cal: 10 },
-      { name: "Band Pull-Aparts", detail: "2 sets × 15 — wakes up rear delts before pressing", xp: 8, cal: 12 },
-      { name: "Incline Push-ups", detail: "2 sets × 10 — primes the chest with low load", xp: 10, cal: 20 },
-      { name: "★ Ramp-up on chest press", detail: "50% × 6 reps, then 75% × 3 reps before working sets", xp: 8, cal: 14 },
+      { name: "Prone Y-T-W Raises", detail: "8 of each letter (Y, T, W) — lie face-down, raise arms in each shape. Wakes rear delts & upper back, no band needed", xp: 8, cal: 12 },
+      { name: "Scapular Push-ups", detail: "2 sets × 10 — in a push-up position, keep arms straight and just pinch/spread the shoulder blades. Primes the chest and shoulder blades for pressing, no equipment", xp: 8, cal: 12 },
+      { name: "Incline Push-ups", detail: "2 sets × 10 — primes the chest with low load before your first press", xp: 10, cal: 20 },
     ],
   },
   // Tuesday — Pull
@@ -23,7 +23,7 @@ const WARMUPS: Record<number, Warmup> = {
     label: "Pull warm-up (8-10 min) — activates back & biceps",
     items: [
       { name: "Jumping Jacks", detail: "2 sets × 20 — raise heart rate", xp: 8, cal: 18 },
-      { name: "Band Pull-Aparts or Towel Rows", detail: "3 sets × 12 — upper back and rear delts", xp: 10, cal: 14 },
+      { name: "Prone Y-T-W Raises", detail: "8 of each letter — lie face-down, raise arms in Y, T, W shapes to fire up rear delts, traps & rhomboids (no equipment)", xp: 10, cal: 14 },
       { name: "Dead Hang", detail: "2 × 20 sec — decompresses the spine, wakes up the grip", xp: 8, cal: 10 },
       { name: "Light Lat Pulldown", detail: "2 sets × 12 at 30% — grooves the pull pattern", xp: 10, cal: 14 },
       { name: "★ Ramp-up on chest-supported row", detail: "50% × 6 reps, then 75% × 3 reps", xp: 8, cal: 14 },
@@ -46,7 +46,7 @@ const WARMUPS: Record<number, Warmup> = {
       { name: "Jumping Jacks", detail: "2 sets × 20 — full body activation", xp: 8, cal: 18 },
       { name: "Wide Arm Circles", detail: "1 min each direction — shoulder joint warm-up", xp: 6, cal: 10 },
       { name: "Push-ups", detail: "2 sets × 8 — chest, shoulders, triceps", xp: 10, cal: 20 },
-      { name: "Band Pull-Aparts", detail: "2 sets × 12 — upper back & rear delts", xp: 8, cal: 12 },
+      { name: "Prone Y-T-W Raises", detail: "8 of each letter — face-down arm raises in Y, T, W shapes for rear delts & upper back (no band)", xp: 8, cal: 12 },
       { name: "★ Ramp-up on incline dumbbell press", detail: "50% × 6 reps, then 75% × 3 reps", xp: 8, cal: 14 },
     ],
   },

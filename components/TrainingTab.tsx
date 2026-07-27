@@ -57,6 +57,23 @@ export default function TrainingTab({ day, phaseIndex, planPhase, isComplete, on
 
   return (
     <div>
+      {/* Phase / RIR banner — updates when you toggle Weeks 1–2 ↔ Week 3+ */}
+      {!isActiveRest && day.type === "gym" && (
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+          flexWrap: "wrap", marginBottom: 14, padding: "10px 14px", borderRadius: 12,
+          background: "linear-gradient(135deg, rgba(124,58,237,0.14), rgba(124,58,237,0.03))",
+          border: "1px solid rgba(124,58,237,0.28)",
+        }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "var(--purple-light)" }}>
+            {phase.label}
+          </div>
+          <span className="pill pill-gold">
+            {planPhase === 0 ? "Stop 2-3 reps before failure" : "Push to 1-2 reps before failure"}
+          </span>
+        </div>
+      )}
+
       {/* Warmup */}
       {warmup && (
         <>
