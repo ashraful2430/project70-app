@@ -268,6 +268,51 @@ const REVERSE_EZ_CURL: Exercise = {
   difficulty: 1, calories: 14,
 };
 
+// ── FOREARM FINISHER (Tue + Wed) — builds thick, veiny forearms ──────────────
+// Light and low-fatigue, done dead last so it never hurts the main lifts.
+// Remember: forearm size helps veins show, but getting LEAN is what makes them pop.
+const FOREARM_FINISHER: Exercise[] = [
+  {
+    name: "Wrist Curls",
+    target: "Forearms",
+    sets: 2, reps: "15", rest: "30s",
+    cue: "ISOLATION. Palm-up. Builds the underside of the forearm for thickness. Only the wrist moves.",
+    steps: [
+      "Sit and rest your forearms on your thighs, wrists just past your knees, palms up.",
+      "Hold a barbell/dumbbells and let your wrists drop fully down.",
+      "Curl the weight up by flexing only your wrists — as high as possible.",
+      "Lower slowly all the way. Keep your forearms glued to your thighs.",
+    ],
+    difficulty: 1, calories: 12,
+  },
+  {
+    name: "Reverse Wrist Curls",
+    target: "Forearms",
+    sets: 2, reps: "15", rest: "30s",
+    cue: "ISOLATION. Palm-DOWN. Builds the top of the forearm and balances the wrist — keeps elbows healthy.",
+    steps: [
+      "Same seated position, but palms facing DOWN over your knees.",
+      "Let the wrists drop, then lift the backs of your hands up as high as you can.",
+      "Squeeze the top of the forearm at the top.",
+      "Lower slowly. Use lighter weight than the palm-up version.",
+    ],
+    difficulty: 1, calories: 10,
+  },
+  {
+    name: "Dead Hang Hold",
+    target: "Forearms & grip",
+    sets: 2, reps: "20-30 sec hold", rest: "45s",
+    cue: "ISOLATION. Pure grip and forearm endurance — also decompresses the spine. Done last.",
+    steps: [
+      "Grip a pull-up bar with both hands, shoulder-width.",
+      "Hang with straight arms, shoulders relaxed — do not swing.",
+      "Hold for 20-30 seconds, squeezing the bar hard.",
+      "Step off gently. Build up the time each week as your grip improves.",
+    ],
+    difficulty: 1, calories: 10,
+  },
+];
+
 // ── WEDNESDAY — LEGS & ARMS (lighter) ────────────────────────────────────────
 const WED_LEGS_ARMS: Exercise[] = [
   {
@@ -559,8 +604,8 @@ export const MAIN_PROGRAM: MainPhase[] = [
     label: "Weeks 1–2 · Foundation",
     levelRange: "RIR 2-3",
     mon: MON_PUSH,
-    tue: TUE_PULL,
-    wed: WED_LEGS_ARMS,
+    tue: [...TUE_PULL, ...FOREARM_FINISHER],
+    wed: [...WED_LEGS_ARMS, ...FOREARM_FINISHER],
     thu: THU_UPPER,
     sat: SAT_LOWER,
   },
@@ -569,8 +614,8 @@ export const MAIN_PROGRAM: MainPhase[] = [
     label: "Week 3+ · Progression",
     levelRange: "RIR 1-2",
     mon: MON_PUSH,
-    tue: [...TUE_PULL, REVERSE_EZ_CURL],
-    wed: WED_LEGS_ARMS,
+    tue: [...TUE_PULL, REVERSE_EZ_CURL, ...FOREARM_FINISHER],
+    wed: [...WED_LEGS_ARMS, ...FOREARM_FINISHER],
     thu: [...THU_UPPER, REVERSE_EZ_CURL],
     sat: SAT_LOWER,
   },

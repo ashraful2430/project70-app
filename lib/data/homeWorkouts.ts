@@ -92,6 +92,18 @@ export const HOME_ALTS: Record<string, HomeAlt> = {
     home: "Bottle Hammer Curl", equipment: "2 water bottles", setsReps: "3 × 12",
     how: "Palms facing each other the whole time, no swinging.",
   },
+  "Wrist Curls": {
+    home: "Bottle Wrist Curls", equipment: "1-2 water bottles", setsReps: "2 × 15",
+    how: "Forearms on your thighs, palms up, curl the bottles using only your wrists.",
+  },
+  "Reverse Wrist Curls": {
+    home: "Bottle Reverse Wrist Curls", equipment: "1-2 water bottles", setsReps: "2 × 15",
+    how: "Same position, palms DOWN, lift the backs of your hands up. Go light.",
+  },
+  "Dead Hang Hold": {
+    home: "Doorframe Dead Hang (or Book Pinch)", equipment: "Doorframe pull-up bar, or pinch two heavy books", setsReps: "2 × 20-30 sec",
+    how: "Hang from a bar for time. No bar? Pinch two thick books together and hold as long as you can.",
+  },
 
   // ── Legs / Glutes ──
   "Hack Squat": {
