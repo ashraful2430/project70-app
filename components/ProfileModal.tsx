@@ -47,8 +47,9 @@ export default function ProfileModal({ level, rank, title, user, onClose, onSign
       const r = await migrateFromFirebase(user.uid);
       setMigrateMsg(`Imported ✓ — progress restored, ${r.calorieDays} calorie day(s), ${r.recipes} recipe(s). Refreshing…`);
       setTimeout(() => window.location.reload(), 1800);
-    } catch {
-      setMigrateMsg("Import failed — check that your Firestore rules allow reads, then try again.");
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setMigrateMsg(`Import failed: ${msg}`);
       setMigrating(false);
     }
   }

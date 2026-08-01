@@ -12,11 +12,16 @@ function minLifetimeForLevel(level: number): number {
 }
 
 async function post(url: string, body: unknown) {
-  await fetch(url, {
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
+  if (!res.ok) {
+    let detail = "";
+    try { detail = (await res.json()).error ?? ""; } catch {}
+    throw new Error(detail || `Save failed (${res.status}) — MongoDB not reachable`);
+  }
 }
 
 export interface MigrationResult {
