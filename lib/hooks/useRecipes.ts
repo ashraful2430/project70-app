@@ -1,9 +1,5 @@
 "use client";
 import { useState, useCallback } from "react";
-import {
-  collection, doc, getDocs, setDoc, deleteDoc,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 export interface RecipeIngredient {
   id: string;         // ingredient id or "online-{name}"
@@ -27,26 +23,36 @@ export interface Recipe {
   createdAt: string;
 }
 
+const LS_RECIPES = "project70-recipes";
+
+function loadLS(): Recipe[] {
+  if (typeof window === "undefined") return [];
+  try { return JSON.parse(localStorage.getItem(LS_RECIPES) ?? "[]"); } catch { return []; }
+}
+function saveLS(list: Recipe[]) {
+  try { localStorage.setItem(LS_RECIPES, JSON.stringify(list)); } catch {}
+}
+
 export function useRecipes(uid: string | null) {
   const [recipes, setRecipes]   = useState<Recipe[]>([]);
   const [loading, setLoading]   = useState(false);
 
   const loadRecipes = useCallback(async () => {
     setLoading(true);
+    const local = loadLS();
     try {
       if (uid) {
-        const snap = await getDocs(collection(db, "users", uid, "recipes"));
-        const list: Recipe[] = [];
-        snap.forEach(d => list.push({ id: d.id, ...(d.data() as Omit<Recipe, "id">) }));
-        list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-        setRecipes(list);
-      } else {
-        // localStorage fallback
-        const raw = localStorage.getItem("project70-recipes") ?? "[]";
-        setRecipes(JSON.parse(raw));
+        const res = await fetch(`/api/data/recipes?uid=${encodeURIComponent(uid)}`);
+        if (res.ok) {
+          const list = (await res.json()) as Recipe[];
+          setRecipes(list.length ? list : local);
+          setLoading(false);
+          return;
+        }
       }
+      setRecipes(local);
     } catch {
-      setRecipes([]);
+      setRecipes(local);
     } finally {
       setLoading(false);
     }
@@ -55,23 +61,25 @@ export function useRecipes(uid: string | null) {
   const saveRecipe = useCallback(async (recipe: Omit<Recipe, "id" | "createdAt">) => {
     const id = Date.now().toString(36);
     const full: Recipe = { ...recipe, id, createdAt: new Date().toISOString() };
+    // local mirror
+    saveLS([full, ...loadLS()]);
     if (uid) {
-      await setDoc(doc(db, "users", uid, "recipes", id), full);
-    } else {
-      const list: Recipe[] = JSON.parse(localStorage.getItem("project70-recipes") ?? "[]");
-      list.unshift(full);
-      localStorage.setItem("project70-recipes", JSON.stringify(list));
+      fetch("/api/data/recipes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uid, recipe: full }),
+      }).catch(() => {});
     }
     setRecipes(prev => [full, ...prev]);
     return full;
   }, [uid]);
 
   const deleteRecipe = useCallback(async (id: string) => {
+    saveLS(loadLS().filter(r => r.id !== id));
     if (uid) {
-      await deleteDoc(doc(db, "users", uid, "recipes", id));
-    } else {
-      const list: Recipe[] = JSON.parse(localStorage.getItem("project70-recipes") ?? "[]");
-      localStorage.setItem("project70-recipes", JSON.stringify(list.filter(r => r.id !== id)));
+      fetch(`/api/data/recipes?uid=${encodeURIComponent(uid)}&id=${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      }).catch(() => {});
     }
     setRecipes(prev => prev.filter(r => r.id !== id));
   }, [uid]);

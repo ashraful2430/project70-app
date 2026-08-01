@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { User } from "firebase/auth";
+import { migrateFromFirebase } from "@/lib/migrateFromFirebase";
 
 interface Props {
   level: number;
@@ -30,10 +31,26 @@ const PHASE_INFO = [
 
 export default function ProfileModal({ level, rank, title, user, onClose, onSignOut, onReset }: Props) {
   const [confirmReset, setConfirmReset] = useState(false);
+  const [migrating, setMigrating] = useState(false);
+  const [migrateMsg, setMigrateMsg] = useState<string | null>(null);
 
   function handleReset() {
     onReset();
     setConfirmReset(false);
+  }
+
+  async function handleMigrate() {
+    if (!user?.uid) return;
+    setMigrating(true);
+    setMigrateMsg(null);
+    try {
+      const r = await migrateFromFirebase(user.uid);
+      setMigrateMsg(`Imported ✓ — progress restored, ${r.calorieDays} calorie day(s), ${r.recipes} recipe(s). Refreshing…`);
+      setTimeout(() => window.location.reload(), 1800);
+    } catch {
+      setMigrateMsg("Import failed — check that your Firestore rules allow reads, then try again.");
+      setMigrating(false);
+    }
   }
 
   return (
@@ -172,6 +189,37 @@ export default function ProfileModal({ level, rank, title, user, onClose, onSign
             </div>
           ))}
         </div>
+
+        {/* Migrate from Firebase → MongoDB (one-time) */}
+        {user && (
+          <>
+            <p className="section-label">Import old data</p>
+            <button
+              onClick={handleMigrate}
+              disabled={migrating}
+              style={{
+                width: "100%", padding: "12px",
+                borderRadius: 12, cursor: migrating ? "default" : "pointer",
+                background: "rgba(59,130,246,0.08)",
+                border: "1px solid rgba(59,130,246,0.28)",
+                color: "#60a5fa", fontSize: 13, fontWeight: 600,
+                marginBottom: 8, opacity: migrating ? 0.6 : 1,
+              }}
+            >
+              {migrating ? "Importing…" : "⬇️ Import my old data from Firebase"}
+            </button>
+            {migrateMsg && (
+              <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, marginBottom: 16 }}>
+                {migrateMsg}
+              </p>
+            )}
+            {!migrateMsg && (
+              <p style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5, marginBottom: 16 }}>
+                Copies your old Firebase progress, calorie logs and recipes into the new MongoDB storage. Run once. Needs your Firestore rules to allow reads.
+              </p>
+            )}
+          </>
+        )}
 
         {/* Reset progress */}
         <p className="section-label">Danger zone</p>

@@ -1,7 +1,5 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
-import { doc, getDoc, setDoc, collection, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 export interface CalEntry {
   id: string;
@@ -37,7 +35,7 @@ function loadLS(date: string): CalEntry[] {
 }
 
 function saveLS(date: string, entries: CalEntry[]) {
-  localStorage.setItem(lsKey(date), JSON.stringify(entries));
+  try { localStorage.setItem(lsKey(date), JSON.stringify(entries)); } catch {}
 }
 
 export function useCalories(uid: string | null) {
@@ -47,27 +45,41 @@ export function useCalories(uid: string | null) {
   const [viewDate, setViewDate]   = useState(today);
   const [loadingHistory, setLoadingHistory] = useState(false);
 
-  // Load entries for the viewDate
+  // Load entries for the viewDate — MongoDB when signed in, else localStorage,
+  // always falling back to localStorage if the request fails.
   useEffect(() => {
-    if (uid) {
-      getDoc(doc(db, "users", uid, "calories", viewDate)).then((snap) => {
-        if (snap.exists()) setEntries((snap.data().entries as CalEntry[]) ?? []);
-        else setEntries([]);
-      }).catch(() => setEntries([]));
-    } else {
-      setEntries(loadLS(viewDate));
+    let cancelled = false;
+    async function load() {
+      const local = loadLS(viewDate);
+      if (uid) {
+        try {
+          const res = await fetch(`/api/data/calories?uid=${encodeURIComponent(uid)}&date=${viewDate}`);
+          if (res.ok) {
+            const data = await res.json();
+            const cloud = (data.entries as CalEntry[]) ?? [];
+            // Prefer whichever source actually has entries
+            if (!cancelled) { setEntries(cloud.length ? cloud : local); return; }
+          }
+        } catch { /* fall through to local */ }
+      }
+      if (!cancelled) setEntries(local);
     }
+    load();
+    return () => { cancelled = true; };
   }, [uid, viewDate]);
 
   const persist = useCallback((next: CalEntry[]) => {
+    saveLS(viewDate, next);
     if (uid) {
-      setDoc(doc(db, "users", uid, "calories", viewDate), {
-        entries: next,
-        total: next.reduce((s, e) => s + e.calories, 0),
-        date: viewDate,
-      }).catch(console.error);
-    } else {
-      saveLS(viewDate, next);
+      fetch("/api/data/calories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uid, date: viewDate,
+          entries: next,
+          total: next.reduce((s, e) => s + e.calories, 0),
+        }),
+      }).catch(() => {});
     }
   }, [uid, viewDate]);
 
@@ -97,15 +109,16 @@ export function useCalories(uid: string | null) {
     const logs: DayLog[] = [];
     if (uid) {
       try {
-        const snap = await getDocs(collection(db, "users", uid, "calories"));
-        snap.forEach(d => {
-          const data = d.data();
-          logs.push({ date: d.id, entries: data.entries ?? [], total: data.total ?? 0 });
-        });
-      } catch {}
-    } else {
-      // Read from localStorage for last 30 days
-      for (let i = 1; i <= 30; i++) {
+        const res = await fetch(`/api/data/calories?uid=${encodeURIComponent(uid)}&history=1`);
+        if (res.ok) {
+          const data = (await res.json()) as DayLog[];
+          data.forEach(d => logs.push(d));
+        }
+      } catch { /* fall through to local scan */ }
+    }
+    if (logs.length === 0) {
+      // localStorage fallback — scan the last 30 days
+      for (let i = 0; i <= 30; i++) {
         const d = new Date();
         d.setDate(d.getDate() - i);
         const key = d.toLocaleDateString("en-CA");

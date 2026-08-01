@@ -1,14 +1,11 @@
 "use client";
 import { useState, useCallback, useEffect } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 
 const LS_DONE     = "project70-done";
 const LS_WEEK     = "project70-week";
 const LS_LIFETIME = "project70-lifetime";
 
 // Monday-based week key: the YYYY-MM-DD of the Monday that starts this date's week.
-// The training week runs Mon→Sun, so a new key on Monday means "reset the checkmarks".
 function currentWeekKey(d = new Date()): string {
   const date = new Date(d);
   const sinceMonday = (date.getDay() + 6) % 7; // Mon=0 … Sun=6
@@ -17,12 +14,43 @@ function currentWeekKey(d = new Date()): string {
   return date.toLocaleDateString("en-CA");
 }
 
+interface Store { comps: Record<string, boolean>; life: number; week?: string; }
+
+function readLS(): Store {
+  if (typeof window === "undefined") return { comps: {}, life: 0 };
+  let comps: Record<string, boolean> = {};
+  try { comps = JSON.parse(localStorage.getItem(LS_DONE) || "{}"); } catch {}
+  const rawLife = Number(localStorage.getItem(LS_LIFETIME));
+  const life = Number.isFinite(rawLife) && rawLife > 0
+    ? rawLife
+    : Object.values(comps).filter(Boolean).length;
+  return { comps, life, week: localStorage.getItem(LS_WEEK) ?? undefined };
+}
+
+// Always mirror to localStorage (survives the network being down); also push to
+// MongoDB via the API when signed in. A failed cloud write never loses local data.
+function persistStore(uid: string | null | undefined, comps: Record<string, boolean>, life: number, week: string) {
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(LS_DONE, JSON.stringify(comps));
+      localStorage.setItem(LS_LIFETIME, String(life));
+      localStorage.setItem(LS_WEEK, week);
+    } catch {}
+  }
+  if (uid) {
+    fetch("/api/data/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ uid, completions: comps, lifetime: life, weekKey: week }),
+    }).catch(() => {});
+  }
+}
+
 /**
- * Two separate stores:
- *   done      — this week's checkmarks. Cleared every Monday so exercises can
- *               be re-completed and counted again.
- *   lifetime  — cumulative completions ever. Drives XP/level. Never weekly-reset,
- *               only cleared by the profile "Reset all progress" button.
+ * done     — this week's checkmarks, cleared every Monday.
+ * lifetime — cumulative completions ever; drives XP/level, never weekly-reset.
+ * Stored in MongoDB (via /api/data/completions) and mirrored to localStorage so
+ * progress persists even if the network/DB is briefly unreachable.
  */
 export function useCompletion(uid?: string | null) {
   const [done, setDone]         = useState<Record<string, boolean>>({});
@@ -34,37 +62,31 @@ export function useCompletion(uid?: string | null) {
     const week = currentWeekKey();
 
     async function load() {
-      let comps: Record<string, boolean> = {};
-      let life = 0;
-      let storedWeek: string | undefined;
+      let chosen = readLS();
 
       if (uid) {
         try {
-          const snap = await getDoc(doc(db, "users", uid));
-          const data = snap.exists() ? snap.data() : {};
-          comps = (data.completions as Record<string, boolean>) ?? {};
-          life = typeof data.lifetime === "number"
-            ? data.lifetime
-            : Object.values(comps).filter(Boolean).length; // migrate old accounts
-          storedWeek = data.weekKey as string | undefined;
+          const res = await fetch(`/api/data/completions?uid=${encodeURIComponent(uid)}`);
+          if (res.ok) {
+            const data = await res.json();
+            const cloud: Store = {
+              comps: data.completions ?? {},
+              life: typeof data.lifetime === "number" ? data.lifetime : 0,
+              week: data.weekKey ?? undefined,
+            };
+            // Prefer the cloud copy only when it holds at least as much progress
+            if (cloud.life >= chosen.life) chosen = cloud;
+          }
         } catch {
-          if (!cancelled) setLoaded(true);
-          return;
+          // DB/network unreachable — keep the local copy
         }
-      } else {
-        try { comps = JSON.parse(localStorage.getItem(LS_DONE) || "{}"); } catch {}
-        const rawLife = Number(localStorage.getItem(LS_LIFETIME));
-        life = Number.isFinite(rawLife) && rawLife > 0
-          ? rawLife
-          : Object.values(comps).filter(Boolean).length;
-        storedWeek = localStorage.getItem(LS_WEEK) ?? undefined;
       }
 
-      // New week → clear the checkmarks but keep the lifetime progress
-      if (storedWeek !== week) {
-        comps = {};
-        persist(uid, {}, life, week);
-      }
+      let comps = chosen.comps;
+      const life = chosen.life;
+      if (chosen.week !== week) comps = {}; // new week → clear checkmarks, keep lifetime
+
+      persistStore(uid, comps, life, week);
 
       if (!cancelled) {
         setDone(comps);
@@ -83,13 +105,13 @@ export function useCompletion(uid?: string | null) {
     const nextLife  = Math.max(0, lifetime + (turningOn ? 1 : -1));
     setDone(nextDone);
     setLifetime(nextLife);
-    persist(uid, nextDone, nextLife, currentWeekKey());
+    persistStore(uid, nextDone, nextLife, currentWeekKey());
   }, [uid, done, lifetime]);
 
   const resetCompletions = useCallback(() => {
     setDone({});
     setLifetime(0);
-    persist(uid, {}, 0, currentWeekKey());
+    persistStore(uid, {}, 0, currentWeekKey());
   }, [uid]);
 
   const isComplete     = useCallback((id: string) => !!done[id], [done]);
@@ -97,20 +119,4 @@ export function useCompletion(uid?: string | null) {
   const totalCompleted = lifetime;
 
   return { toggle, isComplete, countCompleted, totalCompleted, resetCompletions, loaded };
-}
-
-function persist(
-  uid: string | null | undefined,
-  done: Record<string, boolean>,
-  lifetime: number,
-  weekKey: string,
-) {
-  if (uid) {
-    setDoc(doc(db, "users", uid), { completions: done, lifetime, weekKey }, { merge: true })
-      .catch(console.error);
-  } else if (typeof window !== "undefined") {
-    localStorage.setItem(LS_DONE, JSON.stringify(done));
-    localStorage.setItem(LS_LIFETIME, String(lifetime));
-    localStorage.setItem(LS_WEEK, weekKey);
-  }
 }
